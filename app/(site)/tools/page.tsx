@@ -393,7 +393,7 @@ export default function ToolsPage() {
               { id: "paye",  icon: "👤", title: "PAYE Estimator",           desc: "Personal income tax using current GRA tax bands." },
               { id: "corp",  icon: "🏢", title: "Corporate Tax Estimator",  desc: "Company income tax across sectors and special rates." },
               { id: "ssnit", icon: "🛡️", title: "SSNIT Calculator",        desc: "Employee and employer social security contributions." },
-            ].map((tool, i) => (
+            ].map((tool) => (
               <button
                 key={tool.id}
                 onClick={() => { setActive(tool.id); const el = document.getElementById("calculator-top"); if (el) el.scrollIntoView({ behavior: "smooth" });; }}
