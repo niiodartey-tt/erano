@@ -2,111 +2,180 @@
 
 import Link from "next/link";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Check } from "lucide-react";
 
+// ── Real services from company profile ───────────────────
 const services = [
+  {
+    id: "accountancy",
+    icon: "📊",
+    title: "Accountancy Services",
+    tagline: "Accurate, timely financial records that drive better business decisions.",
+    description:
+      "Our accountancy team handles your books with the precision of an in-house finance function at a fraction of the cost. From day-to-day bookkeeping to annual statutory accounts, we keep your financial records clean, compliant, and decision-ready.",
+    features: [
+      "Annual accounts preparation",
+      "Management accounts (monthly / quarterly)",
+      "Bookkeeping and ledger management",
+      "Payroll processing and administration",
+      "Bank reconciliations",
+      "Accounts payable and receivable management",
+      "SSNIT filing and compliance",
+    ],
+    pricing: "Included from Starter Essentials plan — GHS 16,500/year",
+    accent: "bg-blue-50 border-blue-100",
+    iconBg: "bg-blue-100",
+    number: "01",
+  },
+  {
+    id: "business",
+    icon: "🤝",
+    title: "Business Services",
+    tagline: "From start-up to scale-up — strategic support at every stage.",
+    description:
+      "Whether you are starting a new business, acquiring an existing one, or planning for growth, our business services team provides end-to-end support. We navigate Ghana's regulatory landscape so you can focus on building your enterprise.",
+    features: [
+      "Business start-up advisory and registration (RGD)",
+      "Buying an existing business — due diligence",
+      "Strategic growth planning and advisory",
+      "Business finance and funding advisory",
+      "Payroll services and HR compliance",
+      "Company secretarial services",
+      "PPA supplier registration for government tenders",
+    ],
+    pricing: "Included from Starter Essentials plan — GHS 16,500/year",
+    accent: "bg-emerald-50 border-emerald-100",
+    iconBg: "bg-emerald-100",
+    number: "02",
+  },
   {
     id: "tax",
     icon: "📋",
-    title: "Tax Advisory",
-    tagline: "Strategic tax planning and full GRA compliance management.",
+    title: "Tax Planning & Advice",
+    tagline: "Strategic tax planning that minimises liability and ensures full compliance.",
     description:
-      "Ghana's tax landscape is complex and constantly evolving. Our tax advisory team ensures your business remains fully compliant while minimising your tax burden through legitimate planning strategies. From VAT registration to corporate tax structuring, we handle it all.",
+      "Ghana's tax landscape is complex and changes frequently. Our tax team ensures your business remains fully compliant with the Ghana Revenue Authority while implementing legitimate planning strategies to reduce your tax burden. We represent you in GRA audits and handle all filings.",
     features: [
-      "VAT registration and periodic filing",
-      "PAYE computation and compliance",
-      "Corporate income tax returns",
+      "Corporation tax planning, preparation and filing",
+      "Personal tax planning and self-assessment",
+      "VAT registration, returns and compliance",
+      "PAYE computation and employer compliance",
       "GRA audit representation and support",
-      "Tax planning and restructuring strategy",
       "Withholding tax management",
       "Transfer pricing advisory",
     ],
-    pricing: "From GHS 800/month retainer · Free initial consultation",
-    accent: "bg-blue-50 border-blue-100",
-    iconBg: "bg-blue-100",
-  },
-  {
-    id: "audit",
-    icon: "🔍",
-    title: "Audit & Assurance",
-    tagline: "Independent audits conducted to ICAG and international standards.",
-    description:
-      "An independent audit gives your stakeholders — banks, investors, regulators, and partners — confidence in your financial reporting. Our ICAG-licensed auditors conduct thorough, professional engagements that go beyond compliance to deliver actionable insights.",
-    features: [
-      "Statutory financial statement audit",
-      "Internal audit and controls review",
-      "Regulatory compliance audit",
-      "Due diligence for transactions",
-      "Management letter with recommendations",
-      "Agreed-upon procedures",
-      "Forensic accounting investigation",
-    ],
-    pricing: "Quoted per engagement · Free scoping consultation",
-    accent: "bg-emerald-50 border-emerald-100",
-    iconBg: "bg-emerald-100",
-  },
-  {
-    id: "accounting",
-    icon: "📊",
-    title: "Accounting",
-    tagline: "Full outsourced accounting so you can focus on growing your business.",
-    description:
-      "Accurate, timely financial records are the foundation of every sound business decision. Our accounting team handles your books with the precision of an in-house finance function, at a fraction of the cost. We work with QuickBooks, Sage, and Caseware.",
-    features: [
-      "Full bookkeeping and ledger management",
-      "Monthly and quarterly management accounts",
-      "Payroll processing and SSNIT administration",
-      "Annual financial statements preparation",
-      "Accounts payable and receivable management",
-      "Bank reconciliations",
-      "Chart of accounts setup and optimisation",
-    ],
-    pricing: "From GHS 600/month retainer · Sliding scale available",
+    pricing: "Included from Starter Essentials plan — GHS 16,500/year",
     accent: "bg-violet-50 border-violet-100",
     iconBg: "bg-violet-100",
-  },
-  {
-    id: "consultancy",
-    icon: "🤝",
-    title: "Business Consultancy",
-    tagline: "Strategic advisory from registration through to growth planning.",
-    description:
-      "Starting or scaling a business in Ghana requires navigating a web of regulatory requirements across multiple agencies. Our consultancy team guides you through every step — from initial registration to strategic planning — so you build on a solid foundation.",
-    features: [
-      "Business registration with the Registrar General (RGD)",
-      "GRA tax identification and VAT certificate",
-      "SSNIT employer registration",
-      "PPA supplier registration for government tenders",
-      "Business plan development and review",
-      "Strategic planning and growth advisory",
-      "Professional indemnity insurance guidance",
-    ],
-    pricing: "From GHS 500 per engagement · Packages available",
-    accent: "bg-amber-50 border-amber-100",
-    iconBg: "bg-amber-100",
+    number: "03",
   },
 ];
 
-const pricingOptions = [
+// ── Real pricing plans from company profile ───────────────
+const plans = [
   {
-    icon: "🎁",
-    title: "Free initial consultation",
-    body: "A 30-minute session to discuss your needs and assess how we can help. No commitment required.",
+    name: "Free Introductory",
+    price: "GHS 0",
+    period: "",
+    highlight: false,
+    description: "Get started with no commitment. Understand your compliance position and what Erano can do for you.",
+    features: [
+      "Basic compliance check",
+      "Initial financial strategy consultation",
+      "Introduction to corporate governance",
+      "Business health snapshot",
+      "Downloadable guide on starting a business",
+      "Overview of statutory filings and basic governance",
+    ],
+    cta: "Get started free",
+    ctaHref: "/contact",
   },
   {
-    icon: "📅",
-    title: "Monthly retainer",
-    body: "Affordable ongoing support for businesses that need continuous accounting or tax management.",
+    name: "Starter Essentials",
+    price: "GHS 16,500",
+    period: "/ year",
+    highlight: true,
+    description: "The complete compliance and advisory package for growing SMEs ready to operate professionally.",
+    features: [
+      "Customised financial strategy development (once per year)",
+      "Basic compliance monitoring (bi-annually)",
+      "Annual statutory filings",
+      "Annual returns filing",
+      "Basic compliance updates (quarterly)",
+      "Single business valuation report (once per year)",
+      "Basic process review (once per year)",
+    ],
+    cta: "Get started",
+    ctaHref: "/contact",
   },
   {
-    icon: "📐",
-    title: "Sliding scale",
-    body: "Fees adjusted based on your business size and capacity — especially for NGOs and early-stage startups.",
+    name: "Growth Booster",
+    price: "GHS 24,500",
+    period: "/ year",
+    highlight: false,
+    description: "Everything in Starter Essentials, plus deeper industry-specific support for businesses scaling fast.",
+    features: [
+      "All from Starter Essentials",
+      "Industry-specific consultancy (twice per year)",
+      "Monthly compliance monitoring and updates",
+      "Quarterly board meeting preparation",
+      "Value enhancement strategy session (once per year)",
+      "Quarterly risk management workshops",
+      "Maintenance of corporate records",
+    ],
+    cta: "Get started",
+    ctaHref: "/contact",
   },
   {
-    icon: "📦",
-    title: "Per-engagement",
-    body: "For one-off audits, registrations, or advisory projects. Quoted clearly upfront with no surprises.",
+    name: "Business Pro",
+    price: "GHS 32,500",
+    period: "/ year",
+    highlight: false,
+    description: "For established businesses that need proactive compliance, audit support, and ongoing strategic input.",
+    features: [
+      "All from Growth Booster",
+      "Proactive compliance monitoring with alerts (monthly)",
+      "Corporate support and secretarial services (as needed)",
+      "Audit representation for compliance issues (once per year)",
+      "Basic compliance training for staff (bi-annually)",
+      "Ongoing transactional support (up to 3 per year)",
+      "Detailed process optimisation recommendations (bi-annually)",
+    ],
+    cta: "Get started",
+    ctaHref: "/contact",
+  },
+  {
+    name: "Elite Advantage",
+    price: "GHS 37,500",
+    period: "/ year",
+    highlight: false,
+    description: "Our most comprehensive package for complex organisations requiring continuous advisory and enhanced audit coverage.",
+    features: [
+      "All from Business Pro",
+      "Continuous corporate support (monthly consultations)",
+      "Custom compliance training for staff (quarterly)",
+      "Enhanced audit representation (up to twice per year)",
+      "Annual re-valuation for business growth tracking",
+      "Continuous monitoring and reporting",
+      "Customised internal control framework development",
+    ],
+    cta: "Get started",
+    ctaHref: "/contact",
+  },
+  {
+    name: "Custom Offer",
+    price: "Get a quote",
+    period: "",
+    highlight: false,
+    description: "Tailored exclusively for your organisation's unique requirements. Embassies, mining companies, and large corporates welcome.",
+    features: [
+      "Fully bespoke engagement scope",
+      "Dedicated relationship manager",
+      "Custom SLA and reporting cadence",
+      "Exclusive features built around your organisation",
+    ],
+    cta: "Request a quote",
+    ctaHref: "/contact",
   },
 ];
 
@@ -121,13 +190,13 @@ export default function ServicesPage() {
           <div className="max-w-2xl reveal">
             <p className="eyebrow mb-4">What we offer</p>
             <h1 className="heading-display mb-5">
-              Four disciplines,<br />
+              Three disciplines,<br />
               <em>one trusted firm</em>
             </h1>
             <p className="text-ui-lg text-brand-grey leading-relaxed">
               We combine deep local regulatory knowledge with international
-              professional standards across tax, audit, accounting, and
-              business consultancy.
+              professional standards across accountancy, business advisory,
+              and tax planning.
             </p>
           </div>
 
@@ -157,14 +226,17 @@ export default function ServicesPage() {
           <div className="container-erano">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
 
-              {/* Left — content */}
+              {/* Content */}
               <div className={i % 2 === 0 ? "order-1" : "order-1 lg:order-2"}>
                 <div className="reveal">
                   <div className={`w-12 h-12 ${svc.iconBg} rounded-xl flex items-center justify-center text-2xl mb-5`}>
                     {svc.icon}
                   </div>
-                  <p className="eyebrow mb-3">{`0${i + 1} — Service`}</p>
+                  <p className="eyebrow mb-3">{svc.number} — Service</p>
                   <h2 className="heading-section mb-4">{svc.title}</h2>
+                  <p className="text-ui-base text-brand-grey leading-relaxed mb-4 italic font-display text-[1.1rem]">
+                    &ldquo;{svc.tagline}&rdquo;
+                  </p>
                   <p className="text-ui-base text-brand-grey leading-relaxed mb-6">
                     {svc.description}
                   </p>
@@ -177,7 +249,7 @@ export default function ServicesPage() {
                 </div>
               </div>
 
-              {/* Right — features card */}
+              {/* Features card */}
               <div className={i % 2 === 0 ? "order-2" : "order-2 lg:order-1"}>
                 <div className={`reveal reveal-delay-2 border ${svc.accent} rounded-2xl p-7`}>
                   <p className="font-sans font-medium text-ui-base text-brand-charcoal mb-5">
@@ -205,36 +277,94 @@ export default function ServicesPage() {
         </section>
       ))}
 
-      {/* Pricing philosophy */}
+      {/* Pricing plans */}
       <section className="section-gap bg-brand-charcoal text-white">
         <div className="container-erano">
           <div className="max-w-xl mb-12 reveal">
             <p className="eyebrow text-brand-blue-light mb-3">Pricing</p>
             <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.5rem)] font-medium text-white leading-tight mb-4">
-              Transparent pricing,<br />
-              <em className="text-brand-blue-light">no surprises</em>
+              Choose your plan,<br />
+              <em className="text-brand-blue-light">start anytime</em>
             </h2>
             <p className="text-ui-base text-white/60 leading-relaxed">
-              We believe every business deserves access to quality professional
-              services. Our pricing is structured to be fair and accessible.
+              From a free introductory session to a fully bespoke engagement —
+              we have a plan for every stage of your business journey.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {pricingOptions.map((opt, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {plans.map((plan, i) => (
               <div
-                key={opt.title}
-                className={`reveal reveal-delay-${i + 1} border border-white/10 rounded-xl p-6 hover:border-brand-blue/50 hover:bg-white/5 transition-all`}
+                key={plan.name}
+                className={`reveal reveal-delay-${(i % 3) + 1} flex flex-col rounded-2xl p-6 transition-all ${
+                  plan.highlight
+                    ? "bg-brand-blue border-2 border-brand-blue-light shadow-blue"
+                    : "border border-white/10 hover:border-brand-blue/50 hover:bg-white/5"
+                }`}
               >
-                <div className="text-2xl mb-4">{opt.icon}</div>
-                <h3 className="font-sans font-medium text-ui-base text-white mb-2">
-                  {opt.title}
-                </h3>
-                <p className="text-ui-sm text-white/50 leading-relaxed">
-                  {opt.body}
+                {/* Plan name + popular badge */}
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="font-sans font-medium text-ui-base text-white">
+                    {plan.name}
+                  </h3>
+                  {plan.highlight && (
+                    <span className="text-[9px] font-semibold tracking-[0.08em] uppercase bg-white text-brand-blue-dark px-2.5 py-1 rounded-full">
+                      Most popular
+                    </span>
+                  )}
+                </div>
+
+                {/* Price */}
+                <div className="mb-4">
+                  <span className="font-display text-[2rem] font-medium text-white leading-none">
+                    {plan.price}
+                  </span>
+                  {plan.period && (
+                    <span className="text-ui-sm text-white/50 ml-1">{plan.period}</span>
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="text-ui-sm text-white/55 leading-relaxed mb-5">
+                  {plan.description}
                 </p>
+
+                {/* Features */}
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5">
+                      <Check
+                        size={14}
+                        className={`flex-shrink-0 mt-0.5 ${
+                          plan.highlight ? "text-white" : "text-brand-blue-light"
+                        }`}
+                      />
+                      <span className="text-ui-sm text-white/65 leading-relaxed">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <Link
+                  href={plan.ctaHref}
+                  className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-ui-sm font-medium transition-all ${
+                    plan.highlight
+                      ? "bg-white text-brand-blue-dark hover:bg-brand-cloud"
+                      : "border border-white/20 text-white hover:border-white/50 hover:bg-white/5"
+                  }`}
+                >
+                  {plan.cta} <ArrowRight size={14} />
+                </Link>
               </div>
             ))}
+          </div>
+
+          {/* Pricing note */}
+          <div className="mt-10 text-center reveal">
+            <p className="text-ui-sm text-white/40">
+              All prices are annual. Monthly retainer arrangements available on request.
+              Free initial consultation included with every plan.
+            </p>
           </div>
         </div>
       </section>
@@ -244,12 +374,12 @@ export default function ServicesPage() {
         <div className="container-erano text-center reveal">
           <p className="eyebrow mb-4">Start today</p>
           <h2 className="heading-section mb-4 max-w-lg mx-auto">
-            Not sure where to begin?<br />
+            Not sure which plan fits?<br />
             <em className="text-brand-blue">Let&apos;s talk it through</em>
           </h2>
           <p className="text-ui-base text-brand-grey max-w-md mx-auto mb-8">
             Book a free 30-minute consultation and we&apos;ll recommend the
-            right services for your business.
+            right plan and services for your business.
           </p>
           <Link
             href="/contact"
