@@ -22,13 +22,13 @@ export default function ComingSoonPage() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-          
+          <a
             href="mailto:enquiries@eranoconsulting.com"
             className="inline-flex items-center gap-2 bg-brand-blue text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-blue-dark transition-all shadow-sm w-full sm:w-auto justify-center"
           >
             ✉ enquiries@eranoconsulting.com
           </a>
-          
+          <a
             href="https://wa.me/233559331276"
             target="_blank"
             rel="noopener noreferrer"
