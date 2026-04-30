@@ -17,10 +17,11 @@ type FormState = {
   fullName: string;
   email:    string;
   phone:    string;
+  company:  string;
+  industry: string;
   service:  string;
   message:  string;
 };
-
 type Status = "idle" | "loading" | "success" | "error";
 
 const services = [
@@ -32,7 +33,7 @@ const services = [
 ];
 
 export default function ContactPage() {
-  const [form, setForm]     = useState<FormState>({ fullName: "", email: "", phone: "", service: "", message: "" });
+  const [form, setForm] = useState<FormState>({ fullName: "", email: "", phone: "", company: "", industry: "", service: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError]   = useState("");
 
@@ -60,7 +61,7 @@ export default function ContactPage() {
       });
       if (res.ok) {
         setStatus("success");
-        setForm({ fullName: "", email: "", phone: "", service: "", message: "" });
+        setForm({ fullName: "", email: "", phone: "", company: "", industry: "", service: "", message: "" });
       } else {
         setStatus("error");
       }
@@ -255,6 +256,50 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
+                    <label style={labelStyle}>Company name <span style={{ color: "#ef4444" }}>*</span></label>
+                    <input
+                      name="company"
+                      type="text"
+                      value={form.company}
+                      onChange={handleChange}
+                      placeholder="Acme Ltd"
+                      required
+                      style={inputStyle}
+                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                  <div>
+                    <label style={labelStyle}>Industry / Sector</label>
+                    <div style={{ position: "relative" }}>
+                      <select
+                        name="industry"
+                        value={form.industry}
+                        onChange={handleChange}
+                        style={{ ...inputStyle, appearance: "none" as const, cursor: "pointer", paddingRight: "2.5rem" }}
+                        onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                        onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                      >
+                        <option value="">Select your sector...</option>
+                        <option value="sme">SME</option>
+                        <option value="law">Law Firm</option>
+                        <option value="embassy">Embassy / Diplomatic Mission</option>
+                        <option value="mining">Mining Company</option>
+                        <option value="oil">Oil & Gas</option>
+                        <option value="corporate">Corporate Body</option>
+                        <option value="agi">AGI / GIPC Member</option>
+                        <option value="ngo">NGO / Non-profit</option>
+                        <option value="other">Other</option>
+                      </select>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: "0.875rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
                     <label style={labelStyle}>Service of interest</label>
                     <div style={{ position: "relative" }}>
                       <select
@@ -272,7 +317,8 @@ export default function ContactPage() {
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: "0.875rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
                         <polyline points="6 9 12 15 18 9"/>
                       </svg>
-                    </div>                  </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div>

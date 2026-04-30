@@ -227,7 +227,7 @@ export default function Navbar() {
                   (e.currentTarget as HTMLElement).style.transform  = "translateY(0)";
                 }}
               >
-                Contact us
+                Get started
               </Link>
             </div>
           )}
@@ -340,7 +340,7 @@ export default function Navbar() {
                 textAlign:      "center" as const,
                 background:     "#c4973a",
               }}>
-                Contact us
+                Get started
               </Link>
             </div>
           </div>
