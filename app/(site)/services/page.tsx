@@ -132,7 +132,7 @@ export default function ServicesPage() {
           </div>
           <div className="flex flex-wrap gap-2 mt-8 reveal reveal-delay-1">
             {services.map((s) => (
-              
+              <a
                 key={s.id}
                 href={`#${s.id}`}
                 className="inline-flex items-center gap-1.5 text-ui-sm font-medium text-brand-charcoal bg-white border border-brand-cloud px-4 py-2 rounded-full hover:border-brand-blue hover:text-brand-blue-dark transition-all"

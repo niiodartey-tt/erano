@@ -1,147 +1,241 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { useCountUp } from "@/hooks/useCountUp";
+import { motion } from "framer-motion";
+import { useParallax } from "@/hooks/useParallax";
 import { ArrowRight } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
-function StatCard({
-  end, suffix = "", prefix = "", label, decimals = 0,
-}: {
-  end: number; suffix?: string; prefix?: string; label: string; decimals?: number;
-}) {
-  const { count, ref } = useCountUp({ end, duration: 1400, decimals });
-  return (
-    <div className="text-center">
-      <p
-        ref={ref as React.RefObject<HTMLParagraphElement>}
-        className="font-display text-[2.25rem] font-medium text-brand-charcoal leading-none"
-      >
-        {prefix}{decimals > 0 ? count.toFixed(decimals) : Math.round(count)}{suffix}
-      </p>
-      <p className="text-ui-sm text-brand-grey mt-1.5">{label}</p>
-    </div>
-  );
-}
+const fadeUp = {
+  hidden:  { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0  },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const trustBadges = [
+  "ICAG Licensed",
+  "GRA Registered",
+  "CITG Certified",
+  "RGD Incorporated",
+];
 
 export default function Hero() {
+  const parallaxY = useParallax(0.35);
+
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+    <section style={{
+      position:   "relative",
+      width:      "100%",
+      height:     "100%",
+      display:    "flex",
+      alignItems: "center",
+      background: "#080c14",
+      overflow:   "hidden",
+    }}>
 
-      {/* Background image with overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80&auto=format&fit=crop"
-          alt="Modern business district"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f0f4f9]/97 via-[#e8eef6]/90 to-[#dde5f0]/75" />
+      {/* Background video with parallax */}
+      <div style={{
+        position:  "absolute",
+        inset:     0,
+        zIndex:    0,
+        transform: parallaxY,
+      }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            width:     "100%",
+            height:    "100%",
+            objectFit: "cover",
+            opacity:   0.3,
+          }}
+          poster={IMAGES.HOME_HERO_POSTER}
+        >
+          <source src={IMAGES.HOME_HERO_VIDEO} type="video/mp4" />
+        </video>
       </div>
 
-      {/* Geometric grid overlay */}
-      <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
-        <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#5C6167" strokeWidth="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)"/>
-        </svg>
-      </div>
+      {/* Overlay */}
+      <div style={{
+        position:   "absolute",
+        inset:      0,
+        zIndex:     1,
+        background: "linear-gradient(105deg, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.92) 45%, rgba(8,12,20,0.55) 75%, rgba(8,12,20,0.2) 100%)",
+      }} />
 
-      <div className="container-erano relative z-10 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* Content */}
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        animate="visible"
+        style={{
+          position:      "relative",
+          zIndex:        3,
+          width:         "100%",
+          maxWidth:      "1440px",
+          margin:        "0 auto",
+          paddingInline: "clamp(1.5rem, 5.5vw, 5rem)",
+          paddingBlock:  "2rem",
+        }}
+      >
+        <div style={{ maxWidth: "760px" }}>
 
-          {/* Left — copy */}
-          <div>
-            <p className="eyebrow mb-5 reveal">Tax · Audit · Advisory · Ghana</p>
+          {/* Eyebrow */}
+          <motion.div variants={fadeUp} style={{ marginBottom: "1.75rem" }}>
+            <span style={{
+              display:       "inline-flex",
+              alignItems:    "center",
+              gap:           "0.75rem",
+              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize:      "0.6875rem",
+              fontWeight:    600,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase" as const,
+              color:         "#c4973a",
+            }}>
+              <span style={{
+                display:    "inline-block",
+                width:      "32px",
+                height:     "1px",
+                background: "#c4973a",
+                flexShrink: 0,
+              }} />
+              Tax · Audit · Advisory · Ghana
+            </span>
+          </motion.div>
 
-            <h1 className="heading-display mb-6 reveal reveal-delay-1">
-              Expert financial<br />
-              guidance for your<br />
-              <em>growing business</em>
-            </h1>
+          {/* Heading */}
+          <motion.h1
+            variants={fadeUp}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize:      "clamp(3rem, 6.5vw, 5.25rem)",
+              fontWeight:    800,
+              lineHeight:    1.0,
+              letterSpacing: "-0.03em",
+              color:         "#ffffff",
+              marginBottom:  "1.75rem",
+            }}
+          >
+            Financial clarity<br />
+            for Ghana&apos;s most<br />
+            <span style={{ color: "#c4973a" }}>ambitious businesses.</span>
+          </motion.h1>
 
-            <p className="text-ui-lg text-brand-grey leading-relaxed mb-8 max-w-[480px] reveal reveal-delay-2">
-              Erano Consulting provides professional tax advisory, audit,
-              accounting, and business consultancy services tailored to
-              Ghana&apos;s regulatory landscape.
-            </p>
+          {/* Subline */}
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize:     "1.125rem",
+              lineHeight:   1.8,
+              color:        "rgba(255,255,255,0.6)",
+              maxWidth:     "540px",
+              marginBottom: "2.75rem",
+            }}
+          >
+            Erano Consulting provides professional accountancy, business
+            advisory, and tax planning services — built for the complexity
+            of Ghana&apos;s regulatory landscape.
+          </motion.p>
 
-            <div className="flex flex-wrap gap-3 mb-12 reveal reveal-delay-3">
-              <Link
-                href="/services"
-                className="inline-flex items-center gap-2 bg-brand-blue text-white font-medium px-6 py-3 rounded-lg hover:bg-brand-blue-dark transition-all shadow-blue hover:shadow-lg hover:-translate-y-0.5"
-              >
-                Our services <ArrowRight size={16} />
-              </Link>
+          {/* CTAs */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              display:      "flex",
+              flexWrap:     "wrap" as const,
+              gap:          "1rem",
+              marginBottom: "3rem",
+            }}
+          >
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 border border-brand-blue-light text-brand-charcoal font-medium px-6 py-3 rounded-lg hover:border-brand-blue hover:text-brand-blue-dark transition-all bg-white/70"
+                style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  gap:            "0.5rem",
+                  background:     "#c4973a",
+                  color:          "#ffffff",
+                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:       "0.9375rem",
+                  fontWeight:     600,
+                  padding:        "1rem 2.25rem",
+                  borderRadius:   "4px",
+                  textDecoration: "none",
+                }}
               >
-                Book a consultation
+                Book a free consultation <ArrowRight size={17} />
               </Link>
-            </div>
+            </motion.div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap gap-4 reveal reveal-delay-4">
-              {["ICAG Licensed", "GRA Registered", "CITG Certified", "RGD Incorporated"].map((badge) => (
-                <span key={badge} className="inline-flex items-center gap-1.5 text-ui-sm text-brand-grey">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-blue inline-block" />
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </div>
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href="/services"
+                style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  gap:            "0.5rem",
+                  background:     "transparent",
+                  color:          "#ffffff",
+                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:       "0.9375rem",
+                  fontWeight:     600,
+                  padding:        "1rem 2.25rem",
+                  borderRadius:   "4px",
+                  border:         "1.5px solid rgba(255,255,255,0.22)",
+                  textDecoration: "none",
+                }}
+              >
+                Our services
+              </Link>
+            </motion.div>
+          </motion.div>
 
-          {/* Right — stats card */}
-          <div className="reveal reveal-delay-2">
-            <div className="bg-white/90 backdrop-blur-sm border border-brand-cloud rounded-2xl overflow-hidden shadow-card-hover">
-
-              {/* Card hero image */}
-              <div className="relative h-44 w-full">
-                <Image
-                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&q=80&auto=format&fit=crop"
-                  alt="Professional business meeting"
-                  fill
-                  className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
-                <div className="absolute bottom-3 left-4">
-                  <span className="text-[10px] font-semibold tracking-[0.12em] uppercase text-brand-blue-dark bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                    Trusted by businesses across Ghana
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-7">
-                {/* Stat grid */}
-                <div className="grid grid-cols-2 gap-8 mb-7">
-                  <StatCard end={24}  suffix="+"  label="Active clients" />
-                  <StatCard end={6}   suffix="+"  label="Years operating" />
-                  <StatCard end={4.2} suffix="M+" prefix="GHS " label="Tax managed annually" decimals={1} />
-                  <StatCard end={98}  suffix="%"  label="Client retention" />
-                </div>
-
-                <div className="rule mb-5" />
-
-                {/* Sectors */}
-                <p className="text-ui-sm text-brand-grey mb-3">Sectors served</p>
-                <div className="flex flex-wrap gap-2">
-                  {["SMEs", "Mining", "Oil & Gas", "Law Firms", "Embassies", "Real Estate", "Corporate"].map((s) => (
-                    <span key={s} className="text-ui-sm bg-brand-cloud text-brand-charcoal px-3 py-1 rounded-full">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Trust badges */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.625rem" }}
+          >
+            {trustBadges.map((badge) => (
+              <span
+                key={badge}
+                style={{
+                  display:       "inline-flex",
+                  alignItems:    "center",
+                  gap:           "0.5rem",
+                  fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:      "0.75rem",
+                  fontWeight:    500,
+                  color:         "rgba(255,255,255,0.5)",
+                  border:        "1px solid rgba(255,255,255,0.1)",
+                  borderRadius:  "2px",
+                  padding:       "0.375rem 0.875rem",
+                }}
+              >
+                <span style={{
+                  width:        "4px",
+                  height:       "4px",
+                  borderRadius: "50%",
+                  background:   "#c4973a",
+                  flexShrink:   0,
+                }} />
+                {badge}
+              </span>
+            ))}
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

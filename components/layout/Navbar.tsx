@@ -3,12 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Home",       href: "/"           },
-  { label: "About",      href: "/about"      },
+  { label: "About us",   href: "/about"      },
   { label: "Services",   href: "/services"   },
   { label: "Industries", href: "/industries" },
   { label: "Tools",      href: "/tools"      },
@@ -16,170 +14,277 @@ const navLinks = [
   { label: "Contact",    href: "/contact"    },
 ];
 
-const darkHeroPages = ["/", "/about", "/services", "/industries", "/tools", "/resources", "/contact"];
-
 export default function Navbar() {
-  const pathname  = usePathname();
+  const pathname                = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
-  const isDarkPage = darkHeroPages.includes(pathname);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
+    const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler, { passive: true });
     handler();
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 900);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
-  const solidNav = scrolled || open;
-  const lightText = isDarkPage && !solidNav;
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-          solidNav
-            ? "h-[56px] bg-white/95 backdrop-blur-md border-b border-[#e5e8f0] shadow-sm"
-            : isDarkPage
-              ? "h-[72px] bg-transparent border-b border-white/10"
-              : "h-[72px] bg-white border-b border-[#e5e8f0]"
-        )}
-      >
-        <div className="container-erano h-full flex items-center justify-between">
+      <header style={{
+        position:     "fixed",
+        top:          0,
+        left:         0,
+        right:        0,
+        zIndex:       40,
+        height:       "72px",
+        background:   "#ffffff",
+        borderBottom: "1px solid #e8eaed",
+        boxShadow:    scrolled ? "0 2px 20px rgba(0,0,0,0.07)" : "none",
+        transition:   "box-shadow 0.3s ease",
+      }}>
+        <div style={{
+          maxWidth:       "1440px",
+          margin:         "0 auto",
+          paddingInline:  "clamp(1.5rem, 5.5vw, 5rem)",
+          height:         "100%",
+          display:        "flex",
+          alignItems:     "center",
+          justifyContent: "space-between",
+          gap:            "2rem",
+        }}>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" aria-label="Erano Consulting">
-            <div className="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-blue">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-white stroke-2">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" strokeLinecap="round" strokeLinejoin="round"/>
+          {/* ── Logo ── */}
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none", flexShrink: 0 }}>
+            <div style={{
+              width:          "36px",
+              height:         "36px",
+              background:     "#080c14",
+              borderRadius:   "6px",
+              display:        "flex",
+              alignItems:     "center",
+              justifyContent: "center",
+              flexShrink:     0,
+            }}>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                <rect x="4" y="4"  width="16" height="2.5" rx="1" fill="#c4973a"/>
+                <rect x="4" y="11" width="11" height="2.5" rx="1" fill="#ffffff"/>
+                <rect x="4" y="18" width="16" height="2.5" rx="1" fill="#ffffff"/>
               </svg>
             </div>
-            <div className="flex flex-col leading-none">
-              <span className={cn(
-                "font-display text-[17px] font-medium tracking-tight transition-colors duration-300",
-                lightText ? "text-white" : "text-brand-charcoal"
-              )}>
-                Erano
-              </span>
-              <span className={cn(
-                "font-sans text-[9px] font-semibold tracking-[0.12em] uppercase transition-colors duration-300",
-                lightText ? "text-white/50" : "text-brand-grey"
-              )}>
-                Consulting
-              </span>
+            <div style={{ display: "flex", flexDirection: "column" as const, lineHeight: 1 }}>
+              <span style={{
+                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize:      "1.0625rem",
+                fontWeight:    800,
+                letterSpacing: "-0.02em",
+                color:         "#080c14",
+              }}>ERANO</span>
+              <span style={{
+                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize:      "0.45rem",
+                fontWeight:    600,
+                letterSpacing: "0.25em",
+                textTransform: "uppercase" as const,
+                color:         "#9ca3af",
+                marginTop:     "2px",
+              }}>CONSULTING</span>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
-            {navLinks.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-3 py-1.5 rounded-md text-ui-base transition-all duration-150 relative",
-                    active
-                      ? lightText ? "text-white font-medium" : "text-brand-navy font-medium"
-                      : lightText ? "text-white/70 hover:text-white" : "text-brand-grey hover:text-brand-charcoal"
-                  )}
-                >
-                  {link.label}
-                  {active && (
-                    <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-brand-gold rounded-full" />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* ── Desktop nav ── */}
+          {!isMobile && (
+            <nav style={{
+              display:        "flex",
+              alignItems:     "center",
+              flex:           1,
+              justifyContent: "center",
+              gap:            "0",
+            }}>
+              {navLinks.map((link) => {
+                const active = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    style={{
+                      position:       "relative",
+                      display:        "inline-flex",
+                      alignItems:     "center",
+                      gap:            "0.25rem",
+                      padding:        "0 0.875rem",
+                      height:         "72px",
+                      fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                      fontSize:       "0.875rem",
+                      fontWeight:     active ? 600 : 500,
+                      color:          active ? "#080c14" : "#6b7280",
+                      textDecoration: "none",
+                      whiteSpace:     "nowrap" as const,
+                      transition:     "color 0.15s ease",
+                      borderBottom:   active ? "2px solid #c4973a" : "2px solid transparent",
+                    }}
+                    onMouseEnter={e => {
+                      if (!active) (e.currentTarget as HTMLElement).style.color = "#080c14";
+                    }}
+                    onMouseLeave={e => {
+                      if (!active) (e.currentTarget as HTMLElement).style.color = "#6b7280";
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
 
-          {/* Desktop right */}
-          <div className="hidden md:flex items-center gap-3">
-            <span className={cn(
-              "eyebrow border rounded-full px-3 py-1 transition-colors duration-300",
-              lightText ? "text-white/50 border-white/20" : "text-brand-grey border-brand-cloud"
-            )}>
-              ICAG Licensed
-            </span>
-            <Link
-              href="/login"
-              className={cn(
-                "text-ui-base transition-colors duration-300",
-                lightText ? "text-white/70 hover:text-white" : "text-brand-charcoal hover:text-brand-blue"
-              )}
-            >
-              Client login
-            </Link>
-            <Link
-              href="/contact"
-              className="bg-brand-gold text-white text-ui-base font-semibold px-4 py-2 rounded-lg hover:bg-amber-600 transition-all shadow-gold btn-shimmer"
-            >
-              Get started
-            </Link>
-          </div>
-
-          {/* Mobile button */}
-          <button
-            className={cn(
-              "md:hidden p-2 rounded-lg transition-colors",
-              lightText ? "text-white/70 hover:bg-white/10" : "text-brand-grey hover:bg-brand-cloud"
-            )}
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile drawer */}
-      {open && (
-        <div className="fixed inset-0 z-30 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          />
-          <nav
-            className="absolute top-[56px] left-0 right-0 bg-white border-b border-[#e5e8f0] shadow-navy px-4 py-4 flex flex-col gap-1"
-            style={{ animation: "fadeUp 0.25s ease forwards" }}
-          >
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-4 py-3 rounded-lg text-ui-base transition-colors flex items-center justify-between",
-                  pathname === link.href
-                    ? "text-brand-navy font-medium bg-brand-blue-xl"
-                    : "text-brand-grey hover:text-brand-charcoal hover:bg-brand-cloud"
-                )}
-              >
-                {link.label}
-                {pathname === link.href && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-gold" />
-                )}
-              </Link>
-            ))}
-            <div className="mt-3 pt-3 border-t border-brand-cloud flex flex-col gap-2">
+          {/* ── Desktop right ── */}
+          {!isMobile && (
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
               <Link
                 href="/login"
-                className="px-4 py-3 rounded-lg text-ui-base text-brand-charcoal hover:bg-brand-cloud transition-colors"
+                style={{
+                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:       "0.875rem",
+                  fontWeight:     500,
+                  color:          "#6b7280",
+                  textDecoration: "none",
+                  whiteSpace:     "nowrap" as const,
+                  transition:     "color 0.15s ease",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#080c14"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6b7280"; }}
               >
                 Client login
               </Link>
               <Link
                 href="/contact"
-                className="px-4 py-3 rounded-lg text-ui-base bg-brand-gold text-white font-semibold text-center hover:bg-amber-600 transition-all btn-shimmer"
+                style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  background:     "#c4973a",
+                  color:          "#ffffff",
+                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:       "0.875rem",
+                  fontWeight:     600,
+                  padding:        "0.625rem 1.375rem",
+                  borderRadius:   "4px",
+                  textDecoration: "none",
+                  whiteSpace:     "nowrap" as const,
+                  transition:     "background 0.2s ease, transform 0.15s ease",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.background = "#a07828";
+                  (e.currentTarget as HTMLElement).style.transform  = "translateY(-1px)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.background = "#c4973a";
+                  (e.currentTarget as HTMLElement).style.transform  = "translateY(0)";
+                }}
               >
-                Get started
+                Contact us
               </Link>
             </div>
-          </nav>
+          )}
+
+          {/* ── Mobile button ── */}
+          {isMobile && (
+            <button
+              onClick={() => setOpen(v => !v)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              style={{
+                display:        "flex",
+                alignItems:     "center",
+                justifyContent: "center",
+                width:          "40px",
+                height:         "40px",
+                border:         "1px solid #e8eaed",
+                borderRadius:   "6px",
+                background:     "transparent",
+                color:          "#374151",
+                cursor:         "pointer",
+                flexShrink:     0,
+              }}
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* ── Mobile drawer ── */}
+      {open && isMobile && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 39 }}>
+          <div
+            onClick={() => setOpen(false)}
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)" }}
+          />
+          <div style={{
+            position:    "absolute",
+            top:         "72px",
+            left:        0,
+            right:       0,
+            background:  "#ffffff",
+            borderBottom:"1px solid #e8eaed",
+            boxShadow:   "0 8px 32px rgba(0,0,0,0.12)",
+            padding:     "1rem 1.5rem 1.5rem",
+            animation:   "fadeUp 0.2s ease forwards",
+          }}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "space-between",
+                  padding:        "0.875rem 1rem",
+                  borderRadius:   "6px",
+                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:       "1rem",
+                  fontWeight:     pathname === link.href ? 600 : 400,
+                  color:          pathname === link.href ? "#080c14" : "#6b7280",
+                  textDecoration: "none",
+                  background:     pathname === link.href ? "#f9fafb" : "transparent",
+                  marginBottom:   "2px",
+                }}
+              >
+                {link.label}
+                {pathname === link.href && (
+                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#c4973a" }} />
+                )}
+              </Link>
+            ))}
+            <div style={{
+              marginTop:     "0.75rem",
+              paddingTop:    "0.75rem",
+              borderTop:     "1px solid #e8eaed",
+              display:       "flex",
+              flexDirection: "column" as const,
+              gap:           "0.5rem",
+            }}>
+              <Link href="/contact" style={{
+                display:        "block",
+                padding:        "0.875rem 1rem",
+                borderRadius:   "6px",
+                fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize:       "1rem",
+                fontWeight:     600,
+                color:          "#ffffff",
+                textDecoration: "none",
+                textAlign:      "center" as const,
+                background:     "#c4973a",
+              }}>
+                Contact us
+              </Link>
+            </div>
+          </div>
         </div>
       )}
     </>
