@@ -358,11 +358,12 @@ export default function ServicesPage() {
 
               {/* Image */}
               <motion.div
+                className="svc-section-img-wrap"
                 initial={{ opacity: 0, x: i % 2 === 0 ? 40 : -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-                style={{ order: i % 2 === 0 ? 2 : 1, position: "relative", height: "520px", borderRadius: "8px", overflow: "hidden" }}
+                style={{ order: i % 2 === 0 ? 2 : 1, position: "relative", height: "520px", borderRadius: "8px", overflow: "hidden", cursor: "pointer" }}
               >
                 <Image
                   src={svc.image}

@@ -408,3 +408,21 @@
   from { clip-path: inset(0 100% 0 0); }
   to   { clip-path: inset(0 0% 0 0); }
 }
+
+/* ServicesStrip image zoom on card hover */
+.svc-card:hover .svc-img-wrap img {
+  transform: scale(1.12);
+}
+
+.svc-img-wrap img {
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Services page alternating image zoom on hover */
+.svc-section-img-wrap img {
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.svc-section-img-wrap:hover img {
+  transform: scale(1.12) !important;
+}

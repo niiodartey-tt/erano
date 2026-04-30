@@ -137,6 +137,7 @@ export default function ServicesStrip() {
             >
               <Link
                 href={svc.href}
+                className="svc-card"
                 style={{
                   display:        "flex",
                   flexDirection:  "column" as const,
@@ -148,8 +149,7 @@ export default function ServicesStrip() {
                   position:       "relative",
                   background:     "#080c14",
                   cursor:         "pointer",
-                }}
-                onMouseEnter={e => {
+                }}                onMouseEnter={e => {
                   const img  = e.currentTarget.querySelector(".svc-img")  as HTMLElement;
                   const over = e.currentTarget.querySelector(".svc-over") as HTMLElement;
                   const cont = e.currentTarget.querySelector(".svc-cont") as HTMLElement;
@@ -173,7 +173,8 @@ export default function ServicesStrip() {
                 }}
               >
                 {/* Image — top 60% */}
-                <div style={{
+                <div className="svc-img-wrap" 
+                  style={{
                   position: "relative",
                   height:   "280px",
                   overflow: "hidden",
@@ -183,7 +184,6 @@ export default function ServicesStrip() {
                     src={svc.image}
                     alt={svc.imageAlt}
                     fill
-                    className="svc-img"
                     style={{
                       objectFit:  "cover",
                       transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
