@@ -1,0 +1,25 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /login
+
+# *
+User-agent: *
+Disallow: /admin
+
+# *
+User-agent: *
+Disallow: /portal
+
+# *
+User-agent: *
+Disallow: /api
+
+# Host
+Host: https://erano.vercel.app
+
+# Sitemaps
+Sitemap: https://erano.vercel.app/sitemap.xml
