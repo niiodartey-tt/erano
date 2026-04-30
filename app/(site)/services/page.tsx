@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
+import { useState, useEffect } from "react";
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 40 },
@@ -95,6 +96,103 @@ const plans = [
     cta:      "Request a quote",
   },
 ];
+
+const accountantQuotes = [
+  { quote: "Beware of little expenses. A small leak will sink a great ship.", author: "Benjamin Franklin" },
+  { quote: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin" },
+  { quote: "Accounting is the language of business.", author: "Warren Buffett" },
+  { quote: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
+  { quote: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { quote: "In investing, what is comfortable is rarely profitable.", author: "Robert Arnott" },
+];
+
+function QuotesPanel() {
+  const [active, setActive]   = useState(0);
+  const [fading, setFading]   = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setActive(prev => (prev + 1) % accountantQuotes.length);
+        setFading(false);
+      }, 400);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const q = accountantQuotes[active];
+
+  return (
+    <div style={{
+      marginTop:      "1px",
+      background:     "rgba(196,151,58,0.06)",
+      border:         "1px solid rgba(255,255,255,0.06)",
+      borderTop:      "2px solid rgba(196,151,58,0.3)",
+      padding:        "3rem",
+      display:        "flex",
+      flexDirection:  "column" as const,
+      alignItems:     "center",
+      justifyContent: "center",
+      textAlign:      "center" as const,
+      minHeight:      "200px",
+    }}>
+      <div style={{
+        fontFamily:   "Georgia, serif",
+        fontSize:     "5rem",
+        lineHeight:   0.8,
+        color:        "#c4973a",
+        opacity:      0.3,
+        marginBottom: "-1rem",
+        userSelect:   "none",
+      }} aria-hidden="true">&ldquo;</div>
+
+      <div style={{
+        opacity:    fading ? 0 : 1,
+        transform:  fading ? "translateY(8px)" : "translateY(0)",
+        transition: "opacity 0.4s ease, transform 0.4s ease",
+      }}>
+        <p style={{
+          fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontSize:     "1.125rem",
+          fontStyle:    "italic",
+          lineHeight:   1.7,
+          color:        "rgba(255,255,255,0.75)",
+          maxWidth:     "680px",
+          margin:       "0 auto 1.25rem",
+        }}>{q.quote}</p>
+        <p style={{
+          fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontSize:      "0.8125rem",
+          fontWeight:    600,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase" as const,
+          color:         "#c4973a",
+        }}>— {q.author}</p>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.75rem" }}>
+        {accountantQuotes.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            style={{
+              width:        i === active ? "20px" : "6px",
+              height:       "6px",
+              borderRadius: "3px",
+              background:   i === active ? "#c4973a" : "rgba(255,255,255,0.2)",
+              border:       "none",
+              cursor:       "pointer",
+              transition:   "all 0.3s ease",
+              padding:      0,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function ServicesPage() {
   return (
@@ -305,7 +403,8 @@ export default function ServicesPage() {
             </motion.h2>
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
+<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            {/* Left — 6 pricing cards in 2 rows of 3 */}
             {plans.map((plan, i) => (
               <motion.div
                 key={plan.name}
@@ -318,6 +417,8 @@ export default function ServicesPage() {
                   padding:     "2rem",
                   position:    "relative",
                   borderTop:   plan.featured ? "2px solid #c4973a" : "2px solid transparent",
+                  display:     "flex",
+                  flexDirection: "column" as const,
                 }}
               >
                 {plan.featured && (
@@ -356,6 +457,7 @@ export default function ServicesPage() {
                   )}
                 </div>
 
+                {/* Features — flex:1 pushes button to bottom */}
                 <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", display: "flex", flexDirection: "column" as const, gap: "0.5rem", flex: 1 }}>
                   {plan.features.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
@@ -365,7 +467,8 @@ export default function ServicesPage() {
                   ))}
                 </ul>
 
-                <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }}>
+                {/* Button always at bottom */}
+                <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }} style={{ marginTop: "auto" }}>
                   <Link href="/contact" style={{
                     display: "block", textAlign: "center" as const,
                     fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
@@ -381,7 +484,9 @@ export default function ServicesPage() {
               </motion.div>
             ))}
           </div>
-        </div>
+
+          {/* Quotes panel below pricing */}
+          <QuotesPanel />        </div>
       </section>
 
       {/* ── Bottom CTA ── */}

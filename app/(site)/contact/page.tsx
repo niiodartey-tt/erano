@@ -256,19 +256,23 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label style={labelStyle}>Service of interest</label>
-                    <select
-                      name="service"
-                      value={form.service}
-                      onChange={handleChange}
-                      style={{ ...inputStyle, appearance: "none" as const, cursor: "pointer" }}
-                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
-                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
-                    >
-                      {services.map(s => (
-                        <option key={s.value} value={s.value}>{s.label}</option>
-                      ))}
-                    </select>
-                  </div>
+                    <div style={{ position: "relative" }}>
+                      <select
+                        name="service"
+                        value={form.service}
+                        onChange={handleChange}
+                        style={{ ...inputStyle, appearance: "none" as const, cursor: "pointer", paddingRight: "2.5rem" }}
+                        onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                        onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                      >
+                        {services.map(s => (
+                          <option key={s.value} value={s.value}>{s.label}</option>
+                        ))}
+                      </select>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: "0.875rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </div>                  </div>
                 </div>
 
                 <div>

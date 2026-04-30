@@ -111,35 +111,50 @@ export default function Navbar() {
               {navLinks.map((link) => {
                 const active = pathname === link.href;
                 return (
-                  <Link
+<Link
                     key={link.href}
                     href={link.href}
                     style={{
                       position:       "relative",
                       display:        "inline-flex",
                       alignItems:     "center",
-                      gap:            "0.25rem",
-                      padding:        "0 0.875rem",
+                      padding:        "0 1rem",
                       height:         "72px",
                       fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
-                      fontSize:       "0.875rem",
-                      fontWeight:     active ? 600 : 500,
+                      fontSize:       "0.9375rem",
+                      fontWeight:     active ? 700 : 600,
                       color:          active ? "#080c14" : "#6b7280",
                       textDecoration: "none",
                       whiteSpace:     "nowrap" as const,
                       transition:     "color 0.15s ease",
-                      borderBottom:   active ? "2px solid #c4973a" : "2px solid transparent",
                     }}
                     onMouseEnter={e => {
                       if (!active) (e.currentTarget as HTMLElement).style.color = "#080c14";
+                      const bar = e.currentTarget.querySelector(".nav-underline") as HTMLElement;
+                      if (bar) bar.style.transform = "scaleX(1)";
                     }}
                     onMouseLeave={e => {
                       if (!active) (e.currentTarget as HTMLElement).style.color = "#6b7280";
+                      const bar = e.currentTarget.querySelector(".nav-underline") as HTMLElement;
+                      if (bar && !active) bar.style.transform = "scaleX(0)";
                     }}
                   >
                     {link.label}
-                  </Link>
-                );
+                    <span
+                      className="nav-underline"
+                      style={{
+                        position:        "absolute",
+                        bottom:          0,
+                        left:            "1rem",
+                        right:           "1rem",
+                        height:          "2px",
+                        background:      "#c4973a",
+                        transform:       active ? "scaleX(1)" : "scaleX(0)",
+                        transformOrigin: "left",
+                        transition:      "transform 0.25s ease",
+                      }}
+                    />
+                  </Link>                );
               })}
             </nav>
           )}
@@ -147,12 +162,17 @@ export default function Navbar() {
           {/* ── Desktop right ── */}
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
+
+              {/* Client login with lock icon */}
               <Link
                 href="/login"
                 style={{
+                  display:        "inline-flex",
+                  alignItems:     "center",
+                  gap:            "0.4rem",
                   fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
-                  fontSize:       "0.875rem",
-                  fontWeight:     500,
+                  fontSize:       "0.9375rem",
+                  fontWeight:     600,
                   color:          "#6b7280",
                   textDecoration: "none",
                   whiteSpace:     "nowrap" as const,
@@ -161,8 +181,27 @@ export default function Navbar() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#080c14"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6b7280"; }}
               >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ flexShrink: 0 }}
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
                 Client login
               </Link>
+
+              {/* Divider */}
+              <div style={{ width: "1px", height: "20px", background: "#e8eaed" }} />
+
+              {/* Contact CTA */}
               <Link
                 href="/contact"
                 style={{
@@ -171,9 +210,9 @@ export default function Navbar() {
                   background:     "#c4973a",
                   color:          "#ffffff",
                   fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
-                  fontSize:       "0.875rem",
+                  fontSize:       "0.9375rem",
                   fontWeight:     600,
-                  padding:        "0.625rem 1.375rem",
+                  padding:        "0.625rem 1.5rem",
                   borderRadius:   "4px",
                   textDecoration: "none",
                   whiteSpace:     "nowrap" as const,
@@ -248,7 +287,7 @@ export default function Navbar() {
                   borderRadius:   "6px",
                   fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
                   fontSize:       "1rem",
-                  fontWeight:     pathname === link.href ? 600 : 400,
+                  fontWeight:     pathname === link.href ? 700 : 500,
                   color:          pathname === link.href ? "#080c14" : "#6b7280",
                   textDecoration: "none",
                   background:     pathname === link.href ? "#f9fafb" : "transparent",
@@ -269,6 +308,26 @@ export default function Navbar() {
               flexDirection: "column" as const,
               gap:           "0.5rem",
             }}>
+              <Link href="/login" style={{
+                display:        "flex",
+                alignItems:     "center",
+                justifyContent: "center",
+                gap:            "0.4rem",
+                padding:        "0.875rem 1rem",
+                borderRadius:   "6px",
+                fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontSize:       "1rem",
+                fontWeight:     600,
+                color:          "#6b7280",
+                textDecoration: "none",
+                border:         "1px solid #e8eaed",
+              }}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+                Client login
+              </Link>
               <Link href="/contact" style={{
                 display:        "block",
                 padding:        "0.875rem 1rem",

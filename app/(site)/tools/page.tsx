@@ -120,22 +120,29 @@ function VATCalc() {
     <div>
       <InputField label="Amount (GHS)" value={amount} onChange={setAmount} />
       <InputField label="VAT Rate" value={rate} onChange={setRate}>
-        <select
-          value={rate}
-          onChange={e => setRate(e.target.value)}
-          style={{
-            width: "100%", height: "48px",
-            border: "1.5px solid #e8eaed", borderRadius: "4px",
-            padding: "0 1rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-            fontSize: "0.9375rem", color: "#0d1b2e",
-            background: "#ffffff", outline: "none", appearance: "none" as const,
-          }}
-        >
-          <option value="0.15">15% — Standard rate</option>
-          <option value="0.04">4% — Flat rate scheme</option>
-        </select>
-      </InputField>
+      <div style={{ position: "relative" }}>
+          <select
+            value={rate}
+            onChange={e => setRate(e.target.value)}
+            style={{
+              width: "100%", height: "48px",
+              border: "1.5px solid #e8eaed", borderRadius: "4px",
+              padding: "0 2.5rem 0 1rem",
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize: "0.9375rem", color: "#0d1b2e",
+              background: "#ffffff", outline: "none", appearance: "none" as const, cursor: "pointer",
+            }}
+            onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+            onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+          >
+            <option value="0.15">15% — Standard rate</option>
+            <option value="0.04">4% — Flat rate scheme</option>
+          </select>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: "0.875rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>      
+        </InputField>
       <div style={{ marginTop: "1.5rem" }}>
         <ResultRow label="Base amount"  value={fmt(base)} />
         <ResultRow label={`VAT (${parseFloat(rate) * 100}%)`} value={fmt(vatAmt)} />
@@ -188,24 +195,30 @@ function CorporateCalc() {
     <div>
       <InputField label="Profit before tax (GHS)" value={profit} onChange={setProfit} />
       <InputField label="Sector / rate" value={sector} onChange={setSector}>
-        <select
-          value={sector}
-          onChange={e => setSector(e.target.value)}
-          style={{
-            width: "100%", height: "48px",
-            border: "1.5px solid #e8eaed", borderRadius: "4px",
-            padding: "0 1rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
-            fontSize: "0.9375rem", color: "#0d1b2e",
-            background: "#ffffff", outline: "none", appearance: "none" as const,
-          }}
-        >
-          <option value="0.25">25% — Standard rate</option>
-          <option value="0.35">35% — Mining companies</option>
-          <option value="0.08">8% — Free zones enterprise</option>
-          <option value="0.00">0% — Agricultural (1st 5 years)</option>
-        </select>
-      </InputField>
+<div style={{ position: "relative" }}>
+          <select
+            value={sector}
+            onChange={e => setSector(e.target.value)}
+            style={{
+              width: "100%", height: "48px",
+              border: "1.5px solid #e8eaed", borderRadius: "4px",
+              padding: "0 2.5rem 0 1rem",
+              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize: "0.9375rem", color: "#0d1b2e",
+              background: "#ffffff", outline: "none", appearance: "none" as const, cursor: "pointer",
+            }}
+            onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+            onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+          >
+            <option value="0.25">25% — Standard rate</option>
+            <option value="0.35">35% — Mining companies</option>
+            <option value="0.08">8% — Free zones enterprise</option>
+            <option value="0.00">0% — Agricultural (1st 5 years)</option>
+          </select>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", right: "0.875rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>      </InputField>
       <div style={{ marginTop: "1.5rem" }}>
         <ResultRow label="Profit before tax"         value={fmt(pbt)} />
         <ResultRow label={`Corporate tax (${parseFloat(sector) * 100}%)`} value={fmt(tax)} />
