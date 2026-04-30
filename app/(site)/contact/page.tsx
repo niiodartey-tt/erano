@@ -1,41 +1,47 @@
 "use client";
 
 import { useState } from "react";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { ArrowRight, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 
-const services = [
-  { value: "",              label: "Select a service..."     },
-  { value: "tax",           label: "Tax Advisory"            },
-  { value: "audit",         label: "Audit & Assurance"       },
-  { value: "accounting",    label: "Accounting"              },
-  { value: "consultancy",   label: "Business Consultancy"    },
-  { value: "other",         label: "Other / Not sure yet"    },
-];
+const fadeUp = {
+  hidden:  { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.1 } },
+};
 
 type FormState = {
   fullName: string;
-  email: string;
-  phone: string;
-  service: string;
-  message: string;
+  email:    string;
+  phone:    string;
+  service:  string;
+  message:  string;
 };
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export default function ContactPage() {
-  useScrollReveal();
+const services = [
+  { value: "",             label: "Select a service..."       },
+  { value: "accountancy",  label: "Accountancy Services"      },
+  { value: "business",     label: "Business Services"         },
+  { value: "tax",          label: "Tax Planning & Advice"     },
+  { value: "other",        label: "Other / Not sure yet"      },
+];
 
+export default function ContactPage() {
   const [form, setForm]     = useState<FormState>({ fullName: "", email: "", phone: "", service: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
-  const [error,  setError]  = useState("");
+  const [error, setError]   = useState("");
 
   const waNumber  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233559331276";
-  const waMessage = encodeURIComponent("Hello, I'd like to enquire about Erano Consulting's services.");
+  const waMessage = encodeURIComponent("Hello, I would like to enquire about Erano Consulting services.");
   const waHref    = `https://wa.me/${waNumber}?text=${waMessage}`;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -48,9 +54,9 @@ export default function ContactPage() {
     setStatus("loading");
     try {
       const res = await fetch("/api/contact", {
-        method: "POST",
+        method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body:    JSON.stringify(form),
       });
       if (res.ok) {
         setStatus("success");
@@ -63,253 +69,399 @@ export default function ContactPage() {
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    width:        "100%",
+    height:       "52px",
+    border:       "1.5px solid #e8eaed",
+    borderRadius: "4px",
+    padding:      "0 1rem",
+    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+    fontSize:     "0.9375rem",
+    color:        "#0d1b2e",
+    background:   "#ffffff",
+    outline:      "none",
+    transition:   "border-color 0.15s ease",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display:      "block",
+    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+    fontSize:     "0.8125rem",
+    fontWeight:   600,
+    color:        "#0d1b2e",
+    marginBottom: "0.5rem",
+  };
+
   return (
     <>
-      {/* Header */}
-      <section className="bg-hero-gradient pt-16 pb-14">
-        <div className="container-erano">
-          <div className="max-w-2xl reveal">
-            <p className="eyebrow mb-4">Get in touch</p>
-            <h1 className="heading-display mb-5">
-              Let&apos;s talk about<br />
-              <em>your business</em>
-            </h1>
-            <p className="text-ui-lg text-brand-grey leading-relaxed">
-              We respond within one business day. The first consultation
-              is always free — no commitment required.
-            </p>
-          </div>
-        </div>
+      {/* ── Hero ── */}
+      <section style={{
+        background:   "#080c14",
+        paddingBlock: "clamp(6rem, 12vw, 10rem) clamp(4rem, 8vw, 7rem)",
+        position:     "relative",
+        overflow:     "hidden",
+      }}>
+        <div style={{
+          position:   "absolute",
+          inset:      0,
+          background: "radial-gradient(ellipse at 30% 50%, rgba(196,151,58,0.06) 0%, transparent 70%)",
+        }} />
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          style={{ position: "relative", zIndex: 1, maxWidth: "1440px", margin: "0 auto", paddingInline: "clamp(1.5rem, 5.5vw, 5rem)" }}
+        >
+          <motion.span variants={fadeUp} style={{
+            display: "inline-flex", alignItems: "center", gap: "0.75rem",
+            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
+            textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
+          }}>
+            <span style={{ width: "32px", height: "1px", background: "#c4973a", flexShrink: 0 }} />
+            Get in touch
+          </motion.span>
+
+          <motion.h1 variants={fadeUp} style={{
+            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
+            lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
+            marginBottom: "1.25rem", maxWidth: "600px",
+          }}>
+            Let&apos;s talk about<br />
+            <span style={{ color: "#c4973a" }}>your business.</span>
+          </motion.h1>
+
+          <motion.p variants={fadeUp} style={{
+            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontSize: "1.125rem", lineHeight: 1.8,
+            color: "rgba(255,255,255,0.6)", maxWidth: "480px",
+          }}>
+            We respond within one business day. The first consultation
+            is always free — no commitment required.
+          </motion.p>
+        </motion.div>
       </section>
 
-      {/* Main content */}
-      <section className="section-gap bg-white">
-        <div className="container-erano">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      {/* ── Form + sidebar ── */}
+      <section style={{ background: "#ffffff", paddingBlock: "clamp(5rem, 9vw, 7.5rem)" }}>
+        <div style={{
+          maxWidth:      "1440px",
+          margin:        "0 auto",
+          paddingInline: "clamp(1.5rem, 5.5vw, 5rem)",
+          display:       "grid",
+          gridTemplateColumns: "1fr 380px",
+          gap:           "5rem",
+          alignItems:    "start",
+        }}>
 
-            {/* Form — takes 2 cols */}
-            <div className="lg:col-span-2 reveal">
-              <h2 className="font-sans font-medium text-ui-lg text-brand-charcoal mb-6">
-                Send us a message
-              </h2>
+          {/* ── Form ── */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.h2 variants={fadeUp} style={{
+              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize:      "1.75rem",
+              fontWeight:    700,
+              letterSpacing: "-0.02em",
+              color:         "#0d1b2e",
+              marginBottom:  "2.5rem",
+            }}>
+              Send us a message
+            </motion.h2>
 
-              {status === "success" ? (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center">
-                  <div className="text-4xl mb-4">✅</div>
-                  <h3 className="font-sans font-medium text-ui-lg text-brand-charcoal mb-2">
-                    Message received
-                  </h3>
-                  <p className="text-ui-base text-brand-grey">
-                    Thank you for reaching out. A member of our team will
-                    be in touch within one business day.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="form-label">
-                        Full name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="fullName"
-                        value={form.fullName}
-                        onChange={handleChange}
-                        className="form-input"
-                        placeholder="Kofi Asante"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="form-label">
-                        Email address <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        name="email"
-                        type="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        className="form-input"
-                        placeholder="kofi@company.com"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="form-label">Phone number</label>
-                      <input
-                        name="phone"
-                        type="tel"
-                        value={form.phone}
-                        onChange={handleChange}
-                        className="form-input"
-                        placeholder="+233 XX XXX XXXX"
-                      />
-                    </div>
-                    <div>
-                      <label className="form-label">Service of interest</label>
-                      <select
-                        name="service"
-                        value={form.service}
-                        onChange={handleChange}
-                        className="form-input"
-                      >
-                        {services.map((s) => (
-                          <option key={s.value} value={s.value}>{s.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
+            {status === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{
+                  background:   "#f0fdf4",
+                  border:       "1px solid #bbf7d0",
+                  borderRadius: "8px",
+                  padding:      "3rem",
+                  textAlign:    "center",
+                }}
+              >
+                <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✓</div>
+                <div style={{
+                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:     "1.125rem",
+                  fontWeight:   700,
+                  color:        "#0d1b2e",
+                  marginBottom: "0.5rem",
+                }}>Message received</div>
+                <p style={{
+                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontSize:   "0.9375rem",
+                  color:      "#4a5568",
+                  margin:     0,
+                }}>
+                  Thank you for reaching out. A member of our team will
+                  be in touch within one business day.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.form
+                variants={fadeUp}
+                onSubmit={handleSubmit}
+                noValidate
+                style={{ display: "flex", flexDirection: "column" as const, gap: "1.25rem" }}
+              >
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
                   <div>
-                    <label className="form-label">
-                      Message <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      name="message"
-                      value={form.message}
+                    <label style={labelStyle}>Full name <span style={{ color: "#ef4444" }}>*</span></label>
+                    <input
+                      name="fullName"
+                      value={form.fullName}
                       onChange={handleChange}
-                      className="form-input min-h-[140px] resize-y"
-                      placeholder="Tell us about your business and what you need help with..."
+                      placeholder="Kofi Asante"
                       required
+                      style={inputStyle}
+                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
                     />
                   </div>
+                  <div>
+                    <label style={labelStyle}>Email address <span style={{ color: "#ef4444" }}>*</span></label>
+                    <input
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder="kofi@company.com"
+                      required
+                      style={inputStyle}
+                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                    />
+                  </div>
+                </div>
 
-                  {error && (
-                    <p className="text-ui-sm text-red-500">{error}</p>
-                  )}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                  <div>
+                    <label style={labelStyle}>Phone number</label>
+                    <input
+                      name="phone"
+                      type="tel"
+                      value={form.phone}
+                      onChange={handleChange}
+                      placeholder="+233 XX XXX XXXX"
+                      style={inputStyle}
+                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                    />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Service of interest</label>
+                    <select
+                      name="service"
+                      value={form.service}
+                      onChange={handleChange}
+                      style={{ ...inputStyle, appearance: "none" as const, cursor: "pointer" }}
+                      onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                      onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                    >
+                      {services.map(s => (
+                        <option key={s.value} value={s.value}>{s.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-                  {status === "error" && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-ui-sm text-red-600">
-                      Something went wrong. Please try again or contact us directly via WhatsApp.
+                <div>
+                  <label style={labelStyle}>Message <span style={{ color: "#ef4444" }}>*</span></label>
+                  <textarea
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about your business and what you need help with..."
+                    required
+                    style={{
+                      width:        "100%",
+                      border:       "1.5px solid #e8eaed",
+                      borderRadius: "4px",
+                      padding:      "0.875rem 1rem",
+                      fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                      fontSize:     "0.9375rem",
+                      color:        "#0d1b2e",
+                      background:   "#ffffff",
+                      outline:      "none",
+                      resize:       "vertical",
+                      minHeight:    "160px",
+                      transition:   "border-color 0.15s ease",
+                    }}
+                    onFocus={e => { (e.target as HTMLElement).style.borderColor = "#c4973a"; }}
+                    onBlur={e  => { (e.target as HTMLElement).style.borderColor = "#e8eaed"; }}
+                  />
+                </div>
+
+                {error && (
+                  <p style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", color: "#ef4444", margin: 0 }}>
+                    {error}
+                  </p>
+                )}
+
+                {status === "error" && (
+                  <div style={{
+                    background: "#fef2f2", border: "1px solid #fecaca",
+                    borderRadius: "4px", padding: "0.875rem 1rem",
+                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontSize: "0.875rem", color: "#dc2626",
+                  }}>
+                    Something went wrong. Please try again or contact us via WhatsApp.
+                  </div>
+                )}
+
+                <motion.button
+                  type="submit"
+                  disabled={status === "loading"}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    display:      "inline-flex",
+                    alignItems:   "center",
+                    justifyContent: "center",
+                    gap:          "0.5rem",
+                    background:   "#c4973a",
+                    color:        "#ffffff",
+                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontSize:     "0.9375rem",
+                    fontWeight:   600,
+                    padding:      "1rem 2rem",
+                    borderRadius: "4px",
+                    border:       "none",
+                    cursor:       status === "loading" ? "not-allowed" : "pointer",
+                    opacity:      status === "loading" ? 0.7 : 1,
+                    alignSelf:    "flex-start",
+                  }}
+                >
+                  {status === "loading" ? (
+                    <>
+                      <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" opacity="0.25"/>
+                        <path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" opacity="0.75"/>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : "Send message"}
+                </motion.button>
+              </motion.form>
+            )}
+          </motion.div>
+
+          {/* ── Sidebar ── */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.h2 variants={fadeUp} style={{
+              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontSize:      "1.75rem",
+              fontWeight:    700,
+              letterSpacing: "-0.02em",
+              color:         "#0d1b2e",
+              marginBottom:  "2.5rem",
+            }}>
+              Contact details
+            </motion.h2>
+
+            <motion.div variants={fadeUp} style={{ display: "flex", flexDirection: "column" as const, gap: "1.75rem", marginBottom: "2rem" }}>
+              {[
+                { icon: <MapPin size={18} />, label: "Office", content: <span>GI-449-1284, Accra<br />Greater Accra, Ghana</span> },
+                { icon: <Phone size={18} />, label: "Phone",  content: <span>+233 55 923 3199<br />+233 55 933 1276</span>       },
+                { icon: <Mail  size={18} />, label: "Email",  content: <span style={{ wordBreak: "break-all" }}>enquiries@eranoconsulting.com</span> },
+              ].map((item) => (
+                <div key={item.label} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                  <div style={{
+                    width:          "40px",
+                    height:         "40px",
+                    borderRadius:   "6px",
+                    background:     "rgba(196,151,58,0.1)",
+                    display:        "flex",
+                    alignItems:     "center",
+                    justifyContent: "center",
+                    flexShrink:     0,
+                    color:          "#c4973a",
+                  }}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.25rem" }}>
+                      {item.label}
                     </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={status === "loading"}
-                    className="inline-flex items-center gap-2 bg-brand-blue text-white font-medium px-7 py-3.5 rounded-lg hover:bg-brand-blue-dark transition-all shadow-sm disabled:opacity-60 disabled:pointer-events-none"
-                  >
-                    {status === "loading" ? (
-                      <>
-                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                        </svg>
-                        Sending...
-                      </>
-                    ) : (
-                      <>Send message <ArrowRight size={16} /></>
-                    )}
-                  </button>
-                </form>
-              )}
-            </div>
-
-            {/* Contact info sidebar */}
-            <div className="space-y-5 reveal reveal-delay-2">
-              <h2 className="font-sans font-medium text-ui-lg text-brand-charcoal">
-                Contact details
-              </h2>
-
-              <div className="bg-off-white border border-brand-cloud rounded-2xl p-6 space-y-5">
-                <div className="flex gap-3">
-                  <div className="w-9 h-9 bg-brand-blue-xl rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin size={16} className="text-brand-blue-dark" />
-                  </div>
-                  <div>
-                    <p className="text-ui-sm font-medium text-brand-charcoal mb-0.5">Office address</p>
-                    <p className="text-ui-sm text-brand-grey">
-                      GI-449-1284, Accra<br />Greater Accra, Ghana
-                    </p>
+                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.9375rem", lineHeight: 1.7, color: "#6b7280" }}>
+                      {item.content}
+                    </div>
                   </div>
                 </div>
+              ))}
+            </motion.div>
 
-                <div className="flex gap-3">
-                  <div className="w-9 h-9 bg-brand-blue-xl rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone size={16} className="text-brand-blue-dark" />
+            {/* WhatsApp CTA */}
+            <motion.div variants={fadeUp}>
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display:        "flex",
+                  alignItems:     "center",
+                  gap:            "0.875rem",
+                  background:     "#f0fdf4",
+                  border:         "1px solid #bbf7d0",
+                  borderRadius:   "8px",
+                  padding:        "1.25rem",
+                  textDecoration: "none",
+                  transition:     "all 0.2s ease",
+                  marginBottom:   "1.5rem",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#dcfce7"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#f0fdf4"; }}
+              >
+                <div style={{
+                  width:          "40px",
+                  height:         "40px",
+                  borderRadius:   "50%",
+                  background:     "#25D366",
+                  display:        "flex",
+                  alignItems:     "center",
+                  justifyContent: "center",
+                  flexShrink:     0,
+                }}>
+                  <MessageCircle size={20} style={{ color: "#ffffff" }} />
+                </div>
+                <div>
+                  <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.9375rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "2px" }}>
+                    Chat on WhatsApp
                   </div>
-                  <div>
-                    <p className="text-ui-sm font-medium text-brand-charcoal mb-0.5">Phone</p>
-                    <a
-                      href="tel:+233559231996"
-                      className="text-ui-sm text-brand-grey hover:text-brand-blue transition-colors"
-                    >
-                      +233 55 923 1996
-                    </a>
-                    <br />
-                    <a
-                      href="tel:+233559331276"
-                      className="text-ui-sm text-brand-grey hover:text-brand-blue transition-colors"
-                    >
-                      +233 55 933 1276
-                    </a>
+                  <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "#4a5568" }}>
+                    Fastest response — usually within hours
                   </div>
                 </div>
+              </a>
+            </motion.div>
 
-                <div className="flex gap-3">
-                  <div className="w-9 h-9 bg-brand-blue-xl rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail size={16} className="text-brand-blue-dark" />
-                  </div>
-                  <div>
-                    <p className="text-ui-sm font-medium text-brand-charcoal mb-0.5">Email</p>
-                    <a
-                      href="mailto:enquiries@eranoconsulting.com"
-                      className="text-ui-sm text-brand-grey hover:text-brand-blue transition-colors break-all"
-                    >
-                      enquiries@eranoconsulting.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MessageCircle size={16} className="text-[#25D366]" />
-                  </div>
-                  <div>
-                    <p className="text-ui-sm font-medium text-brand-charcoal mb-0.5">WhatsApp</p>
-                    <a
-                      href={waHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-ui-sm text-brand-grey hover:text-[#25D366] transition-colors"
-                    >
-                      Chat with us now
-                    </a>
-                  </div>
-                </div>
+            {/* Response note */}
+            <motion.div variants={fadeUp} style={{
+              background:   "#f5f6f8",
+              borderLeft:   "2px solid #c4973a",
+              borderRadius: "0 4px 4px 0",
+              padding:      "1rem 1.25rem",
+            }}>
+              <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.375rem" }}>
+                Fast response guaranteed
               </div>
-
-              {/* Response time note */}
-              <div className="bg-brand-blue-xl border border-brand-blue-light rounded-xl p-4">
-                <p className="text-ui-sm font-medium text-brand-blue-dark mb-1">
-                  ⚡ Fast response
-                </p>
-                <p className="text-ui-sm text-brand-grey">
-                  We respond to all enquiries within one business day.
-                  For urgent matters, WhatsApp is the fastest way to reach us.
-                </p>
-              </div>
-
-              {/* Map placeholder */}
-              <div className="bg-brand-cloud rounded-xl h-40 flex items-center justify-center border border-brand-cloud">
-                <div className="text-center">
-                  <MapPin size={24} className="text-brand-blue mx-auto mb-2" />
-                  <p className="text-ui-sm text-brand-grey">Accra, Greater Accra</p>
-                  <a
-                    href="https://maps.google.com/?q=Accra,Ghana"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ui-sm text-brand-blue hover:text-brand-blue-dark transition-colors"
-                  >
-                    Open in Google Maps
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+              <p style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", lineHeight: 1.6, color: "#6b7280", margin: 0 }}>
+                We respond to all enquiries within one business day.
+                For urgent matters, WhatsApp is the fastest route.
+              </p>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     </>

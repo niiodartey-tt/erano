@@ -112,7 +112,7 @@ export default function Hero() {
           {/* Heading */}
           <motion.h1
             variants={fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{
               fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(3rem, 6.5vw, 5.25rem)",
@@ -131,7 +131,7 @@ export default function Hero() {
           {/* Subline */}
           <motion.p
             variants={fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{
               fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:     "1.125rem",
@@ -149,7 +149,7 @@ export default function Hero() {
           {/* CTAs */}
           <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{
               display:      "flex",
               flexWrap:     "wrap" as const,
@@ -204,7 +204,7 @@ export default function Hero() {
           {/* Trust badges */}
           <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.625rem" }}
           >
             {trustBadges.map((badge) => (
