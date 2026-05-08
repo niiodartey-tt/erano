@@ -30,7 +30,7 @@
 | T032 — Account state validation utility | `sprint-8` | ✅ Complete |
 | T033 — Rate limiting + honeypot | `sprint-8` | ✅ Complete |
 | T039 — Database indexes | `sprint-8` | ✅ Complete |
-| T009 — Multi-step onboarding form UI | `task/onboarding-form` | ⏳ Not started |
+| T009 — Multi-step onboarding form UI | `sprint-8` | ✅ Complete |
 | T010 — Account creation on form submission | `task/account-creation` | ⏳ Not started |
 
 ### Sprint 8 Definition of Done

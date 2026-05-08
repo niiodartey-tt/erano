@@ -294,6 +294,29 @@ Claude does this automatically — without being asked.
 - TypeScript check: clean pass (0 errors)
 - Build: clean — 19 pages, 0 errors
 
+**Sprint 8 — T009 — Multi-step onboarding form UI**
+- Created `app/onboarding/layout.tsx` — standalone, no Navbar/Footer, SEO metadata
+- Created `app/onboarding/page.tsx` — server component, renders OnboardingForm
+- Created `components/onboarding/onboarding-types.ts` — full Zod schema, OnboardingFormData type, STEPS array, stepFields map, Package interface
+- Created `components/onboarding/form-helpers.tsx` — shared Field, StepHeading, inputCls, selectCls helpers (DRY across all steps)
+- Created `components/onboarding/OnboardingHeader.tsx` — sticky header with ERANO wordmark + "Log in" link
+- Created `components/onboarding/OnboardingSidebar.tsx` — navy sidebar, step progress dots (bg-gold when active/done, Check icon when done), sticky at top-16, hidden on mobile
+- Created `components/onboarding/OnboardingForm.tsx` — orchestrator; useForm + FormProvider; packages fetched on mount via createBrowserClient; step navigation via trigger() on per-step field groups; gold progress bar (3px, dynamic width via inline style); AnimatePresence for step transitions; Back/Continue nav buttons for steps 0-5; footer with privacy/terms links
+- Created `components/onboarding/steps/Step1Business.tsx` — legal name, trading name, reg number, biz type select, country, industry select
+- Created `components/onboarding/steps/Step2Contact.tsx` — full name, role, email, phone, address textarea
+- Created `components/onboarding/steps/Step3Services.tsx` — 8 checkboxes in 2-col grid; Controller-managed array; gold border+bg/5 on checked items; Check icon in box
+- Created `components/onboarding/steps/Step4Financial.tsx` — turnover radio cards (4 options), employees number input, lastAudit optional, hasAccountant yes/no cards
+- Created `components/onboarding/steps/Step5Compliance.tsx` — 3 yes/no radio groups (GRA, VAT, outstanding obligations)
+- Created `components/onboarding/steps/Step6Package.tsx` — package cards fetched from Supabase; skeleton loading state; "Most popular" badge on Growth Booster; custom package shows "Tailored pricing" text; gold border on selected
+- Created `components/onboarding/steps/Step7Summary.tsx` — grouped review cards (Business, Contact, Services, Financial, Compliance, Package); Back + Submit buttons; inline error alert; Loader2 spinner on submit
+- Created `components/onboarding/steps/Step8Confirmation.tsx` — CheckCircle2 icon (text-gold), heading, thank-you message, navy "What happens next" box with 4 steps
+- All step components use useFormContext() — eliminates Control prop phantom-type incompatibility between @hookform/resolvers v5 and react-hook-form v7.73 
+- TypeScript fix: z.coerce.number() replaced with z.number({ error: "Required" }) + valueAsNumber: true — coerce changes input type to unknown, breaking zodResolver return type
+- Supabase fix: nullsLast → nullsFirst: false (nullsLast not in Supabase SDK types)
+- Gold rule respected: 4 contexts only — progress bar, step dots, Continue/Submit button, selected card border+tint
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 20 pages, /onboarding 9.34 kB first load JS
+
 ---
 
 ## Sprint 9 — Client Portal Shell
