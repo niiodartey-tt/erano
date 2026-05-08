@@ -18,18 +18,18 @@
 
 | Task | Branch | Status |
 |---|---|---|
-| T007 — Migrate to Resend, delete Nodemailer | `task/resend-migration` | ⏳ Not started |
+| T007 — Migrate to Resend, delete Nodemailer | `sprint-8` | ✅ Complete |
 | T008 — Email templates (12 templates) | `task/email-templates` | ⏳ Not started |
-| T001 — Supabase schema + RLS | `task/supabase-schema` | ⏳ Not started |
-| T002 — Supabase Storage buckets + RLS | `task/storage-setup` | ⏳ Not started |
-| T003 — RBAC middleware | `task/rbac-middleware` | ⏳ Not started |
-| T004 — Login page | `task/login-page` | ⏳ Not started |
-| T005 — Password reset flow | `task/password-reset` | ⏳ Not started |
-| T006 — First login force password change | `task/set-password` | ⏳ Not started |
-| T031 — Magic link first login | `task/magic-link` | ⏳ Not started |
-| T032 — Account state validation utility | `task/validate-state` | ⏳ Not started |
-| T033 — Rate limiting + honeypot | `task/rate-limit` | ⏳ Not started |
-| T039 — Database indexes | `task/db-indexes` | ⏳ Not started |
+| T001 — Supabase schema + RLS | `sprint-8` | ✅ Complete |
+| T002 — Supabase Storage buckets + RLS | `sprint-8` | ✅ Complete |
+| T003 — RBAC middleware | `sprint-8` | ✅ Complete |
+| T004 — Login page | `sprint-8` | ✅ Complete |
+| T005 — Password reset flow | `sprint-8` | ✅ Complete |
+| T006 — First login force password change | `sprint-8` | ✅ Complete |
+| T031 — Magic link first login | `sprint-8` | ✅ Complete |
+| T032 — Account state validation utility | `sprint-8` | ✅ Complete |
+| T033 — Rate limiting + honeypot | `sprint-8` | ✅ Complete |
+| T039 — Database indexes | `sprint-8` | ✅ Complete |
 | T009 — Multi-step onboarding form UI | `task/onboarding-form` | ⏳ Not started |
 | T010 — Account creation on form submission | `task/account-creation` | ⏳ Not started |
 

@@ -247,6 +247,43 @@ Claude does this automatically — without being asked.
 - TypeScript check: clean pass (0 errors)
 - Build: clean — 14 pages, 0 errors
 
+**Sprint 8 — T004 — Login page**
+- Created `app/login/layout.tsx` — standalone layout, no Navbar/Footer; SEO metadata only
+- Created `app/login/page.tsx` — "use client"; react-hook-form + zodResolver; createBrowserClient from @supabase/ssr
+- Design: off-white full-screen background, white card with shadow-lift, text-based ERANO logo linking to home, gold underline hover animation
+- Validation: email + password via Zod; field-level errors with aria-invalid, aria-describedby, role="alert"
+- Auth flow: signInWithPassword → getUser → users table role/must_change_password check → redirect by role
+- Redirects: admin → /admin; client with must_change_password → /portal/set-password; client → /portal/dashboard
+- Lockout: 5 failed attempts triggers 15-minute in-state lockout; same error message for wrong email and wrong password (no account enumeration)
+- Accessibility: all inputs have associated labels, aria-invalid, aria-describedby; errors use role="alert"; button disabled + aria states during loading/lockout; focus-visible rings on all interactive elements; min-h-[44px] touch targets
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 15 pages, 0 errors
+
+**Sprint 8 — T005 — Password reset flow (T038 session invalidation included)**
+- Created `app/reset-password/layout.tsx` — standalone, no Navbar/Footer, SEO metadata
+- Created `app/reset-password/page.tsx` — email entry form; always shows success message after submit (no account enumeration); `resetPasswordForEmail` redirects to `/reset-password/confirm`; "use client" with react-hook-form + zodResolver
+- Created `app/reset-password/confirm/page.tsx` — new password form with confirm field; Zod `.refine` for password match; on mount exchanges PKCE code via `exchangeCodeForSession` (with fallback to `getSession` for implicit flow); token error state shown if verification fails; on success calls `updateUser` then `signOut({ scope: "global" })` (T038 — invalidates all other sessions) then redirects to `/login?reset=success`
+- Two separate `createBrowserClient` instances per page (useEffect + onSubmit) — safe because both read/write the same cookie store; avoids module-level init (which runs during SSR)
+- Accessibility: `role="status"` on success state, `role="alert"` on token error, `aria-invalid` + `aria-describedby` on all inputs, `role="alert"` + `aria-live` on server errors, `sr-only` loading text during token check
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 17 pages, 0 errors
+
+**Sprint 8 — T006 — Force password change on first login**
+- Created `app/portal/set-password/layout.tsx` — standalone layout, SEO metadata, no Navbar/Footer
+- Created `app/portal/set-password/page.tsx` — "use client"; react-hook-form + zodResolver + zod `.refine` for password match; `useWatch` drives live password requirement checklist (CheckCircle2 / Circle from Lucide); on mount verifies auth via `getUser()` and redirects to /login if no session; on submit calls `updateUser` then POSTs to `/api/portal/auth/clear-password-flag` then redirects to `/portal/dashboard`; no back link or escape route
+- Created `app/api/portal/auth/clear-password-flag/route.ts` — POST handler; uses aliased `createSSRClient` from `@supabase/ssr` (anon key + read-only cookies) to verify session; uses `createServerClient` from `@/lib/supabase-server` (service role) for DB writes; updates `users.must_change_password = false`; inserts audit_log row (`password_changed_on_first_login`); returns 401 if unauthenticated, 500 on DB error
+- Import alias pattern: `import { createServerClient as createSSRClient } from "@supabase/ssr"` avoids naming conflict with the service role client
+- Accessibility: `useWatch` live checklist uses `aria-label` list, `aria-describedby="password-reqs"` on input; all errors `role="alert"`; `sr-only` text during session check; `min-h-[44px]` touch targets
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 19 pages, 0 errors
+
+**Sprint 8 — T031 — lib/magicLink.ts (magic link generation)**
+- Created `lib/magicLink.ts` — server-side only; exports `generateMagicLink(email)` as named export
+- Uses `supabase.auth.admin.generateLink` (service role required — admin API) with `type: "magiclink"` and `redirectTo: ${NEXT_PUBLIC_SITE_URL}/portal/set-password`
+- Throws on missing env var, Supabase error, or missing `action_link` in response
+- No default export, no "use client"
+- TypeScript check: clean pass (0 errors)
+
 ---
 
 ## Sprint 9 — Client Portal Shell
