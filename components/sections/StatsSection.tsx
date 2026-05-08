@@ -77,7 +77,7 @@ export default function StatsSection() {
       }}>
 
         {/* Label */}
-        <div className="reveal" style={{ textAlign: "center", marginBottom: "4rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "4rem" }}>
           <span style={{
             fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "0.6875rem",
@@ -92,7 +92,6 @@ export default function StatsSection() {
 
         {/* Stats row */}
         <div
-          className="reveal reveal-delay-1"
           style={{
             display:        "flex",
             flexWrap:       "wrap" as const,
@@ -119,7 +118,6 @@ export default function StatsSection() {
 
         {/* Gold rule bottom */}
         <div
-          className="reveal"
           style={{
             height:     "1px",
             background: "linear-gradient(90deg, transparent, rgba(196,151,58,0.4), transparent)",
@@ -129,7 +127,6 @@ export default function StatsSection() {
 
         {/* Supporting line */}
         <p
-          className="reveal reveal-delay-2"
           style={{
             fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:    "0.9375rem",

@@ -143,7 +143,49 @@ Claude does this automatically — without being asked.
 ## Sprint 8 — Portal Foundation
 **Status:** 🔄 In progress
 
-*Claude will populate this section during Sprint 8 — after every group automatically.*
+**Standards fix — GH₵ symbol, formatCurrency, dead dependency removal**
+- `lib/utils.ts` — `formatCurrency` now outputs `GH₵ 5,000.00` instead of `GHS 5,000`; uses `toLocaleString("en-GH")` with `minimumFractionDigits: 2`; signature unchanged
+- `app/(site)/services/page.tsx` — replaced all 5 pricing strings from `"GHS 0/16,500/24,500/32,500/37,500"` to `"GH₵ 0/16,500/24,500/32,500/37,500"`
+- Removed `@studio-freight/lenis@^1.0.42` from `package.json` — deprecated package, nothing in the codebase imported from it, `lenis@1.3.23` is the active package
+- npm audit: same 5 pre-existing vulnerabilities in `next@14.2.35` — no change, none introduced by this work
+- TypeScript check: clean pass
+- Build: clean — 14 pages, 0 errors
+
+**Standards fix — contact API route hardening**
+- `app/api/contact/route.ts` — added Zod schema validation (`contactSchema`) for all 7 fields; added `he` HTML entity encoding on all user-supplied values before HTML interpolation; added Map-based rate limiter (5 req / IP / 60 min) with per-request expiry cleanup; added company and industry fields to outbound email template (were in form but silently dropped); Nodemailer/sendEmail logic left unchanged; rate limiter cleanup uses `forEach` not `for...of Map.entries()` due to TypeScript tsconfig target constraints
+- Installed `he@1.2.0` (HTML entity encoder) and `@types/he` — clean, no new vulnerabilities introduced
+- Pre-existing `npm audit` finding: 5 vulnerabilities (1 moderate, 4 high) in `next@14.2.35`, `postcss`, `glob`, `eslint-config-next` — pre-existed before this session; fix requires `npm audit fix --force` which upgrades Next.js to 16+ (breaking change) — deferred to a dedicated upgrade sprint
+- TypeScript error during build: `MapIterator` type incompatible with `for...of` under tsconfig — resolved by switching to `Map.forEach()`
+- TypeScript check: clean pass
+- Build: clean — 14 pages, 0 errors
+
+**Standards fix — security headers, Lenis touch, picsum removal (2 files)**
+- `next.config.mjs` — added `headers()` function applying 5 security headers to all routes (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `X-DNS-Prefetch-Control: on`); removed `picsum.photos` from `remotePatterns`
+- `components/layout/SmoothScroll.tsx` — added `syncTouch: false` to Lenis constructor options; note: standard documents `smoothTouch` but Lenis 1.3.x renamed this to `syncTouch` — same behavior, updated name; `syncTouch` defaults to `false` in 1.3.x but now explicit
+- TypeScript check: clean pass
+- Build: clean — 14 pages, 0 errors
+
+**Standards fix — font, lang, skip navigation (3 files)**
+- `app/layout.tsx` — added `Plus_Jakarta_Sans` via `next/font/google` with variable `--font-plus-jakarta-sans`; changed `<html lang="en">` to `<html lang="en-GH">`; added `className={plusJakartaSans.variable}` to both `<html>` and `<body>`; added skip navigation link as first child of `<body>` targeting `#main-content`
+- `app/globals.css` — removed Google Fonts `@import` line; updated both `font-family` declarations in `@layer base` (body and headings) to use `var(--font-plus-jakarta-sans)` with `"Plus Jakarta Sans"` as fallback
+- `app/(site)/layout.tsx` — added `id="main-content"` to `<main>` element (skip nav target)
+- TypeScript check: clean pass
+- Build: clean — 14 pages static, sitemap generated; Google Fonts fetch warning at build time is expected (self-hosting happens at Vercel deploy time with network access)
+
+**Standards fix — dead reveal CSS class removal (4 files)**
+- `components/sections/WhyErano.tsx` — removed 3 reveal classes: `reveal` (span), `reveal reveal-delay-1` (h2), `reveal reveal-delay-${i+2}` (map div)
+- `components/sections/StatsSection.tsx` — removed 4 reveal classes: `reveal` (label div), `reveal reveal-delay-1` (stats row div), `reveal` (gold rule div), `reveal reveal-delay-2` (supporting p)
+- `components/sections/HomeCTA.tsx` — removed 5 reveal classes: `reveal` (gold rule div), `reveal reveal-delay-1` (h2), `reveal reveal-delay-2` (subline p), `reveal reveal-delay-3` (CTA div), `reveal reveal-delay-4` (trust note p)
+- `components/sections/SectorsGrid.tsx` — removed 2 reveal classes: `reveal` (header div), `reveal reveal-delay-${(i%4)+1}` (map Link)
+- Root cause: `.reveal` and `.reveal-delay-*` CSS classes were never defined in globals.css — all 14 usages were dead code producing no animation
+- TypeScript check: clean pass (no output)
+
+**Standards fix — app/(site)/page.tsx server component conversion**
+- Modified `app/(site)/page.tsx` — removed `"use client"` directive, removed `useScrollReveal` import and call
+- `useScrollReveal` confirmed no-op stub — its sole presence forced the home page to be a client component unnecessarily
+- All child components that require client-side features already declare `"use client"` themselves — this is valid Next.js 14 App Router pattern
+- `calc(100vh - 72px)` wrapper and all component structure left exactly unchanged
+- TypeScript check: clean pass (no output)
 
 ---
 

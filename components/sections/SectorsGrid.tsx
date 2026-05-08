@@ -99,7 +99,7 @@ export default function SectorsGrid() {
       }}>
 
         {/* Header */}
-        <div className="reveal" style={{
+        <div style={{
           display:        "flex",
           alignItems:     "flex-end",
           justifyContent: "space-between",
@@ -168,7 +168,6 @@ export default function SectorsGrid() {
             <Link
               key={sector.name}
               href="/industries"
-              className={`reveal reveal-delay-${(i % 4) + 1}`}
               style={{
                 display:        "block",
                 background:     "#f5f6f8",

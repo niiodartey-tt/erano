@@ -1,6 +1,3 @@
-"use client";
-
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 import Hero from "@/components/sections/Hero";
 import TickerStrip from "@/components/sections/TickerStrip";
 import ServicesStrip from "@/components/sections/ServicesStrip";
@@ -11,7 +8,6 @@ import SectorsGrid from "@/components/sections/SectorsGrid";
 import HomeCTA from "@/components/sections/HomeCTA";
 
 export default function HomePage() {
-  useScrollReveal();
   return (
     <>
       {/* Hero + Ticker = exactly one viewport height minus navbar */}

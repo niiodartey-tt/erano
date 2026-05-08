@@ -66,6 +66,15 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### BUG-005 — Lenis smoothTouch renamed to syncTouch in v1.3.x
+**Sprint:** Sprint 8 (standards review)
+**File:** `components/layout/SmoothScroll.tsx`
+**Symptom:** Standard 05-breaking-points.md documents `smoothTouch: false` but Lenis renamed this option to `syncTouch` in v1.3.x
+**Fix applied:** Used `syncTouch: false` in SmoothScroll.tsx — correct for installed version (1.3.23)
+**Prevention rule:** When upgrading Lenis, check changelog for option renames. `.claude/standards/05-breaking-points.md` should be updated to reference `syncTouch` instead of `smoothTouch`.
+
+---
+
 ## Pending Issues (Known But Not Yet Fixed)
 
 ### PENDING-001 — Mobile responsiveness incomplete on multiple pages
@@ -78,6 +87,16 @@ When a bug is found and resolved, add an entry with:
 - `app/(site)/about/page.tsx` — team grid needs mobile stack fix
 **Status:** Deferred to Sprint 15 — Mobile QA
 **Notes:** ServicesStrip and WhyErano single-column fixes were applied in Sprint 7 via CSS classes. Remaining pages still need full 375px and 430px review.
+
+---
+
+### PENDING-002 — 5 known vulnerabilities in next@14.2.35
+**Identified:** Sprint 8 (standards review)
+**File:** `package.json`
+**Symptom:** npm audit reports 5 pre-existing vulnerabilities in next@14.2.35
+**Fix:** npm audit fix --force upgrades Next.js to 16+ — this is a breaking change requiring a dedicated sprint task
+**Status:** Deferred — add as first task in Sprint 15 (pre-launch hardening)
+**Prevention rule:** Do not run npm audit fix --force mid-sprint. Schedule Next.js major version upgrades as a standalone task with full regression testing.
 
 ---
 

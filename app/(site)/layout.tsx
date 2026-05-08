@@ -7,7 +7,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <Navbar />
-      <main style={{ paddingTop: "72px" }}>
+      <main id="main-content" style={{ paddingTop: "72px" }}>
         <PageTransition>
           {children}
         </PageTransition>

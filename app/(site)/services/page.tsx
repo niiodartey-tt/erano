@@ -49,7 +49,7 @@ const services = [
 const plans = [
   {
     name:     "Free Introductory",
-    price:    "GHS 0",
+    price:    "GH₵ 0",
     period:   "",
     featured: false,
     features: ["Basic compliance check", "Initial financial strategy consultation", "Introduction to corporate governance", "Business health snapshot", "Downloadable guide on starting a business"],
@@ -57,7 +57,7 @@ const plans = [
   },
   {
     name:     "Starter Essentials",
-    price:    "GHS 16,500",
+    price:    "GH₵ 16,500",
     period:   "/ year",
     featured: true,
     features: ["Customised financial strategy (once per year)", "Basic compliance monitoring (bi-annually)", "Annual statutory filings", "Annual returns filing", "Basic compliance updates (quarterly)", "Single business valuation report"],
@@ -65,7 +65,7 @@ const plans = [
   },
   {
     name:     "Growth Booster",
-    price:    "GHS 24,500",
+    price:    "GH₵ 24,500",
     period:   "/ year",
     featured: false,
     features: ["All from Starter Essentials", "Industry-specific consultancy (twice per year)", "Monthly compliance monitoring", "Quarterly board meeting preparation", "Value enhancement strategy session", "Quarterly risk management workshops"],
@@ -73,7 +73,7 @@ const plans = [
   },
   {
     name:     "Business Pro",
-    price:    "GHS 32,500",
+    price:    "GH₵ 32,500",
     period:   "/ year",
     featured: false,
     features: ["All from Growth Booster", "Proactive compliance monitoring (monthly)", "Corporate support and secretarial services", "Audit representation (once per year)", "Basic compliance training for staff", "Ongoing transactional support (up to 3/year)"],
@@ -81,7 +81,7 @@ const plans = [
   },
   {
     name:     "Elite Advantage",
-    price:    "GHS 37,500",
+    price:    "GH₵ 37,500",
     period:   "/ year",
     featured: false,
     features: ["All from Business Pro", "Continuous corporate support (monthly)", "Custom compliance training (quarterly)", "Enhanced audit representation (up to twice/year)", "Annual re-valuation for growth tracking", "Customised internal control framework"],

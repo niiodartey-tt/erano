@@ -20,10 +20,15 @@ export function formatNumber(n: number): string {
 
 /**
  * Format currency in GHS.
- * e.g. formatCurrency(5000) => "GHS 5,000"
+ * e.g. formatCurrency(5000) => "GH₵ 5,000.00"
  */
 export function formatCurrency(amount: number, currency = "GHS"): string {
-  return `${currency} ${formatNumber(amount)}`;
+  const symbol = currency === "GHS" ? "GH₵" : currency;
+  const formatted = amount.toLocaleString("en-GH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${symbol} ${formatted}`;
 }
 
 /**

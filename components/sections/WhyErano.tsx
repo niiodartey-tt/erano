@@ -53,7 +53,6 @@ export default function WhyErano() {
         }}>
 
           <span
-            className="reveal"
             style={{
               display:       "inline-block",
               fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
@@ -69,7 +68,6 @@ export default function WhyErano() {
           </span>
 
           <h2
-            className="reveal reveal-delay-1"
             style={{
               fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(1.875rem, 3vw, 2.625rem)",
@@ -88,7 +86,6 @@ export default function WhyErano() {
             {statements.map((s, i) => (
               <div
                 key={s.title}
-                className={`reveal reveal-delay-${i + 2}`}
                 style={{
                   paddingLeft: "1.25rem",
                   borderLeft:  "2px solid #c4973a",

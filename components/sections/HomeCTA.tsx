@@ -46,7 +46,6 @@ export default function HomeCTA() {
 
         {/* Decorative gold rule */}
         <div
-          className="reveal"
           style={{
             width:        "48px",
             height:       "1px",
@@ -57,7 +56,6 @@ export default function HomeCTA() {
 
         {/* Heading */}
         <h2
-          className="reveal reveal-delay-1"
           style={{
             fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2.25rem, 4.5vw, 3.75rem)",
@@ -74,7 +72,6 @@ export default function HomeCTA() {
 
         {/* Subline */}
         <p
-          className="reveal reveal-delay-2"
           style={{
             fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:    "1.0625rem",
@@ -89,7 +86,7 @@ export default function HomeCTA() {
         </p>
 
         {/* CTA */}
-        <div className="reveal reveal-delay-3">
+        <div>
           <Link
             href="/contact"
             style={{
@@ -121,7 +118,6 @@ export default function HomeCTA() {
 
         {/* Trust note */}
         <p
-          className="reveal reveal-delay-4"
           style={{
             fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "0.8125rem",
