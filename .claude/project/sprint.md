@@ -143,6 +143,18 @@
 
 ---
 
+### ✅ Sprint 7.5 — Standards Review (pre-Sprint 8)
+**Completed:** May 2026
+
+- [x] F1 — Removed dead useScrollReveal + "use client" from app/(site)/page.tsx — home page is now a server component
+- [x] F2 — Removed 14 dead .reveal CSS classes from WhyErano, StatsSection, HomeCTA, SectorsGrid
+- [x] F3 — Migrated Google Fonts @import to next/font/google, lang="en-GH", skip nav link, id="main-content" on <main>
+- [x] F4 — Security headers in next.config.mjs, picsum.photos removed, syncTouch: false on Lenis
+- [x] F5 — Contact API hardened: Zod validation, he sanitization, in-memory rate limiting
+- [x] F6 — GH₵ symbol throughout, formatCurrency fixed, @studio-freight/lenis dead dependency removed
+
+---
+
 ### ✅ Sprint 7 — SEO + Launch
 **Completed:** 2025
 

@@ -143,6 +143,13 @@ Claude does this automatically — without being asked.
 ## Sprint 8 — Portal Foundation
 **Status:** 🔄 In progress
 
+**Sprint 8 — T001/T039 — Supabase schema + RLS + indexes**
+- Created `supabase/schema.sql` — 401 lines — ready to apply via Supabase Dashboard → SQL Editor
+- File contains in order: extensions (pgcrypto), 4 custom ENUM types, 13 tables, 8 indexes (T039), RLS enabled on all 13 tables, 29 RLS policies, 6 package seed rows
+- Tables: users, packages, client_profiles, agreement_versions, invoices, agreements, payment_timers, payment_proofs, document_requests, document_uploads, notifications, audit_log, cron_log
+- RLS policies: clients read/write own data only; admins access all; service role bypass applies automatically; `system_insert_notifications` policy allows server-side inserts from API routes
+- Not executed locally — must be applied in Supabase Dashboard SQL editor
+
 **Standards fix — GH₵ symbol, formatCurrency, dead dependency removal**
 - `lib/utils.ts` — `formatCurrency` now outputs `GH₵ 5,000.00` instead of `GHS 5,000`; uses `toLocaleString("en-GH")` with `minimumFractionDigits: 2`; signature unchanged
 - `app/(site)/services/page.tsx` — replaced all 5 pricing strings from `"GHS 0/16,500/24,500/32,500/37,500"` to `"GH₵ 0/16,500/24,500/32,500/37,500"`
