@@ -1,83 +1,102 @@
-# Environment Variables
+# Environment Variables — Erano Consulting
 
-> This file documents all environment variables for this project.
-> Never include actual values here — variable names only.
-> Actual values live in .env.local (local) and Vercel dashboard (production).
+> Last updated: May 2026
+> Update this file every time a new variable is added to the project.
+> Never commit actual values — variable names only.
+> Actual values live in `.env.local` (local) and Vercel dashboard (production).
 
 ---
 
 ## Rules
 
-- `.env.local` is never committed to Git — it is in `.gitignore`
-- `.env.example` is always committed — it contains variable names with empty values
-- Add new variables to this file AND `.env.example` immediately when created
-- Update Vercel dashboard before deploying any new variable
-- `NEXT_PUBLIC_` prefix = available in browser (client + server)
-- No prefix = server only (API routes, server components)
-- Never log variable values — not even in development
+- `NEXT_PUBLIC_` prefix = accessible in browser — never put secrets here
+- No `NEXT_PUBLIC_` prefix = server-side only — never import into client components
+- `SUPABASE_SERVICE_ROLE_KEY` is the most dangerous variable in this project — server only, always
+- When adding a new variable: add to `.env.local`, Vercel dashboard, and this file simultaneously
+- `.env.example` must always reflect the current variable list — values as empty strings or descriptive placeholders
 
 ---
 
-## Variable Reference
+## Current Variables
 
 ### Supabase
-[TODO: Remove this section if not using Supabase]
 
-| Variable | Scope | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Client + Server | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Client + Server | Public anon key — safe for browser |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server only | Bypasses RLS — never client-side |
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Client + Server | Supabase project URL | ✅ Active |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Client + Server | Supabase anon key — safe for browser | ✅ Active |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server only | Supabase service role — bypasses RLS — never in client | 🔲 Add in Sprint 8 |
 
-### Sanity CMS
-[TODO: Remove this section if not using Sanity]
+> **Critical:** `SUPABASE_SERVICE_ROLE_KEY` must only ever be imported in `/app/api/` route files or server actions. If it appears in any `components/`, `hooks/`, or `lib/` file that is not explicitly server-only, that is a critical security violation.
 
-| Variable | Scope | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Client + Server | Sanity project ID |
-| `NEXT_PUBLIC_SANITY_DATASET` | Client + Server | Dataset name (usually "production") |
-| `SANITY_API_TOKEN` | Server only | Read/write token for server-side mutations |
+---
+
+### Cloudinary
+
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `CLOUDINARY_CLOUD_NAME` | Server only | Cloudinary cloud name — public site images only | ✅ Active (`dyvh4ufcc`) |
+| `CLOUDINARY_API_KEY` | Server only | Cloudinary API key | ✅ Active |
+| `CLOUDINARY_API_SECRET` | Server only | Cloudinary API secret — never expose | ✅ Active |
+
+> Cloudinary is used for public site media only. All portal file storage uses Supabase Storage.
+
+---
+
+### Resend (Email)
+
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `RESEND_API_KEY` | Server only | Resend API key — all transactional email | 🔲 Add in Sprint 8 |
+
+> Replaces Nodemailer + Ethereal entirely. Used for public contact form and all portal email triggers.
+> Domain verification required before production email delivery works — pending client deposit for custom domain.
+
+---
 
 ### Site
 
-| Variable | Scope | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Client + Server | Full production URL e.g. https://hopefrontfoundation.org |
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Client + Server | Canonical site URL — used for CSRF checks, sitemap, OG tags | ✅ Active (`https://erano.vercel.app`) |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Client | WhatsApp float button number | ✅ Active (`233559331276`) |
 
-### Email
-[TODO: Remove or replace with your email service]
-
-| Variable | Scope | Description |
-|---|---|---|
-| `RESEND_API_KEY` | Server only | Resend API key for transactional email |
-
-### Analytics
-[TODO: Remove or replace with your analytics service]
-
-| Variable | Scope | Description |
-|---|---|---|
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Client + Server | Google Analytics measurement ID |
-
-### Payments
-[TODO: Remove if not taking payments]
-
-| Variable | Scope | Description |
-|---|---|---|
-| `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | Client + Server | Paystack public key |
-| `PAYSTACK_SECRET_KEY` | Server only | Paystack secret key — never client-side |
-
-### Project-Specific
-[TODO: Add any additional variables specific to this project]
-
-| Variable | Scope | Description |
-|---|---|---|
-| [TODO: VARIABLE_NAME] | [TODO: Scope] | [TODO: Description] |
+> Update `NEXT_PUBLIC_SITE_URL` when custom domain is activated.
 
 ---
 
-## .env.example Template
+### Rate Limiting
 
-Copy this into your `.env.example` file at project root:
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `UPSTASH_REDIS_REST_URL` | Server only | Upstash Redis URL — rate limiting on onboarding form | 🔲 Add in Sprint 8 |
+| `UPSTASH_REDIS_REST_TOKEN` | Server only | Upstash Redis token | 🔲 Add in Sprint 8 |
+
+> Used by `lib/ratelimit.ts` to enforce max 5 onboarding submissions per IP per hour.
+
+---
+
+### Vercel Cron
+
+| Variable | Scope | Description | Status |
+|---|---|---|---|
+| `CRON_SECRET` | Server only | Secret header value — validates cron requests are from Vercel | 🔲 Add in Sprint 10 |
+
+> The expired timer cron job at `/api/cron/check-expired-timers` checks for this header before running.
+> Set in Vercel dashboard and passed as `Authorization: Bearer ${CRON_SECRET}`.
+
+---
+
+## Pending Variables (Blocked on Client Deposit)
+
+| Variable | Scope | Description | Blocked on |
+|---|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Client + Server | Update to custom domain | Domain purchase |
+| `RESEND_FROM_EMAIL` | Server only | Verified sender address e.g. `hello@eranoconsulting.com` | Domain + Resend verification |
+
+---
+
+## .env.example (Current — Keep in Sync)
 
 ```bash
 # Supabase
@@ -85,56 +104,49 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 
-# Sanity CMS
-NEXT_PUBLIC_SANITY_PROJECT_ID=
-NEXT_PUBLIC_SANITY_DATASET=
-SANITY_API_TOKEN=
+# Cloudinary (public site only)
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Resend (all email)
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
 
 # Site
 NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_WHATSAPP_NUMBER=
 
-# Email (Resend)
-RESEND_API_KEY=
+# Rate limiting (Upstash)
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 
-# Analytics
-NEXT_PUBLIC_GA_MEASUREMENT_ID=
-
-# Payments (Paystack)
-NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=
-PAYSTACK_SECRET_KEY=
+# Cron security
+CRON_SECRET=
 ```
 
 ---
 
-## Vercel Environment Configuration
+## How to Add a New Variable
 
-Variables must be set in the Vercel dashboard for each environment:
-
-| Variable | Development | Preview | Production |
-|---|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | ✅ | ✅ |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | ✅ | ✅ |
-| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | ✅ | ✅ |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | ✅ | ✅ | ✅ |
-| `NEXT_PUBLIC_SANITY_DATASET` | ✅ | ✅ | ✅ |
-| `SANITY_API_TOKEN` | ✅ | ✅ | ✅ |
-| `NEXT_PUBLIC_SITE_URL` | [TODO] | [TODO] | ✅ |
-
-> [TODO: Update this table to match your actual variables]
-> Pull Vercel env vars to local with: `vercel env pull .env.local`
+1. Add value to `.env.local`
+2. Add to Vercel dashboard under Project → Settings → Environment Variables
+3. Add to `.env.example` with empty value
+4. Add a row to the table in this file with status `✅ Active`
+5. If server-only, confirm it is never imported into client components
 
 ---
 
-## Security Notes
+## Vercel Environment Variable Scopes
 
-- `SUPABASE_SERVICE_ROLE_KEY` bypasses all Row Level Security
-  It must never appear in any client component or be logged anywhere
-- `SANITY_API_TOKEN` allows writes to your CMS
-  Server only — never expose to browser
-- `PAYSTACK_SECRET_KEY` allows payment operations
-  Server only — never expose to browser
-- If any server-only key is accidentally committed or exposed:
-  1. Rotate the key immediately in the service dashboard
-  2. Update the value in Vercel
-  3. Update `.env.local`
-  4. Document the incident in known-issues.md
+| Vercel scope | When it applies |
+|---|---|
+| Production | `main` branch deploys only |
+| Preview | All branch deploys except main |
+| Development | `vercel dev` local |
+
+> Set all variables in Production + Preview + Development unless there is a specific reason to scope them.
+
+---
+
+*ApexSource Ventures · Accra, Ghana · May 2026*

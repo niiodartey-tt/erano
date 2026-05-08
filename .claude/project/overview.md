@@ -1,19 +1,23 @@
-# Project Overview
+# Project Overview — Erano Consulting
 
-## Basic Information
+> Last updated: May 2026
+> Maintained by: ApexSource Ventures
+
+---
+
+## Project Identity
 
 | Field | Value |
 |---|---|
-| Project name | [TODO: e.g. Hopefront Foundation Website] |
-| Client | [TODO: Client or organisation name] |
-| Domain | [TODO: hopefrontfoundation.org] |
-| Project type | [TODO: Nonprofit website / SaaS platform / Consulting site / E-commerce] |
-| Purpose | [TODO: One sentence — what does this site do and for whom?] |
-| Primary audience | [TODO: e.g. International donors, HR managers, SME owners in Ghana] |
-| Secondary audience | [TODO: e.g. Local community members, volunteers] |
-| Started | [TODO: DD/MM/YYYY] |
-| Target launch | [TODO: DD/MM/YYYY] |
-| Delivered | [TODO: DD/MM/YYYY — fill in on handoff] |
+| **Project name** | Erano Consulting Website + Client Portal |
+| **Client** | Erano Consulting (Accra, Ghana) |
+| **Domain** | erano.vercel.app (pending: custom domain via GoDaddy) |
+| **Purpose** | Public marketing site + authenticated client onboarding and service portal |
+| **Primary audience** | Ghanaian businesses seeking tax, audit, accounting, and advisory services |
+| **Secondary audience** | Internal admin team managing client accounts |
+| **Live URL** | https://erano.vercel.app |
+| **GitHub** | https://github.com/niiodartey-tt/erano.git |
+| **Local path** | ~/Projects/erano |
 
 ---
 
@@ -21,101 +25,197 @@
 
 | Layer | Technology | Version | Notes |
 |---|---|---|---|
-| Framework | [TODO: Next.js] | [TODO: 16] | [TODO: App Router] |
-| Language | TypeScript | Latest stable | Strict mode always |
-| Styling | Tailwind CSS | Latest stable | Utility-first |
-| Animation | Framer Motion | [TODO: verify at npmjs.com] | Component animations |
-| Animation | Lenis | [TODO: verify at npmjs.com] | Smooth scroll |
-| Animation | tailwindcss-animate | [TODO: verify at npmjs.com] | Simple UI states |
-| CMS | [TODO: Sanity v3 / None] | [TODO: version] | [TODO: Hosted Studio] |
-| Database | [TODO: Supabase / None] | [TODO: version] | [TODO: PostgreSQL + RLS] |
-| Auth | [TODO: Supabase Auth / NextAuth / None] | — | [TODO: notes] |
-| Forms | react-hook-form + zod | Latest stable | Validation via Zod |
-| Icons | lucide-react | Latest stable | Only icon library |
-| Deployment | Vercel | — | Auto-deploy on push to main |
-| Package manager | npm | — | Linux (Ubuntu/Debian) |
-| Node.js | [TODO: 20.x LTS] | — | Managed via nvm — see .nvmrc |
+| Framework | Next.js | 14 | App Router |
+| Language | TypeScript | Latest | Strict mode |
+| Styling | Tailwind CSS | v3 | No inline styles |
+| Animations | Framer Motion | Latest | whileInView, AnimatePresence |
+| Smooth scroll | Lenis | Latest | 1.2s ease-out, wraps entire app |
+| Database | Supabase (PostgreSQL) | Latest | RLS enforced on every table |
+| Auth | Supabase Auth | Latest | Magic link first login |
+| File storage | Supabase Storage | Latest | Private buckets, signed URLs only |
+| Email | Resend | Latest | All transactional + public contact form |
+| Hosting | Vercel | Latest | Auto-deploy on push to main |
+| Font | Plus Jakarta Sans | — | Google Fonts, loaded in layout.tsx |
+| Icons | Lucide React | Latest | No emojis — SVGs only |
+| Image CDN | Cloudinary | — | Public site only — hero images and media |
 
 ---
 
-## Supabase Configuration
+## No CMS — Hardcoded Content
 
-**Project URL:** [TODO: from Supabase dashboard]
-**Project ID:** [TODO: from Supabase dashboard]
+**Sanity is NOT used on this project and must never be added.**
 
-### Tables
+All content is hardcoded in component files. There are no Sanity schemas, no GROQ queries, no `sanityFetch()` calls, and no Sanity Studio. If a task seems to require a CMS, flag it to Naa — do not install Sanity.
 
-| Table | RLS Enabled | Public Read | Notes |
+---
+
+## Design System (Locked — Do Not Change)
+
+### Colours
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--ink` | `#080c14` | Hero backgrounds, dark sections |
+| `--navy` | `#0d1b2e` | Headings, footer bg, portal sidebar |
+| `--gold` | `#c4973a` | Single accent — max 4× per page |
+| `--white` | `#ffffff` | Dominant background — 80% of site |
+| `--off` | `#f5f6f8` | Alternate section backgrounds |
+| `--line` | `#e2e5ea` | Dividers, borders |
+| `--body` | `#4a5568` | Body copy |
+
+### Typography
+
+| Role | Weight | Size | Notes |
 |---|---|---|---|
-| [TODO: contact_submissions] | [TODO: Yes] | [TODO: No] | [TODO: anon insert only] |
-| [TODO: newsletter_subscribers] | [TODO: Yes] | [TODO: No] | [TODO: anon insert only] |
+| Display headings | 700–800 | clamp(3rem, 6.5vw, 5.25rem) | — |
+| Section headings | 700 | clamp(2rem, 3.5vw, 3rem) | — |
+| Body | 400 | 1rem | line-height 1.8 |
+| Eyebrow labels | 600 | 0.6875rem | tracked 0.2em, uppercase, gold |
 
-> Add all tables here. Document RLS status clearly.
-> Claude must know which tables have RLS enabled to avoid silent query failures.
+### Layout
+
+| Token | Value |
+|---|---|
+| Max container | 1440px |
+| Side padding | clamp(1.5rem, 5.5vw, 5rem) |
+| Section padding | clamp(5rem, 9vw, 7.5rem) |
+
+### Motion
+
+| Effect | Spec |
+|---|---|
+| Scroll reveals | Framer Motion whileInView — fade up 40px, 0.7s |
+| Page transitions | fade 0.4s |
+| Image hover zoom | 1.12 scale, 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) |
+| Hero parallax | 0.35x scroll speed — disabled on mobile |
+| Smooth scroll | Lenis 1.2s ease-out |
+
+### Design Rules
+
+- No card borders on dark sections — content sits directly on ink/navy backgrounds
+- Left-aligned headings on all pages
+- Gold used maximum 4× per page
+- No emojis anywhere — Lucide React SVGs or inline SVGs only
 
 ---
 
-## Sanity CMS Configuration
+## Supabase Tables
 
-**Project ID:** [TODO: from Sanity dashboard]
-**Dataset:** [TODO: production]
-**Studio URL:** [TODO: https://project-name.sanity.studio]
-
-### Content Types (Schemas)
-
-| Schema | Type | Description |
+| Table | RLS | Notes |
 |---|---|---|
-| [TODO: program] | document | [TODO: Foundation programs] |
-| [TODO: teamMember] | document | [TODO: Staff and leadership] |
-| [TODO: blogPost] | document | [TODO: News and stories] |
-| [TODO: testimonial] | document | [TODO: Client/donor testimonials] |
-
-> Add all Sanity schemas here. Helps Claude write correct GROQ queries.
+| `users` | ✅ Required | role: `client` / `admin`, account_state |
+| `client_profiles` | ✅ Required | All onboarding form data + custom_price_ghs |
+| `packages` | ✅ Required | price_ghs nullable for Custom package |
+| `invoices` | ✅ Required | final_price_ghs locked at generation |
+| `agreements` | ✅ Required | T&Cs acceptance log with version |
+| `agreement_versions` | ✅ Required | Versioned legal content |
+| `payment_timers` | ✅ Required | Server-side only — 5 business days |
+| `payment_proofs` | ✅ Required | Private storage, signed URLs |
+| `document_requests` | ✅ Required | Admin to client requests |
+| `document_uploads` | ✅ Required | Client uploads against requests |
+| `notifications` | ✅ Required | In-app bell — Supabase Realtime |
+| `audit_log` | ✅ Required | Every admin action logged |
+| `cron_log` | ✅ Required | Expired timer cron run history |
 
 ---
 
-## Third Party Integrations
+## Supabase Storage Buckets
 
-| Service | Purpose | Notes |
+| Bucket | Access | Signed URL Expiry |
 |---|---|---|
-| [TODO: Vercel Analytics] | [TODO: Page view tracking] | [TODO: Free tier] |
-| [TODO: Resend] | [TODO: Transactional email] | [TODO: Contact form notifications] |
-| [TODO: Paystack] | [TODO: Donations] | [TODO: Ghana payment gateway] |
-
-> List all third-party services connected to this project.
+| `payment-proofs` | Private | 15 minutes |
+| `document-uploads` | Private | 30 minutes |
+| `invoices` | Private | 1 hour |
 
 ---
 
-## Audience and Context
+## Account States
 
-**Is this a dual-audience site?** [TODO: Yes / No]
+| State | Description |
+|---|---|
+| `pending` | Form submitted — awaiting consultation |
+| `awaiting_agreement` | Invoice generated — client must accept T&Cs |
+| `awaiting_payment` | T&Cs accepted — timer running — bank details visible |
+| `awaiting_confirmation` | Payment proof uploaded — admin reviewing |
+| `active` | Payment confirmed — fully onboarded |
+| `expired` | 5 business day payment window elapsed — locked |
 
-If yes, describe the audiences:
-- **Local audience:** [TODO: e.g. Ghanaian SME owners and HR professionals]
-- **International audience:** [TODO: e.g. International donors and embassies]
+---
 
-**Currency display:** [TODO: GHS only / GHS and USD / USD only]
-**Language tag:** [TODO: en-GH / en]
-**Phone format:** [TODO: +233 international / 0XX local / both]
+## User Roles
+
+| Role | Access |
+|---|---|
+| `client` | Own portal only — state-gated routes |
+| `admin` | Full admin dashboard — all clients and actions |
+
+---
+
+## Third-Party Integrations
+
+| Service | Purpose | Credentials |
+|---|---|---|
+| Supabase | DB, Auth, Storage | `.env.local` |
+| Cloudinary | Public site images and video | `.env.local` — `CLOUDINARY_CLOUD_NAME=dyvh4ufcc` |
+| Resend | All transactional email | `.env.local` — pending domain verification |
+| Vercel | Hosting and cron jobs | Vercel dashboard |
+| Google Fonts | Plus Jakarta Sans | Loaded in `app/layout.tsx` |
+
+---
+
+## Services (Real — Client Approved)
+
+1. **Accountancy Services** — annual accounts, management accounts, bookkeeping, payroll, SSNIT
+2. **Business Services** — start-up, RGD registration, strategic growth, company secretarial
+3. **Tax Planning & Advice** — corporation tax, personal tax, VAT, PAYE, GRA audit
+
+## Pricing Plans (Real — Client Approved)
+
+| Plan | Price |
+|---|---|
+| Free Introductory | GHS 0 |
+| Starter Essentials | GHS 16,500/yr |
+| Growth Booster | GHS 24,500/yr (most popular) |
+| Business Pro | GHS 32,500/yr |
+| Elite Advantage | GHS 37,500/yr |
+| Custom | Admin-set after negotiation |
 
 ---
 
 ## Project-Specific Rules
 
-Rules specific to this client that extend or override the ApexSource standard:
+These rules are absolute for this project. They override general preferences.
 
-- [TODO: e.g. All copy must be approved by client before sprint merge]
-- [TODO: e.g. Adinkra symbols — Adinkrahene = Leadership, Nea Onnim = Learning]
-- [TODO: e.g. Client uses Paystack not Stripe for all payments]
-- [TODO: e.g. Blog posts are managed entirely in Sanity — never hardcoded]
-- [TODO: e.g. Gallery images uploaded to Sanity — not stored in /public]
+| # | Rule |
+|---|---|
+| R1 | No Sanity — ever. Content is hardcoded. Do not suggest or install Sanity. |
+| R2 | No emojis anywhere on the site or portal. Lucide React or inline SVGs only. |
+| R3 | Gold used maximum 4× per page. Never as a background fill. |
+| R4 | `SUPABASE_SERVICE_ROLE_KEY` in server-side API routes only — never imported into any client component. |
+| R5 | All Supabase Storage access via signed URLs only — no public bucket URLs ever. |
+| R6 | Payment timer logic lives server-side only — never in client state or localStorage. |
+| R7 | Account state transitions validated server-side on every API route — UI gating alone is not sufficient. |
+| R8 | All admin actions must be logged in `audit_log` — no exceptions. |
+| R9 | No plain text passwords in any email template. Magic link only for first login. |
+| R10 | File uploads validated by MIME type server-side — never by extension or client Content-Type header. |
+| R11 | Invoice file paths include a random UUID — never predictable sequential paths. |
+| R12 | `eslint.ignoreDuringBuilds: true` is set in next.config.mjs — do not remove. |
+| R13 | Navbar uses JS `isMobile` state — not Tailwind breakpoints — to control mobile menu. |
+| R14 | Hero + TickerStrip wrapped in `calc(100vh - 72px)` flex container in home page.tsx. |
+| R15 | Cloudinary is for public site only. Portal files use Supabase Storage exclusively. |
 
 ---
 
-## Key Contacts
+## Blocked Items (Pending Client Deposit)
 
-| Role | Name | Contact |
-|---|---|---|
-| Client primary | [TODO: Name] | [TODO: email or phone] |
-| Client CMS manager | [TODO: Name] | [TODO: email] |
-| ApexSource lead | Naa | naa@apexsourceventures.com |
+| Item | Blocked on |
+|---|---|
+| Custom domain (GoDaddy) | Client deposit |
+| Resend domain verification | Custom domain |
+| Real team photos | Client to supply |
+| Company logo SVG | Client to supply |
+| Final copy review | Client to supply |
+
+---
+
+*ApexSource Ventures · Accra, Ghana · May 2026*

@@ -1,104 +1,84 @@
-# Known Issues
+# Known Issues — Erano Consulting
 
-> This file is a living log of bugs discovered, diagnosed, and fixed.
-> Every bug that took more than 30 minutes to resolve gets documented here.
-> This turns every bug into a permanent improvement to the project standard.
-> Claude reads this to avoid repeating the same mistakes.
-
----
-
-## How to Add an Entry
-
-When a bug is resolved, add an entry using this format:
-
-```markdown
----
-BUG:     One sentence describing what the bug was
-CAUSE:   What caused it — be specific
-FIX:     What resolved it — be specific
-PREVENT: Rule or check added to stop it recurring
-DATE:    DD/MM/YYYY
-SPRINT:  Sprint N
----
-```
+> Last updated: May 2026
+> Every resolved bug is logged here with cause, fix, and prevention rule.
+> Claude reads this before debugging to avoid repeating known mistakes.
+> Add an entry every time a bug is found and resolved — do not wait until sprint end.
 
 ---
 
-## Active Issues
+## How to Log an Issue
 
-> Bugs currently being investigated or worked around.
-> Move to Resolved once fixed.
+When a bug is found and resolved, add an entry with:
 
-| Issue | Discovered | Status | Notes |
-|---|---|---|---|
-| [TODO: None currently] | — | — | — |
-
----
-
-## Resolved Issues
-
-> Document every resolved bug here. Newest first.
-
-[TODO: Add entries as bugs are discovered and resolved]
+- **Symptom** — what went wrong visually or functionally
+- **Root cause** — the actual reason it happened
+- **Fix applied** — exactly what was changed
+- **Prevention rule** — what to check in future to avoid this
 
 ---
 
-## Example Entry (delete when first real entry is added)
+## Active Bugs
 
----
-BUG:     AnimatedCounter stuck at zero on impact section
-CAUSE:   Component was a server component — useRef and useInView
-         only work in client components. The ref was never attached
-         to the DOM because the component never hydrated.
-FIX:     Added "use client" as line 1 of AnimatedCounter.tsx.
-         Confirmed ref attaches correctly in browser DevTools.
-PREVENT: All components using useRef, useInView, or any Framer
-         Motion hooks must have "use client" as line 1.
-         Added to breaking-points standard.
-DATE:    12 January 2026
-SPRINT:  Sprint 2
----
+> None currently logged.
 
 ---
 
-## Recurring Patterns
+## Resolved Bugs
 
-> Patterns that have caused multiple bugs — extra vigilance required.
-
-[TODO: Add patterns as they emerge — e.g. "Supabase RLS silently blocks
-queries three times in Sprint 1 — always check RLS first when query
-returns empty"]
-
----
-
-## Dependency Issues
-
-> Package-related problems — version conflicts, deprecated APIs, vulnerabilities.
-
-| Package | Version | Issue | Resolution | Date |
-|---|---|---|---|---|
-| [TODO: package] | [TODO: version] | [TODO: issue] | [TODO: resolution] | [TODO: date] |
+### BUG-001 — Mobile menu appearing on desktop
+**Sprint:** Sprint 2
+**File:** `components/layout/Navbar.tsx`
+**Symptom:** Hamburger menu was showing on desktop viewports
+**Root cause:** Tailwind breakpoint `md:hidden` was applied but window resize was not updating the state correctly
+**Fix applied:** Replaced Tailwind breakpoint logic with JS `isMobile` state using `window.innerWidth` check + resize event listener
+**Prevention rule:** Navbar uses JS `isMobile` state — never Tailwind breakpoints — to control mobile menu visibility. Do not revert this to Tailwind.
 
 ---
 
-## Environment Issues
-
-> Problems caused by environment configuration — missing vars, wrong values.
-
-| Variable | Environment | Issue | Resolution | Date |
-|---|---|---|---|---|
-| [TODO: VAR_NAME] | [TODO: Production] | [TODO: issue] | [TODO: resolution] | [TODO: date] |
+### BUG-002 — TickerStrip not flush at bottom of viewport
+**Sprint:** Sprint 3
+**File:** `app/(site)/page.tsx`
+**Symptom:** TickerStrip had a gap below it before the next section
+**Root cause:** Hero and TickerStrip were not wrapped in a shared container constrained to viewport height
+**Fix applied:** Wrapped Hero + TickerStrip in a flex column container with `height: calc(100vh - 72px)` in `page.tsx`
+**Prevention rule:** Hero and TickerStrip must always remain inside the `calc(100vh - 72px)` wrapper in `page.tsx`. Do not separate them or add margin/padding to this wrapper.
 
 ---
 
-## Notes for Future Phases
+### BUG-003 — Framer Motion animations triggering on mount instead of scroll
+**Sprint:** Sprint 3
+**File:** Multiple section components
+**Symptom:** Animations played immediately on page load — not when elements scrolled into view
+**Root cause:** `viewport={{ once: true }}` was missing from `whileInView` props
+**Fix applied:** Added `viewport={{ once: true }}` to all `whileInView` animation variants
+**Prevention rule:** Every `whileInView` animation must include `viewport={{ once: true }}`. Counter animations use `useInView` — never animate on mount.
 
-> Things that were not bugs but could become problems in future sprints.
-> Technical debt and deferred decisions.
+---
 
-[TODO: Add notes as the project progresses]
+### BUG-004 — generateStaticParams causing build failure on resources/[slug]
+**Sprint:** Sprint 6
+**File:** `app/(site)/resources/[slug]/page.tsx`
+**Symptom:** Build failing with static generation error on the slug page
+**Root cause:** `generateStaticParams` was defined on a "use client" page — incompatible
+**Fix applied:** Removed `generateStaticParams` entirely — page is "use client" and renders dynamically
+**Prevention rule:** `generateStaticParams` cannot be used in "use client" files. If a dynamic route needs client hooks, remove `generateStaticParams` and allow dynamic rendering.
 
-- [TODO: e.g. The contact form uses in-memory rate limiting — upgrade
-  to Upstash Redis if traffic increases significantly]
-- [TODO: e.g. Sanity image URLs are not optimised for mobile —
-  add width/height parameters in Sprint 3]
+---
+
+## Pending Issues (Known But Not Yet Fixed)
+
+### PENDING-001 — Mobile responsiveness incomplete on multiple pages
+**Identified:** Sprint 7
+**Affected files:**
+- `app/(site)/services/page.tsx` — alternating grid needs mobile stack fix
+- `app/(site)/contact/page.tsx` — form grid needs mobile stack fix
+- `app/(site)/services/page.tsx` — pricing grid needs mobile horizontal scroll or stack
+- `app/(site)/tools/page.tsx` — calculator grid needs mobile stack fix
+- `app/(site)/about/page.tsx` — team grid needs mobile stack fix
+**Status:** Deferred to Sprint 15 — Mobile QA
+**Notes:** ServicesStrip and WhyErano single-column fixes were applied in Sprint 7 via CSS classes. Remaining pages still need full 375px and 430px review.
+
+---
+
+*ApexSource Ventures · Accra, Ghana · May 2026*
