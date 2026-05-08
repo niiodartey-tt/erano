@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import he from "he";
+import { render } from "@react-email/render";
 import { sendEmail } from "@/lib/email";
 import { contactRatelimit, getClientIp } from "@/lib/ratelimit";
+import { ContactFormEmail, subject as contactSubject } from "@/emails/ContactFormEmail";
 
 const contactSchema = z.object({
   fullName: z.string().min(2).max(100),
@@ -32,35 +34,16 @@ export async function POST(req: NextRequest) {
 
     const { fullName, email, phone, company, industry, service, message } = result.data;
 
-    // Encode all user-supplied values before HTML interpolation
+    // Encode all user-supplied values for the auto-reply HTML
     const sFullName = he.encode(fullName);
-    const sPhone    = phone    ? he.encode(phone)    : "Not provided";
-    const sCompany  = company  ? he.encode(company)  : "Not provided";
-    const sIndustry = industry ? he.encode(industry) : "Not specified";
-    const sService  = service  ? he.encode(service)  : "Not specified";
-    const sMessage  = he.encode(message);
 
     // Email to Erano team
+    const emailHtml = await render(ContactFormEmail({ fullName, email, phone, company, industry, service, message }));
     await sendEmail({
       to:      process.env.ADMIN_EMAIL ?? "admin@eranoconsulting.com",
-      subject: `New enquiry from ${fullName}${service ? ` — ${service}` : ""}`,
-      html: `
-        <div style="font-family:sans-serif;max-width:560px;margin:0 auto;">
-          <h2 style="color:#5C6167;">New enquiry — Erano Consulting website</h2>
-          <table style="width:100%;border-collapse:collapse;">
-            <tr><td style="padding:8px 0;color:#6b7280;width:120px;">Name</td><td style="padding:8px 0;color:#2c2f36;font-weight:500;">${sFullName}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="padding:8px 0;color:#2c2f36;">${he.encode(email)}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="padding:8px 0;color:#2c2f36;">${sPhone}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Company</td><td style="padding:8px 0;color:#2c2f36;">${sCompany}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Industry</td><td style="padding:8px 0;color:#2c2f36;">${sIndustry}</td></tr>
-            <tr><td style="padding:8px 0;color:#6b7280;">Service</td><td style="padding:8px 0;color:#2c2f36;">${sService}</td></tr>
-          </table>
-          <div style="margin-top:16px;padding:16px;background:#f8f9fb;border-radius:8px;">
-            <p style="color:#6b7280;margin:0 0 8px;">Message</p>
-            <p style="color:#2c2f36;margin:0;line-height:1.6;">${sMessage}</p>
-          </div>
-        </div>
-      `,
+      subject: contactSubject(fullName),
+      replyTo: email,
+      html:    emailHtml,
     });
 
     // Auto-reply to enquirer

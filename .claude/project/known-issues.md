@@ -99,6 +99,16 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### PENDING-003 — @react-email/components npm deprecation warnings
+**Identified:** Sprint 8 (T008)
+**File:** `emails/*.tsx`, `package.json`
+**Symptom:** npm install and builds emit deprecation warnings for `@react-email/components@1.0.12` and all its sub-packages (`@react-email/body`, `@react-email/button`, etc.)
+**Status:** Packages are functional — all exports verified, TypeScript passes, builds pass. Deprecation is an npm registry metadata warning, not a runtime error. Templates render correctly via `@react-email/render@2.0.8`.
+**Fix when needed:** Upgrade to the latest stable `@react-email/components` in a dedicated sprint task. Check migration guide for any breaking changes in JSX output or component API before upgrading.
+**Prevention rule:** Do not remove or downgrade the package mid-sprint. Functionality is confirmed working; warnings are cosmetic until an upgrade is planned.
+
+---
+
 ### PENDING-002 — 5 known vulnerabilities in next@14.2.35
 **Identified:** Sprint 8 (standards review)
 **File:** `package.json`

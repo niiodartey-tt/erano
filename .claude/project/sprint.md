@@ -19,7 +19,7 @@
 | Task | Branch | Status |
 |---|---|---|
 | T007 — Migrate to Resend, delete Nodemailer | `sprint-8` | ✅ Complete |
-| T008 — Email templates (12 templates) | `task/email-templates` | ⏳ Not started |
+| T008 — Email templates (12 templates) | `sprint-8` | ✅ Complete |
 | T001 — Supabase schema + RLS | `sprint-8` | ✅ Complete |
 | T002 — Supabase Storage buckets + RLS | `sprint-8` | ✅ Complete |
 | T003 — RBAC middleware | `sprint-8` | ✅ Complete |

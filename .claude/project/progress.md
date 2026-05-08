@@ -284,6 +284,16 @@ Claude does this automatically — without being asked.
 - No default export, no "use client"
 - TypeScript check: clean pass (0 errors)
 
+**Sprint 8 — T008 — React Email templates (all 12)**
+- Installed `@react-email/components@1.0.12` and `@react-email/render@2.0.8`; packages are functional despite npm registry deprecation warnings on sub-packages (see known-issues.md PENDING entry)
+- Created `emails/utils.ts` — shared `baseUrl` constant and `styles` object; email-safe Arial font; 600px container; navy (#0d1b2e) header with gold (#c4973a) border-bottom; grey (#f5f6f8) footer
+- Created 12 email templates (named exports, no defaults, no "use client"): `WelcomeEmail`, `InvoiceReadyEmail`, `AgreementAcceptedEmail`, `PaymentProofReceivedEmail`, `PaymentConfirmedEmail`, `PaymentRejectedEmail`, `AccountExpiredEmail`, `AccountReactivatedEmail`, `DocumentRequestedEmail`, `DocumentUploadedEmail`, `PasswordResetEmail`, `ContactFormEmail`
+- Each template exports both a `subject` (string or function) and the React component
+- `ContactFormEmail` skips empty optional fields (phone, company, industry, service) using conditional JSX — React Email renders truthily/falsily correctly
+- Updated `app/api/contact/route.ts` — replaced raw HTML string for admin notification with `await render(ContactFormEmail({...}))`; added `replyTo: email` so replies go directly to the enquirer; imported `ContactFormEmail` and `render`; auto-reply and all other logic unchanged; `he` still used for `sFullName` in auto-reply template
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 19 pages, 0 errors
+
 ---
 
 ## Sprint 9 — Client Portal Shell
