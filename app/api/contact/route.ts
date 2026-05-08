@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import he from "he";
-import { sendEmail } from "@/lib/mailer";
+import { sendEmail } from "@/lib/email";
+import { contactRatelimit, getClientIp } from "@/lib/ratelimit";
 
 const contactSchema = z.object({
   fullName: z.string().min(2).max(100),
@@ -13,30 +14,16 @@ const contactSchema = z.object({
   message:  z.string().min(10).max(2000),
 });
 
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
 export async function POST(req: NextRequest) {
-  // Rate limiting — max 5 requests per IP per 60 minutes
-  const ip  = req.headers.get("x-forwarded-for") ?? "unknown";
-  const now = Date.now();
-
-  // Clean up expired entries to prevent memory leak
-  rateLimitMap.forEach((entry, key) => {
-    if (now > entry.resetAt) rateLimitMap.delete(key);
-  });
-
-  const rateEntry = rateLimitMap.get(ip);
-  if (rateEntry && now <= rateEntry.resetAt) {
-    if (rateEntry.count >= 5) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-    }
-    rateEntry.count++;
-  } else {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
-  }
-
   try {
     const body   = await req.json();
+
+    const ip = getClientIp(req);
+    const { success } = await contactRatelimit.limit(ip);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     const result = contactSchema.safeParse(body);
 
     if (!result.success) {
@@ -55,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     // Email to Erano team
     await sendEmail({
-      to:      "enquiries@eranoconsulting.com",
+      to:      process.env.ADMIN_EMAIL ?? "admin@eranoconsulting.com",
       subject: `New enquiry from ${fullName}${service ? ` — ${service}` : ""}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:0 auto;">

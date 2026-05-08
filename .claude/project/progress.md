@@ -143,6 +143,22 @@ Claude does this automatically — without being asked.
 ## Sprint 8 — Portal Foundation
 **Status:** 🔄 In progress
 
+**Sprint 8 — lib/supabase-server.ts**
+- Created `lib/supabase-server.ts` — named export `createServerClient()` only, no default
+- Initialises Supabase with service role key; `autoRefreshToken: false`, `persistSession: false`
+- Guards: throws on missing env vars rather than silently returning a broken client
+- Header comment marks file as server-side only — never import in client components
+- Resolves the `storage.ts` module error from the previous task
+- TypeScript check: clean pass (0 errors)
+
+**Sprint 8 — T002 — lib/storage.ts**
+- Created `lib/storage.ts` — server-side only, no "use client"
+- Exports: `SIGNED_URL_EXPIRY` constants (15 min / 30 min / 1 hr), `generateSignedUrl`, `getPaymentProofUrl`, `getDocumentUploadUrl`, `getInvoiceUrl`, `uploadFile`
+- All signed URLs generated on demand — never stored
+- `uploadFile` uses `upsert: false` — no silent overwrites
+- Imports `createServerClient` from `@/lib/supabase-server` (not yet created)
+- TypeScript: 1 expected error — `Cannot find module '@/lib/supabase-server'` — resolves when supabase-server.ts is created next
+
 **Sprint 8 — T001/T039 — Supabase schema + RLS + indexes**
 - Created `supabase/schema.sql` — 401 lines — ready to apply via Supabase Dashboard → SQL Editor
 - File contains in order: extensions (pgcrypto), 4 custom ENUM types, 13 tables, 8 indexes (T039), RLS enabled on all 13 tables, 29 RLS policies, 6 package seed rows
@@ -193,6 +209,43 @@ Claude does this automatically — without being asked.
 - All child components that require client-side features already declare `"use client"` themselves — this is valid Next.js 14 App Router pattern
 - `calc(100vh - 72px)` wrapper and all component structure left exactly unchanged
 - TypeScript check: clean pass (no output)
+
+**Sprint 8 — T003 — middleware.ts (RBAC route protection)**
+- Created `middleware.ts` at project root — 5 routing rules for portal/admin/login
+- Migrated from deprecated `@supabase/auth-helpers-nextjs` (does not export `createMiddlewareClient` in v0.15.0) to `@supabase/ssr` (already installed at ^0.10.2)
+- Uses `createServerClient` from `@supabase/ssr` with `getAll`/`setAll` cookie handlers — required pattern for middleware to propagate token refreshes to the response
+- Switched from `getSession()` to `getUser()` — server-validates the JWT rather than trusting the cookie payload
+- Rules: unauthenticated → /login; admin on /portal → /admin; client on /admin → /portal/dashboard; authenticated on /login → redirect by role; all other → pass through
+- All redirects return `supabaseResponse` (not bare `NextResponse.redirect`) so refreshed session cookies are preserved
+- Matcher: `/portal/:path*`, `/admin/:path*`, `/login`
+- TypeScript check: clean pass (0 errors)
+
+**Sprint 8 — T032 — lib/validateState.ts (account state validation)**
+- Created `lib/validateState.ts` — server-side only utility, called at the start of every portal API route handler
+- Exports: `AccountState` union type (6 states), `StateValidationError` class, `requireState` async function, `isStateAllowed` pure helper
+- `requireState` queries `users.account_state` via `createServerClient()` (service role); throws typed `StateValidationError` if state not in allowedStates; throws plain `Error` on DB error or missing user
+- `isStateAllowed` is a pure synchronous helper — no DB call — for conditional UI/logic checks
+- Named exports only, no default export, no `"use client"`
+- TypeScript check: clean pass (0 errors)
+
+**Sprint 8 — T007 — Migrate Nodemailer → Resend**
+- Installed `resend@6.12.3` (--save-exact); no new vulnerabilities introduced — same 5 pre-existing in next@14
+- Created `lib/email.ts` — single email utility for the entire project; server-side only; exports `SendEmailOptions` interface and `sendEmail` async function
+- `sendEmail` uses `RESEND_FROM_EMAIL` env var with `onboarding@resend.dev` sandbox fallback — update to verified domain address once client domain is confirmed in Resend dashboard
+- Updated `app/api/contact/route.ts` — swapped import from `@/lib/mailer` to `@/lib/email`; admin `to` address now reads from `process.env.ADMIN_EMAIL ?? "admin@eranoconsulting.com"`; rate limiting, Zod validation, and `he` sanitization left unchanged
+- Deleted `lib/mailer.ts` — Nodemailer Ethereal stub; scheduled for deletion since Sprint 8 start
+- Uninstalled `nodemailer` and `@types/nodemailer` — confirmed absent from `package.json`
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 14 pages, 0 errors
+
+**Sprint 8 — T033 — lib/ratelimit.ts (Upstash Redis rate limiting)**
+- Installed `@upstash/ratelimit` and `@upstash/redis` (--save-exact); no new vulnerabilities introduced
+- Created `lib/ratelimit.ts` — server-side only; exports `apiRatelimit` (20 req/10s), `onboardingRatelimit` (5 req/60m), `contactRatelimit` (5 req/60m), and `getClientIp` helper
+- Module-level env var guards throw on missing `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`
+- `getClientIp` reads `x-forwarded-for` (first IP only, trimmed) then `x-real-ip` then falls back to `"unknown"`
+- Updated `app/api/contact/route.ts` — replaced in-memory Map rate limiter with `contactRatelimit.limit(ip)`; Map declaration and entire IP check block removed; Zod validation and `he` sanitization unchanged
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 14 pages, 0 errors
 
 ---
 

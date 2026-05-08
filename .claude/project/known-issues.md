@@ -75,6 +75,15 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### BUG-006 — @supabase/auth-helpers-nextjs deprecated — use @supabase/ssr
+**Sprint:** Sprint 8
+**File:** `middleware.ts`
+**Symptom:** @supabase/auth-helpers-nextjs@0.15.0 does not export createMiddlewareClient — package is deprecated
+**Fix applied:** Used @supabase/ssr (already in package.json) with getAll/setAll cookie handler pattern. Replaced getSession() with getUser() — validates JWT server-side rather than trusting cookie payload
+**Prevention rule:** Never install @supabase/auth-helpers-nextjs on new projects. Always use @supabase/ssr. Always use getUser() not getSession() in middleware and server-side auth checks.
+
+---
+
 ## Pending Issues (Known But Not Yet Fixed)
 
 ### PENDING-001 — Mobile responsiveness incomplete on multiple pages
