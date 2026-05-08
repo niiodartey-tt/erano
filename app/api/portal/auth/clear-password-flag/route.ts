@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { createServerClient as createSSRClient } from "@supabase/ssr";
 import { createServerClient } from "@/lib/supabase-server";
 
-export async function POST(_request: Request) {
+export async function POST() {
   const cookieStore = cookies();
 
   // Verify the authenticated user via session cookie

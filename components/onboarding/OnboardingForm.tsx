@@ -117,7 +117,7 @@ export function OnboardingForm() {
                   {currentStep === 3 && <Step4Financial />}
                   {currentStep === 4 && <Step5Compliance />}
                   {currentStep === 5 && <Step6Package packages={packages} packagesLoading={packagesLoading} />}
-                  {currentStep === 6 && <Step7Summary data={getValues()} packages={packages} onBack={() => setCurrentStep(5)} onSubmit={handleFinalSubmit} submitting={submitting} submitError={submitError} />}
+                  {currentStep === 6 && <Step7Summary data={getValues()} packages={packages} onBack={() => setCurrentStep(5)} onEdit={setCurrentStep} onSubmit={handleFinalSubmit} submitting={submitting} submitError={submitError} />}
                   {currentStep === 7 && <Step8Confirmation contactName={getValues("contactName")} />}
                 </motion.div>
               </AnimatePresence>

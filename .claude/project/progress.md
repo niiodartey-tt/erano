@@ -317,6 +317,24 @@ Claude does this automatically — without being asked.
 - TypeScript check: clean pass (0 errors)
 - Build: clean — 20 pages, /onboarding 9.34 kB first load JS
 
+**Sprint 8 — T010 — Account creation API**
+- Created `app/api/onboarding/submit/route.ts` — POST handler; honeypot (logs + returns 200), Upstash rate limiting (5 req / IP / 60 min), Zod validation against `submitSchema` (20 fields, packageId as uuid), duplicate email check via `users` table
+- Auth user creation via `supabase.auth.admin.createUser` (email_confirm: true); cascading cleanup on failure — if `users` insert fails: delete auth user; if `client_profiles` insert fails: delete users row then auth user
+- Inserts into `users` (id, email, role: "client", account_state: "pending", must_change_password: true) and `client_profiles` (all 20 profile fields mapped from validated body)
+- Magic link generation non-fatal — wrapped in try/catch; welcome email non-fatal — wrapped in try/catch; audit_log always written on success
+- TypeScript fix: Supabase `PostgrestFilterBuilder` is not a standard Promise — no `.catch()` method; replaced with plain `await` for fire-and-forget cleanup ops
+- Lint fix: removed `_request: Request` unused param from `app/api/portal/auth/clear-password-flag/route.ts` (Sprint 8 file — changed to `POST()` with no params)
+- Pre-merge checklist result: tsc ✅ clean; build ✅ clean 21 pages; lint ⚠️ 2 errors in locked files (SectorsGrid.tsx, WhyErano.tsx — pre-existing Sprint 1–3 issues, eslint.ignoreDuringBuilds prevents build block); audit ⚠️ 5 pre-existing vulnerabilities in next@14 transitive deps (no new issues introduced)
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 21 pages, /api/onboarding/submit ƒ Dynamic
+
+**Sprint 8 — Step7Summary edit buttons**
+- Modified `components/onboarding/steps/Step7Summary.tsx` — added `onEdit: (step: number) => void` to `Step7Props` interface; updated `Group` internal component to accept `step: number` and `onEdit` props; card header changed from static `<p>` to flex row (`justify-between items-center`) with title on left and Edit button on right; Edit button: `text-xs text-navy hover:underline`, `Pencil` icon (w-3 h-3, `aria-hidden`) inline before "Edit" text; each of the 6 Groups passes `step={0..5}` and `onEdit={onEdit}`
+- Modified `components/onboarding/OnboardingForm.tsx` — added `onEdit={setCurrentStep}` prop to Step7Summary render; uses existing `setCurrentStep` state setter directly — no new function needed
+- Gold rule unaffected — Pencil icon is navy, Edit button is navy; no new gold usages introduced
+- TypeScript check: clean pass (0 errors)
+- Build: clean — 21 pages, 0 errors
+
 ---
 
 ## Sprint 9 — Client Portal Shell

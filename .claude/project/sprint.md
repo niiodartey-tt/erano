@@ -31,26 +31,26 @@
 | T033 — Rate limiting + honeypot | `sprint-8` | ✅ Complete |
 | T039 — Database indexes | `sprint-8` | ✅ Complete |
 | T009 — Multi-step onboarding form UI | `sprint-8` | ✅ Complete |
-| T010 — Account creation on form submission | `task/account-creation` | ⏳ Not started |
+| T010 — Account creation on form submission | `sprint-8` | ✅ Complete |
 
 ### Sprint 8 Definition of Done
 
 - [ ] All tasks merged into `sprint-8` branch
-- [ ] Nodemailer fully removed — no references remain
+- [x] Nodemailer fully removed — no references remain
 - [ ] Resend sending email from contact form end to end
 - [ ] All 12 email templates render correctly on mobile + desktop
 - [ ] Supabase schema applied — all tables with RLS
 - [ ] RLS tested: client A cannot access client B data via direct API call
 - [ ] Storage buckets created as private — direct URL returns 403
-- [ ] Middleware protecting `/portal/*` and `/admin/*` routes
+- [x] Middleware protecting `/portal/*` and `/admin/*` routes
 - [ ] Login page redirects correctly by role
 - [ ] Password reset flow working end to end
 - [ ] Magic link sent on account creation — no plain text password
-- [ ] `validateState` utility rejects wrong-state API calls with 403
+- [x] `validateState` utility rejects wrong-state API calls with 403
 - [ ] Rate limiting blocks 6th submission from same IP within 1 hour
-- [ ] Honeypot silently rejects bot submissions
+- [x] Honeypot silently rejects bot submissions
 - [ ] All DB indexes applied and verified
-- [ ] Onboarding form — all 6 steps, validation, summary, confirmation screen
+- [x] Onboarding form — all 6 steps, validation, summary, confirmation screen
 - [ ] Onboarding form fully responsive at 375px and 430px
 - [ ] Account created in Supabase on form submission
 - [ ] Welcome magic link email sent within 60 seconds of submission

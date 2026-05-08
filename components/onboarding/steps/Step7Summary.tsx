@@ -1,24 +1,38 @@
 "use client";
 
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, Pencil } from "lucide-react";
 import type { OnboardingFormData, Package } from "../onboarding-types";
 
 interface Step7Props {
   data: OnboardingFormData;
   packages: Package[];
   onBack: () => void;
+  onEdit: (step: number) => void;
   onSubmit: () => void;
   submitting: boolean;
   submitError: string;
 }
 
-function Group({ title, rows }: { title: string; rows: { label: string; value?: string | null }[] }) {
+function Group({ title, step, onEdit, rows }: {
+  title: string;
+  step: number;
+  onEdit: (step: number) => void;
+  rows: { label: string; value?: string | null }[];
+}) {
   const visible = rows.filter((r) => r.value);
   if (!visible.length) return null;
   return (
     <div className="border border-line rounded-lg overflow-hidden">
-      <div className="px-5 py-2.5 bg-off border-b border-line">
+      <div className="flex items-center justify-between px-5 py-2.5 bg-off border-b border-line">
         <p className="text-ui-sm font-semibold text-navy">{title}</p>
+        <button
+          type="button"
+          onClick={() => onEdit(step)}
+          className="flex items-center gap-1 text-xs text-navy hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-navy rounded"
+        >
+          <Pencil className="w-3 h-3" aria-hidden="true" />
+          Edit
+        </button>
       </div>
       <dl className="divide-y divide-line">
         {visible.map(({ label, value }) => (
@@ -32,7 +46,7 @@ function Group({ title, rows }: { title: string; rows: { label: string; value?: 
   );
 }
 
-export function Step7Summary({ data, packages, onBack, onSubmit, submitting, submitError }: Step7Props) {
+export function Step7Summary({ data, packages, onBack, onEdit, onSubmit, submitting, submitError }: Step7Props) {
   const selectedPkg = packages.find((p) => p.id === data.packageId);
 
   return (
@@ -41,7 +55,7 @@ export function Step7Summary({ data, packages, onBack, onSubmit, submitting, sub
       <p className="text-body-sm text-body mb-8">Review your details before submitting.</p>
 
       <div className="space-y-3 mb-8">
-        <Group title="Business" rows={[
+        <Group title="Business" step={0} onEdit={onEdit} rows={[
           { label: "Legal name",        value: data.legalName },
           { label: "Trading name",      value: data.tradingName },
           { label: "Registration no.",  value: data.regNumber },
@@ -49,28 +63,28 @@ export function Step7Summary({ data, packages, onBack, onSubmit, submitting, sub
           { label: "Industry",          value: data.industry },
           { label: "Country",           value: data.country },
         ]} />
-        <Group title="Contact" rows={[
+        <Group title="Contact" step={1} onEdit={onEdit} rows={[
           { label: "Full name",  value: data.contactName },
           { label: "Role",       value: data.contactRole },
           { label: "Email",      value: data.contactEmail },
           { label: "Phone",      value: data.contactPhone },
           { label: "Address",    value: data.address },
         ]} />
-        <Group title="Services" rows={[
+        <Group title="Services" step={2} onEdit={onEdit} rows={[
           { label: "Selected",  value: data.services.join(", ") },
         ]} />
-        <Group title="Financial" rows={[
+        <Group title="Financial" step={3} onEdit={onEdit} rows={[
           { label: "Turnover",        value: data.turnover },
           { label: "Employees",       value: String(data.employees) },
           { label: "Last audit",      value: data.lastAudit },
           { label: "Has accountant",  value: data.hasAccountant === "yes" ? "Yes" : "No" },
         ]} />
-        <Group title="Compliance" rows={[
+        <Group title="Compliance" step={4} onEdit={onEdit} rows={[
           { label: "GRA registered",          value: data.graRegistered === "yes" ? "Yes" : "No" },
           { label: "VAT registered",          value: data.vatRegistered === "yes" ? "Yes" : "No" },
           { label: "Outstanding obligations", value: data.outstandingObligations === "yes" ? "Yes" : "No" },
         ]} />
-        <Group title="Package" rows={[
+        <Group title="Package" step={5} onEdit={onEdit} rows={[
           { label: "Selected package",  value: selectedPkg?.name ?? "—" },
         ]} />
       </div>
