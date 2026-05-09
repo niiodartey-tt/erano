@@ -197,6 +197,38 @@ Completed and approved in Sprint 9. Do not modify.
 
 ---
 
+## Locked — Sprint 10 Invoice, Payment Flow + PDF Generation
+
+Completed and approved in Sprint 10. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `lib/businessDays.ts` | Business day calculator — used by agreement accept to set payment deadline | Wrong payment deadline set for all new agreements |
+| `lib/checkDuplicateRef.ts` | Duplicate transaction reference guard — called by payment upload API | Allows duplicate payment submissions |
+| `lib/validateMime.ts` | MIME type validation from magic bytes — used on all file uploads | File type bypass — extension spoofing allowed |
+| `lib/generateStoragePath.ts` | UUID-prefixed storage path generator — invoices, payment proofs, document uploads | Predictable file paths — enumeration attack possible |
+| `lib/generateInvoicePdf.ts` | PDF generation — A4 layout, Plus Jakarta Sans, GH₵ symbol | Breaks invoice PDF generation |
+| `app/portal/invoice/page.tsx` | Invoice display page — AgreementGate + bank details + state gating | Breaks invoice page |
+| `app/portal/invoice/layout.tsx` | Invoice page metadata | Breaks invoice SEO |
+| `app/portal/payments/page.tsx` | Payments page — timer + upload form + history, state gated | Breaks payments page |
+| `app/portal/payments/layout.tsx` | Payments page metadata | Breaks payments SEO |
+| `app/api/portal/invoice/me/route.ts` | Invoice GET API — returns most recent invoice for authenticated client | Breaks invoice data load |
+| `app/api/portal/agreements/accept/route.ts` | Agreement accept API — creates agreements row, payment timer, transitions state to awaiting_payment | Breaks T&Cs acceptance flow |
+| `app/api/portal/payments/upload/route.ts` | Payment proof upload API — MIME validation, duplicate check, state transition to awaiting_confirmation | Breaks payment submission |
+| `app/api/portal/payments/timer/route.ts` | Payment timer GET API — returns active timer expires_at for client | Breaks payment countdown |
+| `app/api/portal/payments/history/route.ts` | Payment history GET API — returns all payment proofs for client | Breaks payment history view |
+| `app/api/portal/payments/proof-url/route.ts` | Signed URL API — generates 15-min signed URL with ownership check | Breaks payment proof download |
+| `app/api/cron/check-expired-timers/route.ts` | Vercel cron — marks expired timers, sets account_state → expired, sends email | Payment expiry not enforced |
+| `components/portal/invoice/AgreementGate.tsx` | T&Cs scroll gate — scroll-to-bottom enforcement, accept button, state refresh | Breaks agreement acceptance UI |
+| `components/portal/payments/PaymentTimer.tsx` | Countdown timer component — urgent/expired colour states, reduced motion support | Breaks payment deadline display |
+| `components/portal/payments/PaymentUploadForm.tsx` | Payment proof upload form — react-hook-form + zod, 7 fields, FormData POST | Breaks payment submission UI |
+| `components/portal/payments/PaymentHistory.tsx` | Payment history table — status badges, signed URL download | Breaks payment history UI |
+| `vercel.json` | Vercel cron schedule — daily 6am UTC check-expired-timers | Cron job stops running; expired accounts not detected |
+| `public/fonts/PlusJakartaSans-Regular.ttf` | TTF font for PDF generation — contains U+20B5 GH₵ glyph | PDF generation throws WinAnsi encoding error |
+| `public/fonts/PlusJakartaSans-Bold.ttf` | TTF bold font for PDF generation — contains U+20B5 GH₵ glyph | PDF generation throws WinAnsi encoding error |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.

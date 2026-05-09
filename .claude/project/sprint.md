@@ -47,9 +47,9 @@
 ### ✅ Sprint 10 — Legal, Invoice, Payment Flow
 **Completed:** May 2026
 **Branch:** `sprint-10`
-**Approved by Naa:** [ ]
-**Merged to main:** [ ]
-**Merged date:** —
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
 
 - [x] T014 — T&Cs agreement gate (AgreementGate.tsx, /api/portal/agreements/accept, lib/businessDays.ts)
 - [x] T015 — Invoice display (app/portal/invoice/, /api/portal/invoice/me)
