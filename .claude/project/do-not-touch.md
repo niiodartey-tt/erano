@@ -168,6 +168,35 @@ Completed and approved in Sprint 8. Do not modify.
 
 ---
 
+## Locked — Sprint 9 Client Portal Shell
+
+Completed and approved in Sprint 9. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `context/PortalContext.tsx` | Portal context — accountState, userName, userId, mobile nav state | Breaks all portal pages that read context |
+| `app/portal/layout.tsx` | Portal layout — auth guard, must_change_password redirect, PortalProvider wrapper | Breaks portal auth flow and layout for all portal pages |
+| `app/portal/dashboard/page.tsx` | Dashboard dispatcher — 6 state-gated views | Breaks client dashboard |
+| `app/portal/profile/page.tsx` | Profile page — edit contact + change password | Breaks client profile page |
+| `app/portal/profile/layout.tsx` | Profile page metadata | Breaks profile SEO |
+| `app/api/portal/profile/me/route.ts` | Profile GET API — service role bypass for client_profiles RLS | Breaks profile + dashboard data load |
+| `app/api/portal/profile/update/route.ts` | Profile PATCH API — updates contact details, audit logged | Breaks contact detail editing |
+| `app/api/portal/auth/clear-password-flag/route.ts` | Clears must_change_password — used after set-password and change-password | Breaks post-password-change flow |
+| `components/portal/layout/PortalSidebar.tsx` | Nav sidebar — desktop sticky + mobile slide-in, state badge, sign out | Breaks portal navigation |
+| `components/portal/layout/PortalHeader.tsx` | Portal header — page title, hamburger, notification bell, user avatar | Breaks portal header on all pages |
+| `components/portal/layout/PortalMobileNav.tsx` | Mobile bottom nav — 5 items, state-gated visibility | Breaks mobile portal navigation |
+| `components/portal/dashboard/StatusTimeline.tsx` | 4-step onboarding timeline — shared by pending/agreement/confirmation views | Breaks timeline in 3 dashboard views |
+| `components/portal/dashboard/PendingView.tsx` | Dashboard view for pending state | Breaks pending dashboard |
+| `components/portal/dashboard/AgreementView.tsx` | Dashboard view for awaiting_agreement state | Breaks agreement dashboard |
+| `components/portal/dashboard/PaymentView.tsx` | Dashboard view for awaiting_payment state — countdown timer | Breaks payment dashboard |
+| `components/portal/dashboard/ConfirmationView.tsx` | Dashboard view for awaiting_confirmation state | Breaks confirmation dashboard |
+| `components/portal/dashboard/ActiveView.tsx` | Dashboard view for active state — stat cards + activity feed | Breaks active dashboard |
+| `components/portal/dashboard/ExpiredView.tsx` | Dashboard view for expired state — WhatsApp + email CTAs | Breaks expired dashboard |
+| `components/portal/profile/ContactDetailsForm.tsx` | Contact details edit form — PATCH to profile update API | Breaks contact editing |
+| `components/portal/profile/ChangePasswordForm.tsx` | Change password form — signInWithPassword verify + updateUser | Breaks password change |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.

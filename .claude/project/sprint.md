@@ -8,27 +8,35 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 9 — Client Portal Shell
-**Started:** May 2026
+**Sprint:** Sprint 10 — Legal, Invoice, Payment Flow
+**Started:** TBD
 **Target completion:** TBD
-**Branch:** `sprint-9`
+**Branch:** `sprint-10`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T011 — Client portal layout (sidebar, header, notification bell placeholder) | `sprint-9` | ✅ Complete |
-| T012 — Client dashboard state-gated views (all 6 states) | `sprint-9` | ✅ Complete |
-| T013 — Client profile page (edit + change password) | `sprint-9` | ✅ Complete |
+| T014 — T&Cs agreement gate | `sprint-10` | ⏳ Not started |
+| T015 — Invoice display | `sprint-10` | ⏳ Not started |
+| T016 — Payment timer (server-side, Vercel cron) | `sprint-10` | ⏳ Not started |
+| T017 — Payment proof upload | `sprint-10` | ⏳ Not started |
+| T018 — Payment history view | `sprint-10` | ⏳ Not started |
+| T034 — Duplicate transaction reference check | `sprint-10` | ⏳ Not started |
+| T035 — Signed URL expiry policy | `sprint-10` | ⏳ Not started |
+| T036 — MIME type validation | `sprint-10` | ⏳ Not started |
+| T037 — Unpredictable invoice file paths | `sprint-10` | ⏳ Not started |
+| T038 — Session invalidation on password reset | `sprint-10` | ⏳ Not started |
+| T040 — Non-blocking PDF generation | `sprint-10` | ⏳ Not started |
 
-### Sprint 9 Definition of Done
+### Sprint 10 Definition of Done
 
-- [ ] All tasks merged into `sprint-9` branch
-- [ ] Portal layout renders correctly — sidebar, header, notification bell
-- [ ] All 6 account states render the correct dashboard view
-- [ ] Client profile page — edit fields save to DB
-- [ ] Change password flow wired to Supabase
+- [ ] All tasks merged into `sprint-10` branch
+- [ ] Agreement gate works correctly for awaiting_agreement state
+- [ ] Invoice PDF displays and downloads correctly
+- [ ] Payment timer runs server-side only — never in client state
+- [ ] Payment proof upload validated by MIME type server-side
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
@@ -42,6 +50,20 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 9 — Client Portal Shell
+**Completed:** May 2026
+**Branch:** `sprint-9`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] T011 — Client portal layout (PortalContext, portal layout.tsx, PortalSidebar, PortalHeader, PortalMobileNav)
+- [x] T012 — Client dashboard — 6 state-gated views (pending, awaiting_agreement, awaiting_payment, awaiting_confirmation, active, expired) + shared StatusTimeline
+- [x] T013 — Client profile page — edit contact details + change password
+- [x] Fix — client_profiles RLS bypass via /api/portal/profile/me (service role) — BUG-009
+
+---
 
 ### ✅ Sprint 8 — Portal Foundation
 **Completed:** May 2026
@@ -250,7 +272,7 @@ Planned tasks:
 
 ---
 
-## Do Not Touch During Sprint 9
+## Do Not Touch During Sprint 10
 
 > These are stable completed components. Do not modify without explicit instruction from Naa.
 
@@ -268,16 +290,19 @@ Planned tasks:
 - `next-sitemap.config.js` — locked
 - `next.config.mjs` — locked unless adding new image domain
 - All Sprint 8 files — see do-not-touch.md for full list
+- All Sprint 9 files — see do-not-touch.md for full list
 
 ---
 
 ## Sprint Notes
 
-### Sprint 9 Notes
-- All Sprint 8 infrastructure (middleware, validateState, email, storage) is locked — do not modify
-- Portal routes live under `app/portal/` — new files only, no modifications to auth pages
-- Sidebar and header are new shared components — will be locked after Sprint 9 approval
-- All portal data fetches must be server-side — no initial render fetches in client components
+### Sprint 10 Notes
+- All Sprint 8 and Sprint 9 infrastructure is locked — do not modify
+- New portal routes live under `app/portal/` — no modifications to dashboard, profile, or layout files
+- Payment timer logic must be server-side only — never in client state or localStorage
+- All Supabase Storage access via signed URLs only — no public bucket URLs
+- File uploads validated by MIME type server-side — never by file extension
+- Invoice file paths must include a random UUID — never predictable
 
 ---
 
