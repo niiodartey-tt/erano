@@ -11,19 +11,33 @@ export default function AuthCallbackPage() {
     );
 
     async function handleCallback() {
-      // Get session — Supabase automatically exchanges the hash token
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      const accessToken  = params.get("access_token");
+      const refreshToken = params.get("refresh_token");
+      const type         = params.get("type");
+
+      console.log("[AUTH-CALLBACK] hash:", hash);
+      console.log("[AUTH-CALLBACK] accessToken present:", !!accessToken);
+      console.log("[AUTH-CALLBACK] refreshToken present:", !!refreshToken);
+      console.log("[AUTH-CALLBACK] type:", type);
+
+      if (!accessToken || !refreshToken) {
+        window.location.href = "/login";
+        return;
+      }
+
+      const { data: { session }, error } = await supabase.auth.setSession({
+        access_token:  accessToken,
+        refresh_token: refreshToken,
+      });
+
+      console.log("[AUTH-CALLBACK] setSession error:", error);
+      console.log("[AUTH-CALLBACK] session present:", !!session);
+      console.log("[AUTH-CALLBACK] session user id:", session?.user?.id);
 
       if (error || !session) {
-        // Wait 2 seconds and try again — token exchange may still be in progress
-        setTimeout(async () => {
-          const { data: { session: retrySession } } = await supabase.auth.getSession();
-          if (!retrySession) {
-            window.location.href = "/login";
-            return;
-          }
-          await redirect(supabase, retrySession.user.id);
-        }, 2000);
+        window.location.href = "/login";
         return;
       }
 
@@ -31,15 +45,17 @@ export default function AuthCallbackPage() {
     }
 
     async function redirect(supabase: ReturnType<typeof createBrowserClient>, userId: string) {
-      const { data } = await supabase
+      const { data: userData } = await supabase
         .from("users")
         .select("must_change_password, role")
         .eq("id", userId)
         .single();
 
-      if (data?.role === "admin") {
+      console.log("[AUTH-CALLBACK] userData:", JSON.stringify(userData));
+
+      if (userData?.role === "admin") {
         window.location.href = "/admin";
-      } else if (data?.must_change_password) {
+      } else if (userData?.must_change_password) {
         window.location.href = "/portal/set-password";
       } else {
         window.location.href = "/portal/dashboard";
