@@ -11,47 +11,89 @@ export default function AuthCallbackPage() {
     );
 
     async function handleCallback() {
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      const accessToken  = params.get("access_token");
-      const refreshToken = params.get("refresh_token");
-      const type         = params.get("type");
+      console.log("[AUTH-CALLBACK] page loaded");
+      console.log("[AUTH-CALLBACK] pathname:", window.location.pathname);
+      console.log("[AUTH-CALLBACK] search:", window.location.search);
+      console.log("[AUTH-CALLBACK] hash length:", window.location.hash.length);
 
-      console.log("[AUTH-CALLBACK] hash:", hash);
-      console.log("[AUTH-CALLBACK] accessToken present:", !!accessToken);
-      console.log("[AUTH-CALLBACK] refreshToken present:", !!refreshToken);
+      // ── PATH A: implicit flow — tokens in hash ────────────────────────────
+      const hash       = window.location.hash.substring(1);
+      const hashParams = new URLSearchParams(hash);
+      const accessToken  = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+      const type         = hashParams.get("type");
+      const hashError    = hashParams.get("error");
+
+      console.log("[AUTH-CALLBACK] PATH A — hash tokens present:", !!accessToken && !!refreshToken);
       console.log("[AUTH-CALLBACK] type:", type);
+      console.log("[AUTH-CALLBACK] hash error:", hashError);
 
-      if (!accessToken || !refreshToken) {
-        window.location.href = "/login";
+      if (accessToken && refreshToken) {
+        console.log("[AUTH-CALLBACK] calling setSession with hash tokens");
+        const { data: { session }, error } = await supabase.auth.setSession({
+          access_token:  accessToken,
+          refresh_token: refreshToken,
+        });
+        console.log("[AUTH-CALLBACK] setSession error:", error?.message ?? null);
+        console.log("[AUTH-CALLBACK] setSession session present:", !!session);
+        console.log("[AUTH-CALLBACK] setSession user id:", session?.user?.id ?? null);
+
+        if (session) {
+          await doRedirect(supabase, session.user.id);
+          return;
+        }
+        console.log("[AUTH-CALLBACK] setSession produced no session, falling through");
+      }
+
+      // ── PATH B: PKCE flow — code in query string ──────────────────────────
+      const searchParams = new URLSearchParams(window.location.search);
+      const code         = searchParams.get("code");
+      console.log("[AUTH-CALLBACK] PATH B — PKCE code present:", !!code);
+
+      if (code) {
+        console.log("[AUTH-CALLBACK] calling exchangeCodeForSession");
+        const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code);
+        console.log("[AUTH-CALLBACK] exchangeCode error:", error?.message ?? null);
+        console.log("[AUTH-CALLBACK] exchangeCode session present:", !!session);
+        console.log("[AUTH-CALLBACK] exchangeCode user id:", session?.user?.id ?? null);
+
+        if (session) {
+          await doRedirect(supabase, session.user.id);
+          return;
+        }
+        console.log("[AUTH-CALLBACK] exchangeCode produced no session, falling through");
+      }
+
+      // ── PATH C: SDK already processed tokens — check existing session ─────
+      console.log("[AUTH-CALLBACK] PATH C — calling getSession as fallback");
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log("[AUTH-CALLBACK] getSession error:", sessionError?.message ?? null);
+      console.log("[AUTH-CALLBACK] getSession session present:", !!session);
+      console.log("[AUTH-CALLBACK] getSession user id:", session?.user?.id ?? null);
+
+      if (session) {
+        await doRedirect(supabase, session.user.id);
         return;
       }
 
-      const { data: { session }, error } = await supabase.auth.setSession({
-        access_token:  accessToken,
-        refresh_token: refreshToken,
-      });
-
-      console.log("[AUTH-CALLBACK] setSession error:", error);
-      console.log("[AUTH-CALLBACK] session present:", !!session);
-      console.log("[AUTH-CALLBACK] session user id:", session?.user?.id);
-
-      if (error || !session) {
-        window.location.href = "/login";
-        return;
-      }
-
-      await redirect(supabase, session.user.id);
+      console.log("[AUTH-CALLBACK] all paths exhausted — redirecting to /login");
+      window.location.href = "/login";
     }
 
-    async function redirect(supabase: ReturnType<typeof createBrowserClient>, userId: string) {
-      const { data: userData } = await supabase
+    async function doRedirect(
+      supabase: ReturnType<typeof createBrowserClient>,
+      userId: string,
+    ) {
+      console.log("[AUTH-CALLBACK] querying users table for id:", userId);
+      const { data: userData, error: dbError } = await supabase
         .from("users")
         .select("must_change_password, role")
         .eq("id", userId)
         .single();
 
-      console.log("[AUTH-CALLBACK] userData:", JSON.stringify(userData));
+      console.log("[AUTH-CALLBACK] dbError:", dbError?.message ?? null);
+      console.log("[AUTH-CALLBACK] must_change_password:", userData?.must_change_password ?? null);
+      console.log("[AUTH-CALLBACK] role:", userData?.role ?? null);
 
       if (userData?.role === "admin") {
         window.location.href = "/admin";
