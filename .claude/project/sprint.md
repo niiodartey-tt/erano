@@ -43,17 +43,17 @@
 - [ ] RLS tested: client A cannot access client B data via direct API call
 - [ ] Storage buckets created as private — direct URL returns 403
 - [x] Middleware protecting `/portal/*` and `/admin/*` routes
-- [ ] Login page redirects correctly by role
+- [x] Login page redirects correctly by role
 - [ ] Password reset flow working end to end
-- [ ] Magic link sent on account creation — no plain text password
+- [x] Magic link sent on account creation — no plain text password
 - [x] `validateState` utility rejects wrong-state API calls with 403
 - [ ] Rate limiting blocks 6th submission from same IP within 1 hour
 - [x] Honeypot silently rejects bot submissions
-- [ ] All DB indexes applied and verified
+- [x] All DB indexes applied and verified
 - [x] Onboarding form — all 6 steps, validation, summary, confirmation screen
 - [ ] Onboarding form fully responsive at 375px and 430px
-- [ ] Account created in Supabase on form submission
-- [ ] Welcome magic link email sent within 60 seconds of submission
+- [x] Account created in Supabase on form submission
+- [x] Welcome magic link email sent within 60 seconds of submission
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools

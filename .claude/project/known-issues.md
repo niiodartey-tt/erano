@@ -84,6 +84,16 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### BUG-007 — Supabase magic link redirecting to /login instead of /auth/callback
+**Sprint:** Sprint 8
+**File:** `lib/magicLink.ts`, Supabase Authentication → Email Templates → Magic Link
+**Symptom:** User clicks magic link in welcome email → browser navigates to `/login` → `/auth/callback` never loads → no console output
+**Root cause:** Supabase Magic Link email template was using `{{ .ConfirmationURL }}`. That variable resolves to the Supabase-hosted confirmation URL which redirects to the project's Site URL — it does not honour the custom `redirectTo` option passed to `admin.generateLink`. The browser was always landing on `/login` because that is what `NEXT_PUBLIC_SITE_URL` resolves to in Supabase's redirect chain.
+**Fix applied:** Updated the Magic Link template in Supabase Dashboard → Authentication → Email Templates to use `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=magiclink` directly. The Button `href` in `emails/WelcomeEmail.tsx` already pointed to `magicLinkUrl` (the `action_link` from `admin.generateLink`) and is correct — no code change needed.
+**Prevention rule:** When debugging auth redirects, always check the Supabase email template first. `{{ .ConfirmationURL }}` ignores custom `redirect_to` and always redirects through Supabase's own redirect to Site URL. Use `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=magiclink` to control the landing page directly.
+
+---
+
 ## Pending Issues (Known But Not Yet Fixed)
 
 ### PENDING-001 — Mobile responsiveness incomplete on multiple pages
