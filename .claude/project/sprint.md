@@ -8,52 +8,27 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 8 — Portal Foundation
+**Sprint:** Sprint 9 — Client Portal Shell
 **Started:** May 2026
 **Target completion:** TBD
-**Branch:** `sprint-8`
+**Branch:** `sprint-9`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T007 — Migrate to Resend, delete Nodemailer | `sprint-8` | ✅ Complete |
-| T008 — Email templates (12 templates) | `sprint-8` | ✅ Complete |
-| T001 — Supabase schema + RLS | `sprint-8` | ✅ Complete |
-| T002 — Supabase Storage buckets + RLS | `sprint-8` | ✅ Complete |
-| T003 — RBAC middleware | `sprint-8` | ✅ Complete |
-| T004 — Login page | `sprint-8` | ✅ Complete |
-| T005 — Password reset flow | `sprint-8` | ✅ Complete |
-| T006 — First login force password change | `sprint-8` | ✅ Complete |
-| T031 — Magic link first login | `sprint-8` | ✅ Complete |
-| T032 — Account state validation utility | `sprint-8` | ✅ Complete |
-| T033 — Rate limiting + honeypot | `sprint-8` | ✅ Complete |
-| T039 — Database indexes | `sprint-8` | ✅ Complete |
-| T009 — Multi-step onboarding form UI | `sprint-8` | ✅ Complete |
-| T010 — Account creation on form submission | `sprint-8` | ✅ Complete |
+| T011 — Client portal layout (sidebar, header, notification bell placeholder) | `sprint-9` | ⏳ Not started |
+| T012 — Client dashboard state-gated views (all 6 states) | `sprint-9` | ⏳ Not started |
+| T013 — Client profile page (edit + change password) | `sprint-9` | ⏳ Not started |
 
-### Sprint 8 Definition of Done
+### Sprint 9 Definition of Done
 
-- [ ] All tasks merged into `sprint-8` branch
-- [x] Nodemailer fully removed — no references remain
-- [ ] Resend sending email from contact form end to end
-- [ ] All 12 email templates render correctly on mobile + desktop
-- [ ] Supabase schema applied — all tables with RLS
-- [ ] RLS tested: client A cannot access client B data via direct API call
-- [ ] Storage buckets created as private — direct URL returns 403
-- [x] Middleware protecting `/portal/*` and `/admin/*` routes
-- [x] Login page redirects correctly by role
-- [ ] Password reset flow working end to end
-- [x] Magic link sent on account creation — no plain text password
-- [x] `validateState` utility rejects wrong-state API calls with 403
-- [ ] Rate limiting blocks 6th submission from same IP within 1 hour
-- [x] Honeypot silently rejects bot submissions
-- [x] All DB indexes applied and verified
-- [x] Onboarding form — all 6 steps, validation, summary, confirmation screen
-- [ ] Onboarding form fully responsive at 375px and 430px
-- [x] Account created in Supabase on form submission
-- [x] Welcome magic link email sent within 60 seconds of submission
+- [ ] All tasks merged into `sprint-9` branch
+- [ ] Portal layout renders correctly — sidebar, header, notification bell
+- [ ] All 6 account states render the correct dashboard view
+- [ ] Client profile page — edit fields save to DB
+- [ ] Change password flow wired to Supabase
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
@@ -67,6 +42,30 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 8 — Portal Foundation
+**Completed:** May 2026
+**Branch:** `sprint-8`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] T007 — Resend email integration, Nodemailer deleted
+- [x] T008 — 12 React Email templates (WelcomeEmail, PasswordResetEmail, InvoiceReadyEmail, PaymentConfirmedEmail, PaymentRejectedEmail, PaymentProofReceivedEmail, DocumentRequestedEmail, DocumentUploadedEmail, AgreementAcceptedEmail, AccountExpiredEmail, AccountReactivatedEmail, ContactFormEmail)
+- [x] T001 — Supabase schema: users, client_profiles, packages, invoices, payments, documents, notifications, audit_log + RLS on all tables
+- [x] T002 — Supabase Storage buckets (documents, payment-proofs, invoices) — private, RLS-gated, signed URLs only
+- [x] T003 — RBAC middleware protecting /portal/* and /admin/* by role and account_state
+- [x] T004 — Login page — email/password, role-based redirect, 5-attempt lockout
+- [x] T005 — Password reset flow (request + confirm pages)
+- [x] T006 — Force password change on first login (/portal/set-password)
+- [x] T031 — Magic link first login — no plain text password ever sent
+- [x] T032 — validateState utility — rejects wrong-state API calls with 403
+- [x] T033 — Rate limiting (Upstash) + honeypot on onboarding submit
+- [x] T039 — Database indexes on all foreign keys and high-frequency query columns
+- [x] T009 — Multi-step onboarding form (8 steps including summary + confirmation)
+- [x] T010 — Account creation API — auth user, users row, client_profiles row, magic link email
+
+---
 
 ### ✅ Sprint 1 — Foundation
 **Completed:** 2025
@@ -170,16 +169,6 @@
 
 ## Upcoming Sprints
 
-### ⏳ Sprint 9 — Client Portal Shell
-**Planned start:** After Sprint 8 approval
-
-Planned tasks:
-- [ ] T011 — Client portal layout (sidebar, header, notification bell placeholder)
-- [ ] T012 — Client dashboard state-gated views (all 6 states)
-- [ ] T013 — Client profile page (edit + change password)
-
----
-
 ### ⏳ Sprint 10 — Legal, Invoice, Payment Flow
 **Planned start:** After Sprint 9 approval
 
@@ -261,7 +250,7 @@ Planned tasks:
 
 ---
 
-## Do Not Touch During Sprint 8
+## Do Not Touch During Sprint 9
 
 > These are stable completed components. Do not modify without explicit instruction from Naa.
 
@@ -278,19 +267,17 @@ Planned tasks:
 - `lib/images.ts` — locked (Cloudinary keys)
 - `next-sitemap.config.js` — locked
 - `next.config.mjs` — locked unless adding new image domain
+- All Sprint 8 files — see do-not-touch.md for full list
 
 ---
 
 ## Sprint Notes
 
-### Sprint 8 Notes
-- `app/api/contact/route.ts` will be modified in this sprint to replace Nodemailer with Resend — this is the only (site) file touched in Sprint 8
-- `lib/mailer.ts` will be deleted in this sprint
-- `middleware.ts` is a new root-level file — does not exist yet
-- All portal and admin routes are new — no risk of touching existing public site
-- Supabase schema must be applied and RLS tested before onboarding form is built
-- Magic link replaces plain text password — `must_change_password` flag on `users` table
-- Rate limiting requires Upstash Redis — add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to `.env.local` and Vercel before building T033
+### Sprint 9 Notes
+- All Sprint 8 infrastructure (middleware, validateState, email, storage) is locked — do not modify
+- Portal routes live under `app/portal/` — new files only, no modifications to auth pages
+- Sidebar and header are new shared components — will be locked after Sprint 9 approval
+- All portal data fetches must be server-side — no initial render fetches in client components
 
 ---
 

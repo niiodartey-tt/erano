@@ -117,39 +117,54 @@ Completed and approved in Sprints 4–7. Do not modify.
 
 ---
 
-## Files to DELETE in Sprint 8
+## Locked — Sprint 8 Auth + Infrastructure
 
-These files must be removed as part of Sprint 8 — they are not locked, they are scheduled for deletion.
+Completed and approved in Sprint 8. Do not modify.
 
-| File | Action | Sprint |
+| File | Why locked | Risk if changed |
 |---|---|---|
-| `lib/mailer.ts` | Delete — replaced by `lib/email.ts` (Resend) | Sprint 8 |
-
-> `app/api/contact/route.ts` is NOT deleted — it is updated to use `lib/email.ts` instead of `lib/mailer.ts`.
-
----
-
-## In-Progress During Sprint 8
-
-> These areas are being actively built. Only sprint-8 task branches touch these.
-
-| Area | Active task branch |
-|---|---|
-| `app/onboarding/` | `task/onboarding-form` |
-| `app/login/` | `task/login-page` |
-| `app/reset-password/` | `task/password-reset` |
-| `app/portal/set-password/` | `task/set-password` |
-| `app/api/onboarding/` | `task/account-creation` |
-| `app/api/contact/route.ts` | `task/resend-migration` |
-| `lib/email.ts` | `task/resend-migration` |
-| `lib/storage.ts` | `task/storage-setup` |
-| `lib/validateState.ts` | `task/validate-state` |
-| `lib/ratelimit.ts` | `task/rate-limit` |
-| `middleware.ts` | `task/rbac-middleware` |
-| Supabase schema | `task/supabase-schema` |
-| Supabase Storage | `task/storage-setup` |
-
-> Clear this section at the end of Sprint 8 once all tasks are merged.
+| `middleware.ts` | RBAC — protects all portal and admin routes | Breaks auth gating site-wide |
+| `lib/email.ts` | Resend integration — used by all email sends | Breaks all transactional email |
+| `lib/storage.ts` | Supabase Storage helpers — signed URL generation | Breaks all file access |
+| `lib/supabase-server.ts` | Server-side Supabase client factory | Breaks all server-side DB access |
+| `lib/magicLink.ts` | Magic link generation — first login flow | Breaks account activation |
+| `lib/ratelimit.ts` | Upstash rate limiting — onboarding + auth | Removes rate limiting protection |
+| `lib/validateState.ts` | Account state validation — rejects wrong-state API calls | Breaks state gating on all portal APIs |
+| `app/auth/callback/page.tsx` | Auth callback — handles magic link + PKCE token exchange | Breaks all magic link logins |
+| `app/login/page.tsx` | Login page — email/password, role redirect, lockout | Breaks client and admin login |
+| `app/reset-password/page.tsx` | Password reset request page | Breaks password reset flow |
+| `app/reset-password/confirm/page.tsx` | Password reset confirmation page | Breaks password reset flow |
+| `app/portal/set-password/page.tsx` | Force password change on first login | Breaks first-login flow |
+| `app/api/contact/route.ts` | Contact form API — Resend email send | Breaks contact form |
+| `app/api/onboarding/submit/route.ts` | Account creation API — auth user, users row, client_profiles, magic link | Breaks all new client onboarding |
+| `app/api/portal/auth/clear-password-flag/route.ts` | Clears must_change_password after set-password | Breaks post-first-login redirect |
+| `supabase/schema.sql` | Full schema — all tables, RLS policies, indexes | Breaks entire database layer |
+| `emails/WelcomeEmail.tsx` | Welcome + magic link email template | Breaks account activation email |
+| `emails/PasswordResetEmail.tsx` | Password reset email template | Breaks password reset email |
+| `emails/InvoiceReadyEmail.tsx` | Invoice notification template | Breaks invoice emails |
+| `emails/PaymentConfirmedEmail.tsx` | Payment confirmed template | Breaks payment emails |
+| `emails/PaymentRejectedEmail.tsx` | Payment rejected template | Breaks payment emails |
+| `emails/PaymentProofReceivedEmail.tsx` | Payment proof received template | Breaks payment emails |
+| `emails/DocumentRequestedEmail.tsx` | Document request template | Breaks document emails |
+| `emails/DocumentUploadedEmail.tsx` | Document uploaded template | Breaks document emails |
+| `emails/AgreementAcceptedEmail.tsx` | T&Cs agreement template | Breaks agreement emails |
+| `emails/AccountExpiredEmail.tsx` | Account expired template | Breaks account state emails |
+| `emails/AccountReactivatedEmail.tsx` | Account reactivated template | Breaks account state emails |
+| `emails/ContactFormEmail.tsx` | Contact form notification template | Breaks contact form emails |
+| `emails/utils.ts` | Shared email utilities | Breaks all email templates |
+| `components/onboarding/OnboardingForm.tsx` | Multi-step form controller | Breaks onboarding flow |
+| `components/onboarding/OnboardingHeader.tsx` | Onboarding progress header | Breaks onboarding UI |
+| `components/onboarding/OnboardingSidebar.tsx` | Onboarding sidebar | Breaks onboarding UI |
+| `components/onboarding/form-helpers.tsx` | Shared form input components | Breaks onboarding form inputs |
+| `components/onboarding/onboarding-types.ts` | Shared TypeScript types for onboarding | Breaks type safety across onboarding |
+| `components/onboarding/steps/Step1Business.tsx` | Onboarding step 1 | Breaks onboarding |
+| `components/onboarding/steps/Step2Contact.tsx` | Onboarding step 2 | Breaks onboarding |
+| `components/onboarding/steps/Step3Services.tsx` | Onboarding step 3 | Breaks onboarding |
+| `components/onboarding/steps/Step4Financial.tsx` | Onboarding step 4 | Breaks onboarding |
+| `components/onboarding/steps/Step5Compliance.tsx` | Onboarding step 5 | Breaks onboarding |
+| `components/onboarding/steps/Step6Package.tsx` | Onboarding step 6 | Breaks onboarding |
+| `components/onboarding/steps/Step7Summary.tsx` | Onboarding step 7 — summary | Breaks onboarding |
+| `components/onboarding/steps/Step8Confirmation.tsx` | Onboarding step 8 — confirmation | Breaks onboarding |
 
 ---
 
@@ -159,9 +174,14 @@ Once data exists in these tables, column changes require a migration file. Never
 
 | Table | Status |
 |---|---|
-| All tables | 🔲 Not yet created — Sprint 8 |
-
-> Update this table once Sprint 8 schema is applied and data begins entering the system.
+| `users` | ✅ Created — Sprint 8 |
+| `client_profiles` | ✅ Created — Sprint 8 |
+| `packages` | ✅ Created — Sprint 8 |
+| `invoices` | ✅ Created — Sprint 8 |
+| `payments` | ✅ Created — Sprint 8 |
+| `documents` | ✅ Created — Sprint 8 |
+| `notifications` | ✅ Created — Sprint 8 |
+| `audit_log` | ✅ Created — Sprint 8 |
 
 ---
 
