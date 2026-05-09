@@ -8,28 +8,34 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 11 — Document Management + Notifications
+**Sprint:** Sprint 12 — Admin Dashboard
 **Started:** TBD
 **Target completion:** TBD
-**Branch:** `sprint-11`
+**Branch:** `sprint-12`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T025 — In-app notification centre | `sprint-11` | ✅ Complete |
-| T026 — Admin document request | `sprint-11` | ⏳ Not started |
-| T027 — Client document upload | `sprint-11` | ✅ Complete |
-| T043 — Supabase Realtime for notification bell | `sprint-11` | ✅ Complete |
+| T020 — Admin dashboard shell + navigation | `sprint-12` | ⏳ Not started |
+| T021 — Submissions inbox | `sprint-12` | ⏳ Not started |
+| T022 — Client list + filters | `sprint-12` | ⏳ Not started |
+| T023 — Individual client profile (admin view) | `sprint-12` | ⏳ Not started |
+| T019 — Admin payment confirmation + rejection | `sprint-12` | ⏳ Not started |
+| T041 — Admin confirmation modals | `sprint-12` | ⏳ Not started |
+| T042 — CSRF protection | `sprint-12` | ⏳ Not started |
+| T044 — Pagination on client list | `sprint-12` | ⏳ Not started |
 
-### Sprint 11 Definition of Done
+### Sprint 12 Definition of Done
 
-- [ ] All tasks merged into `sprint-11` branch
-- [ ] Notification bell updates in real time via Supabase Realtime
-- [ ] Admin can request documents from a client
-- [ ] Client can upload documents in response to a request
-- [ ] All file uploads validated by MIME type server-side
+- [ ] All tasks merged into `sprint-12` branch
+- [ ] Admin can view all client submissions
+- [ ] Admin can view and filter the client list
+- [ ] Admin can view individual client profile
+- [ ] Admin can confirm or reject payment proofs
+- [ ] All admin actions logged in audit_log
+- [ ] CSRF protection on all admin mutation routes
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
@@ -43,6 +49,21 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 11 — Document Management + Notifications
+**Completed:** May 2026
+**Branch:** `sprint-11`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] T025 — In-app notification centre (app/portal/notifications/, /api/portal/notifications/route.ts, /api/portal/notifications/mark-all-read/route.ts, NotificationBell.tsx)
+- [x] T027 — Client document upload (app/portal/documents/, /api/portal/documents/requests, /api/portal/documents/upload, /api/portal/documents/download, DocumentRequestCard.tsx)
+- [x] T043 — Supabase Realtime for notification bell (NotificationBell.tsx — postgres_changes INSERT subscription)
+- [ ] T026 — Admin document request — deferred to Sprint 12
+- [ ] T038 — Session invalidation on password reset — deferred to Sprint 12
+
+---
 
 ### ✅ Sprint 10 — Legal, Invoice, Payment Flow
 **Completed:** May 2026
@@ -205,33 +226,6 @@
 
 ## Upcoming Sprints
 
-### ⏳ Sprint 11 — Document Management + Notifications
-**Planned start:** After Sprint 10 approval
-
-Planned tasks:
-- [ ] T038 — Session invalidation on password reset (deferred from Sprint 10)
-- [ ] T025 — In-app notification centre
-- [ ] T026 — Admin document request
-- [ ] T027 — Client document upload
-- [ ] T043 — Supabase Realtime for notification bell
-
----
-
-### ⏳ Sprint 12 — Admin Dashboard
-**Planned start:** After Sprint 11 approval
-
-Planned tasks:
-- [ ] T020 — Admin dashboard shell + navigation
-- [ ] T021 — Submissions inbox
-- [ ] T022 — Client list + filters
-- [ ] T023 — Individual client profile (admin view)
-- [ ] T019 — Admin payment confirmation + rejection
-- [ ] T041 — Admin confirmation modals
-- [ ] T042 — CSRF protection
-- [ ] T044 — Pagination on client list
-
----
-
 ### ⏳ Sprint 13 — Invoice Generation + Package Management
 **Planned start:** After Sprint 12 approval
 
@@ -269,7 +263,7 @@ Planned tasks:
 
 ---
 
-## Do Not Touch During Sprint 10
+## Do Not Touch During Sprint 12
 
 > These are stable completed components. Do not modify without explicit instruction from Naa.
 
@@ -288,6 +282,8 @@ Planned tasks:
 - `next.config.mjs` — locked unless adding new image domain
 - All Sprint 8 files — see do-not-touch.md for full list
 - All Sprint 9 files — see do-not-touch.md for full list
+- All Sprint 10 files — see do-not-touch.md for full list
+- All Sprint 11 files — see do-not-touch.md for full list
 
 ---
 

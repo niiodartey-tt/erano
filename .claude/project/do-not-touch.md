@@ -229,6 +229,27 @@ Completed and approved in Sprint 10. Do not modify.
 
 ---
 
+## Locked — Sprint 11 Document Management + Notifications
+
+Completed and approved in Sprint 11. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `app/portal/notifications/page.tsx` | Notifications list page — full history, mark all read | Breaks notifications page |
+| `app/portal/notifications/layout.tsx` | Notifications page metadata | Breaks notifications SEO |
+| `app/portal/documents/page.tsx` | Documents page — lists all document requests with upload cards | Breaks documents page |
+| `app/portal/documents/layout.tsx` | Documents page metadata | Breaks documents SEO |
+| `app/api/portal/notifications/route.ts` | Notifications GET + PATCH — list and mark individual read | Breaks notification fetch and read |
+| `app/api/portal/notifications/mark-all-read/route.ts` | Mark all notifications read POST API | Breaks mark-all-read action |
+| `app/api/portal/documents/requests/route.ts` | Document requests GET — returns requests with nested uploads | Breaks documents data load |
+| `app/api/portal/documents/upload/route.ts` | Document upload POST — IDOR check, MIME validation, 10MB limit, audit log | Breaks document upload flow |
+| `app/api/portal/documents/download/route.ts` | Document download GET — IDOR check, 30-min signed URL | Breaks document download |
+| `components/portal/notifications/NotificationBell.tsx` | Bell icon with badge + dropdown + Supabase Realtime subscription | Breaks real-time notification bell |
+| `components/portal/documents/DocumentRequestCard.tsx` | Card per document request — upload form (pending) or download link (uploaded/reviewed) | Breaks document request UI |
+| `components/portal/layout/PortalHeader.tsx` | Portal header — modified Sprint 11 to add NotificationBell | Breaks portal header on all pages |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
