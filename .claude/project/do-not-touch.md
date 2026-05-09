@@ -250,6 +250,42 @@ Completed and approved in Sprint 11. Do not modify.
 
 ---
 
+## Locked — Sprint 12 Admin Dashboard
+
+Completed and approved in Sprint 12. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `app/admin/layout.tsx` | Admin layout server component — auth guard, role check, AdminProvider, pendingCount | Breaks admin auth and layout for all admin pages |
+| `app/admin/page.tsx` | Admin dashboard — 4 metric cards, SubmissionsPanel | Breaks admin dashboard |
+| `app/admin/clients/layout.tsx` | Clients list page metadata | Breaks clients page SEO |
+| `app/admin/clients/page.tsx` | Clients list — search, state filter, pagination | Breaks admin client list |
+| `app/admin/clients/[id]/layout.tsx` | Client profile page metadata | Breaks client profile SEO |
+| `app/admin/clients/[id]/page.tsx` | Client profile page — all sections, confirm/reject modal, download handler | Breaks admin client profile view |
+| `app/api/admin/metrics/route.ts` | Admin metrics API — counts + recent submissions | Breaks admin dashboard data load |
+| `app/api/admin/clients/route.ts` | Admin clients list API — search, state filter, pagination | Breaks admin client list |
+| `app/api/admin/clients/[id]/route.ts` | Admin client profile GET — all 9 data sections, invoice signed URL | Breaks admin client profile data load |
+| `app/api/admin/clients/[id]/update-state/route.ts` | Admin account state PATCH — audit logged | Breaks manual state transitions |
+| `app/api/admin/payments/confirm/route.ts` | Payment confirm POST — state→active, invoice→paid, email, notification, audit | Breaks payment confirmation flow |
+| `app/api/admin/payments/reject/route.ts` | Payment reject POST — state→awaiting_payment, rejection email, notification, audit | Breaks payment rejection flow |
+| `app/api/admin/documents/request/route.ts` | Document request POST — creates request, email, notification, audit | Breaks admin document request flow |
+| `app/api/admin/signed-url/route.ts` | Admin signed URL GET — generates signed URLs for any bucket after admin role check | Breaks all admin file downloads |
+| `lib/csrf.ts` | CSRF origin check — used by all state-mutating admin + portal routes | Removes CSRF protection from 8 mutation endpoints |
+| `context/AdminContext.tsx` | Admin React context — adminId, adminName, AdminProvider, useAdmin hook | Breaks AdminHeader and all components reading admin context |
+| `components/admin/layout/AdminSidebar.tsx` | Admin sidebar — nav items, pending count badge, sign out | Breaks admin navigation |
+| `components/admin/layout/AdminHeader.tsx` | Admin header — page title, admin avatar | Breaks admin header on all pages |
+| `components/admin/inbox/SubmissionsPanel.tsx` | Submissions inbox — 7-tab filter, state count badges, recent submissions table | Breaks admin inbox on dashboard |
+| `components/admin/clients/ClientsTable.tsx` | Clients table — loading skeleton, state badges, View links | Breaks client list rendering |
+| `components/admin/clients/PaginationBar.tsx` | Pagination bar — Prev/Next controls, showing X–Y of Z | Breaks client list pagination |
+| `components/admin/clients/ClientProfileHeader.tsx` | Client profile header — name, state badge, confirm/reject buttons, reactivate badge | Breaks client profile header |
+| `components/admin/clients/ClientInfoSections.tsx` | Business info, compliance, package/invoice/agreement sections | Breaks client profile info display |
+| `components/admin/clients/ClientPaymentSection.tsx` | Payment timer banner + proofs table with confirm/reject/download | Breaks payment section on client profile |
+| `components/admin/clients/ClientDocumentsSection.tsx` | Document requests list + DocumentRequestForm toggle | Breaks documents section on client profile |
+| `components/admin/clients/DocumentRequestForm.tsx` | Inline doc request form — title, category, description, POST to request API | Breaks admin document request UI |
+| `components/admin/ui/ConfirmModal.tsx` | Accessible confirm modal — focus trap, Escape key, optional reason textarea | Breaks all admin confirmation dialogs |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.

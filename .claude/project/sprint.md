@@ -44,9 +44,9 @@
 ### ✅ Sprint 12 — Admin Dashboard
 **Completed:** May 2026
 **Branch:** `sprint-12`
-**Approved by Naa:** [ ]
-**Merged to main:** [ ]
-**Merged date:** —
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
 
 - [x] T020 — Admin dashboard shell + navigation (AdminContext, AdminSidebar, AdminHeader, admin layout, admin metrics API + dashboard page)
 - [x] T021 — Submissions inbox with state filter tabs + counts (SubmissionsPanel, extended metrics API)
