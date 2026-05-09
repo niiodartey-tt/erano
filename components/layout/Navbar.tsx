@@ -203,7 +203,7 @@ export default function Navbar() {
 
               {/* Contact CTA */}
               <Link
-                href="/contact"
+                href="/onboarding"
                 style={{
                   display:        "inline-flex",
                   alignItems:     "center",
@@ -328,7 +328,7 @@ export default function Navbar() {
                 </svg>
                 Client login
               </Link>
-              <Link href="/contact" style={{
+              <Link href="/onboarding" style={{
                 display:        "block",
                 padding:        "0.875rem 1rem",
                 borderRadius:   "6px",

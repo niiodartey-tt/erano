@@ -48,8 +48,6 @@ export async function POST(request: Request) {
     const { success } = await onboardingRatelimit.limit(ip);
     if (!success) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
-    console.log("[ONBOARDING] Submission received from IP:", ip);
-
     // Input validation
     const result = submitSchema.safeParse(body);
     if (!result.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
@@ -77,7 +75,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to create account" }, { status: 500 });
     }
     const userId = authData.user.id;
-    console.log("[ONBOARDING] Auth user created:", userId);
 
     // Insert users record
     const { error: usersError } = await supabase.from("users").insert({
@@ -134,7 +131,6 @@ export async function POST(request: Request) {
 
     // Send welcome email (non-fatal)
     try {
-      console.log("[ONBOARDING] Attempting to send welcome email to:", data.contactEmail);
       const emailHtml = await render(WelcomeEmail({ contactName: data.contactName, magicLinkUrl }));
       await sendEmail({
         to:      data.contactEmail,
