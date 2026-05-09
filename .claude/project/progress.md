@@ -648,7 +648,31 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 13 — Invoice Generation + Package Management
-*Claude will populate this section during Sprint 13.*
+
+### T024 + T028 + T029 — Invoice generation, package list, package upgrade (Group 1 — all tasks)
+**Status:** ✅ tsc clean · build clean
+
+**Files created (7):**
+- `app/api/admin/packages/route.ts` — GET: returns all active packages ordered by price_ghs ASC nulls last. Admin role check.
+- `app/api/admin/invoices/route.ts` — GET: returns all invoices with FK-embedded package name and client email, ordered by generated_at DESC. Admin role check.
+- `app/api/admin/invoices/generate/route.ts` — POST `{ client_id, custom_price_ghs? }`. Verifies admin, CSRF, client state = pending. Resolves final price (Custom → required custom_price_ghs; else package.price_ghs). Generates ERN-YYYY-NNNN invoice number (sequential, year-scoped). Calls `generateInvoicePdf`, `uploadFile` to `invoices` bucket, inserts invoice row with package_id, updates state → awaiting_agreement, audit logs `invoice_generated`. Non-fatal: `InvoiceReadyEmail` + notification. Also saves custom_price_ghs to client_profiles when Custom package.
+- `app/api/admin/invoices/upgrade/route.ts` — POST `{ client_id, package_id, custom_price_ghs? }`. Verifies admin, CSRF, client state = active. Checks no open invoice (status = "generated"). Fetches new package + profile. Same PDF + upload + insert flow as generate. Updates `client_profiles.package_id`, state → awaiting_agreement, audit logs `package_upgrade_initiated`. Non-fatal: email + notification.
+- `app/admin/invoices/layout.tsx` — Metadata: "Invoice Manager — Erano Admin".
+- `app/admin/invoices/page.tsx` — Invoice table: invoice number, client email (hidden md), package name (hidden lg), amount, date (hidden sm), status badge (generated/paid), link to client profile. Loading skeleton + error + empty states.
+- `components/admin/clients/PackageUpgradeModal.tsx` — Modal with package dropdown (fetched from `/api/admin/packages` on mount), package description preview, custom price input when Custom selected, submit calls `/api/admin/invoices/upgrade`. Focus trap (Escape + Tab). Under 150 lines.
+
+**Files modified (2):**
+- `components/admin/clients/ClientProfileHeader.tsx` — Added `onGenerateInvoice`, `generatingInvoice`, `onInitiateUpgrade` props. "Generate Invoice" button shows when `accountState === "pending"`. "Initiate Package Upgrade" button shows when `accountState === "active"`.
+- `app/admin/clients/[id]/page.tsx` — Added `generating`, `customPrice`, `upgradeModal` state. Added `handleGenerateInvoice()`. Custom price input card shows when state = pending AND package = Custom. `PackageUpgradeModal` rendered when `upgradeModal` is true.
+
+**Key decisions:**
+- Invoice number format ERN-YYYY-NNNN is year-scoped: query `invoice_number LIKE 'ERN-{year}-%'` ordered DESC, parse last segment, +1. Avoids a dedicated sequence table.
+- Bank details sourced from optional env vars (`INVOICE_BANK_NAME`, `INVOICE_BANK_ACCOUNT_NAME`, `INVOICE_BANK_ACCOUNT_NUMBER`, `INVOICE_BANK_BRANCH`). If not set, PDF omits the bank details block (the field is optional in `InvoiceData`).
+- `package_id` stored on both the `invoices` row (historical record) and updated on `client_profiles` (current assignment). Upgrade route updates both.
+- Upgrade guard: blocks if a `status = "generated"` invoice already exists — prevents double-invoicing while a previous invoice is still open.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — `/admin/invoices` ƒ Dynamic added, all new API routes registered.
 
 ---
 

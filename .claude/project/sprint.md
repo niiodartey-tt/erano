@@ -18,16 +18,16 @@
 
 | Task | Branch | Status |
 |---|---|---|
-| T024 — Admin invoice generation (PDF) | `sprint-13` | ⏳ Not started |
-| T028 — Package seeding + display | `sprint-13` | ⏳ Not started |
-| T029 — Package upgrade flow | `sprint-13` | ⏳ Not started |
+| T024 — Admin invoice generation (PDF) | `sprint-13` | ✅ Complete |
+| T028 — Package seeding + display | `sprint-13` | ✅ Complete |
+| T029 — Package upgrade flow | `sprint-13` | ✅ Complete |
 
 ### Sprint 13 Definition of Done
 
-- [ ] All tasks merged into `sprint-13` branch
-- [ ] Admin can generate and send a PDF invoice to a client
-- [ ] Packages are seeded and display correctly
-- [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
+- [x] All tasks merged into `sprint-13` branch
+- [x] Admin can generate and send a PDF invoice to a client
+- [x] Packages are seeded and display correctly
+- [x] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
 - [ ] Naa reviewed on Vercel preview URL

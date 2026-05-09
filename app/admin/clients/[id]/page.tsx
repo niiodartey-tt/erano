@@ -9,6 +9,7 @@ import { ClientInfoSections } from "@/components/admin/clients/ClientInfoSection
 import { ClientPaymentSection } from "@/components/admin/clients/ClientPaymentSection";
 import { ClientDocumentsSection } from "@/components/admin/clients/ClientDocumentsSection";
 import { ConfirmModal } from "@/components/admin/ui/ConfirmModal";
+import { PackageUpgradeModal } from "@/components/admin/clients/PackageUpgradeModal";
 
 interface UserRow  { id: string; email: string; account_state: string; created_at: string }
 interface Package  { name: string; description: string; price_ghs: number | null }
@@ -33,6 +34,9 @@ export default function ClientProfilePage() {
   const [error,        setError]        = useState<string | null>(null);
   const [modal,        setModal]        = useState<Modal>(null);
   const [modalLoading, setModalLoading] = useState(false);
+  const [generating,   setGenerating]   = useState(false);
+  const [customPrice,  setCustomPrice]  = useState("");
+  const [upgradeModal, setUpgradeModal] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -58,6 +62,18 @@ export default function ClientProfilePage() {
     void fetchData();
   }
 
+  async function handleGenerateInvoice() {
+    if (!data) return;
+    setGenerating(true);
+    const reqBody: Record<string, unknown> = { client_id: data.user.id };
+    if (data.package?.name === "Custom") reqBody.custom_price_ghs = parseFloat(customPrice);
+    await fetch("/api/admin/invoices/generate", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reqBody),
+    });
+    setGenerating(false);
+    void fetchData();
+  }
+
   async function handleDownload(bucket: string, path: string) {
     const res = await fetch(`/api/admin/signed-url?bucket=${encodeURIComponent(bucket)}&path=${encodeURIComponent(path)}`);
     if (!res.ok) return;
@@ -70,6 +86,7 @@ export default function ClientProfilePage() {
 
   const pendingProof = data.proofs.find(p => p.status === "pending") ?? null;
   const profile = data.profile;
+  const isCustomPackage = data.package?.name === "Custom";
 
   return (
     <div className="p-4 md:p-6 max-w-4xl space-y-4">
@@ -84,7 +101,17 @@ export default function ClientProfilePage() {
         pendingProofId={pendingProof?.id ?? null}
         onConfirmPayment={() => pendingProof && setModal({ type: "confirm", proofId: pendingProof.id })}
         onRejectPayment={() => pendingProof && setModal({ type: "reject", proofId: pendingProof.id })}
+        onGenerateInvoice={() => void handleGenerateInvoice()}
+        generatingInvoice={generating}
+        onInitiateUpgrade={() => setUpgradeModal(true)}
       />
+
+      {data.user.account_state === "pending" && isCustomPackage && (
+        <div className="bg-white rounded-xl border border-line p-5 md:p-6">
+          <label className="ec-label" htmlFor="custom-price">Custom package price (GH₵)</label>
+          <input id="custom-price" type="number" min="1" className="ec-input mt-1" placeholder="0.00" value={customPrice} onChange={e => setCustomPrice(e.target.value)} />
+        </div>
+      )}
 
       <ClientInfoSections profile={profile} pkg={data.package} invoice={data.invoice} agreement={data.agreement} />
 
@@ -100,16 +127,21 @@ export default function ClientProfilePage() {
         onRequestCreated={fetchData} onDownload={handleDownload}
       />
 
+      {upgradeModal && (
+        <PackageUpgradeModal
+          clientId={data.user.id}
+          onSuccess={() => { setUpgradeModal(false); void fetchData(); }}
+          onClose={() => setUpgradeModal(false)}
+        />
+      )}
+
       {modal && (
         <ConfirmModal
           title={modal.type === "confirm" ? "Confirm payment" : "Reject payment"}
           body={modal.type === "confirm" ? "Mark this payment as approved and activate the client account?" : "The client will be notified and asked to re-upload a valid proof."}
           confirmLabel={modal.type === "confirm" ? "Confirm" : "Reject"}
-          loading={modalLoading}
-          withReason={modal.type === "reject"}
-          destructive={modal.type === "reject"}
-          onConfirm={(reason) => void handleModalConfirm(reason)}
-          onClose={() => setModal(null)}
+          loading={modalLoading} withReason={modal.type === "reject"} destructive={modal.type === "reject"}
+          onConfirm={(reason) => void handleModalConfirm(reason)} onClose={() => setModal(null)}
         />
       )}
     </div>
