@@ -80,11 +80,11 @@ export default function LoginPage() {
         .single();
 
       if (profile?.role === "admin") {
-        router.push("/admin");
+        router.replace("/admin");
       } else if (profile?.must_change_password) {
-        router.push("/portal/set-password");
+        router.replace("/portal/set-password");
       } else {
-        router.push("/portal/dashboard");
+        router.replace("/portal/dashboard");
       }
     } finally {
       setLoading(false);

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard, FileText, CreditCard,
@@ -40,17 +39,12 @@ const BADGE: Record<AccountState, { label: string; cls: string }> = {
 
 export default function PortalSidebar({ accountState }: { accountState: AccountState }) {
   const pathname = usePathname();
-  const router   = useRouter();
   const { isMobileNavOpen, toggleMobileNav } = usePortal();
   const badge = BADGE[accountState];
 
   async function handleSignOut() {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
-    await supabase.auth.signOut();
-    router.push("/login");
+    await fetch("/api/auth/signout", { method: "POST" });
+    window.location.href = "/login";
   }
 
   return (

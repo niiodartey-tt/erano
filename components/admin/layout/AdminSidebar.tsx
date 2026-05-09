@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import { LayoutDashboard, Users, FileText, FolderOpen, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,15 +22,10 @@ const NAV: NavItem[] = [
 
 export default function AdminSidebar({ pendingCount }: { pendingCount: number }) {
   const pathname = usePathname();
-  const router   = useRouter();
 
   async function handleSignOut() {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
-    await supabase.auth.signOut();
-    router.push("/login");
+    await fetch("/api/auth/signout", { method: "POST" });
+    window.location.href = "/login";
   }
 
   return (

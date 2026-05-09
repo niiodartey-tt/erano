@@ -11,21 +11,16 @@ import { ClientDocumentsSection } from "@/components/admin/clients/ClientDocumen
 import { ConfirmModal } from "@/components/admin/ui/ConfirmModal";
 import { PackageUpgradeModal } from "@/components/admin/clients/PackageUpgradeModal";
 
-interface UserRow  { id: string; email: string; account_state: string; created_at: string }
-interface Package  { name: string; description: string; price_ghs: number | null }
-interface Invoice  { invoice_number: string; final_price_ghs: number; status: string; generated_at: string; file_path: string | null; signed_url: string | null }
-interface Agreement { accepted_at: string; version_number: number }
-interface Timer    { expires_at: string; is_active: boolean }
-interface Proof    { id: string; amount_paid: number; currency: string; transaction_reference: string; status: string; uploaded_at: string; file_path: string | null }
-interface DocUpload { id: string; file_path: string; uploaded_at: string }
-interface DocRequest { id: string; title: string; description: string; category: string; status: string; created_at: string; document_uploads: DocUpload[] }
-interface ClientData {
-  user: UserRow; profile: Record<string, unknown>; package: Package | null;
-  invoice: Invoice | null; agreement: Agreement | null; timer: Timer | null;
-  proofs: Proof[]; doc_requests: DocRequest[]; audit_log: { id: string; action: string; actor_role: string; created_at: string }[];
-}
-
-type Modal = { type: "confirm" | "reject"; proofId: string } | null;
+type UserRow    = { id: string; email: string; account_state: string; created_at: string };
+type Package    = { name: string; description: string; price_ghs: number | null };
+type Invoice    = { invoice_number: string; final_price_ghs: number; status: string; generated_at: string; file_path: string | null; signed_url: string | null };
+type Agreement  = { accepted_at: string; version_number: number };
+type Timer      = { expires_at: string; is_active: boolean };
+type Proof      = { id: string; amount_paid: number; currency: string; transaction_reference: string; status: string; uploaded_at: string; file_path: string | null };
+type DocUpload  = { id: string; file_path: string; uploaded_at: string };
+type DocRequest = { id: string; title: string; description: string; category: string; status: string; created_at: string; document_uploads: DocUpload[] };
+type ClientData = { user: UserRow; profile: Record<string, unknown>; package: Package | null; invoice: Invoice | null; agreement: Agreement | null; timer: Timer | null; proofs: Proof[]; doc_requests: DocRequest[]; audit_log: { id: string; action: string; actor_role: string; created_at: string }[] };
+type Modal      = { type: "confirm" | "reject"; proofId: string } | null;
 
 export default function ClientProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +32,8 @@ export default function ClientProfilePage() {
   const [generating,   setGenerating]   = useState(false);
   const [customPrice,  setCustomPrice]  = useState("");
   const [upgradeModal, setUpgradeModal] = useState(false);
+  const [invoiceNum,   setInvoiceNum]   = useState<string | null>(null);
+  const [generateErr,  setGenerateErr]  = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -52,48 +49,46 @@ export default function ClientProfilePage() {
     if (!modal || !data) return;
     setModalLoading(true);
     const isConfirm = modal.type === "confirm";
-    const url  = isConfirm ? "/api/admin/payments/confirm" : "/api/admin/payments/reject";
-    const body = isConfirm
-      ? { client_id: data.user.id, proof_id: modal.proofId }
-      : { client_id: data.user.id, proof_id: modal.proofId, reason: reason ?? "" };
+    const url = isConfirm ? "/api/admin/payments/confirm" : "/api/admin/payments/reject";
+    const body = isConfirm ? { client_id: data.user.id, proof_id: modal.proofId } : { client_id: data.user.id, proof_id: modal.proofId, reason: reason ?? "" };
     await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    setModalLoading(false);
-    setModal(null);
-    void fetchData();
+    setModalLoading(false); setModal(null); void fetchData();
   }
 
   async function handleGenerateInvoice() {
     if (!data) return;
-    setGenerating(true);
-    const reqBody: Record<string, unknown> = { client_id: data.user.id };
-    if (data.package?.name === "Custom") reqBody.custom_price_ghs = parseFloat(customPrice);
-    await fetch("/api/admin/invoices/generate", {
+    setGenerating(true); setGenerateErr(null); setInvoiceNum(null);
+    const reqBody = data.package?.name === "Custom"
+      ? { client_id: data.user.id, custom_price_ghs: parseFloat(customPrice) }
+      : { client_id: data.user.id };
+    const res = await fetch("/api/admin/invoices/generate", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reqBody),
     });
+    const json = await res.json() as { invoice_number?: string; error?: string };
     setGenerating(false);
+    if (!res.ok) { setGenerateErr(json.error ?? "Invoice generation failed."); return; }
+    setInvoiceNum(json.invoice_number ?? null);
     void fetchData();
   }
 
   async function handleDownload(bucket: string, path: string) {
     const res = await fetch(`/api/admin/signed-url?bucket=${encodeURIComponent(bucket)}&path=${encodeURIComponent(path)}`);
     if (!res.ok) return;
-    const { url } = await res.json() as { url: string };
-    window.open(url, "_blank");
+    window.open((await res.json() as { url: string }).url, "_blank");
   }
 
   if (loading) return <div className="p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-white border border-line animate-pulse" />)}</div>;
   if (error || !data) return <div className="p-4 md:p-6"><p className="text-sm text-red-600" role="alert">{error ?? "Client not found."}</p></div>;
 
-  const pendingProof = data.proofs.find(p => p.status === "pending") ?? null;
-  const profile = data.profile;
-  const isCustomPackage = data.package?.name === "Custom";
+  const pendingProof   = data.proofs.find(p => p.status === "pending") ?? null;
+  const profile        = data.profile;
+  const isCustom       = data.package?.name === "Custom";
 
   return (
     <div className="p-4 md:p-6 max-w-4xl space-y-4">
       <Link href="/admin/clients" className="inline-flex items-center gap-1 text-sm text-body hover:text-navy transition-colors mb-2">
         <ChevronLeft className="h-4 w-4" aria-hidden="true" /> All clients
       </Link>
-
       <ClientProfileHeader
         email={data.user.email} accountState={data.user.account_state} createdAt={data.user.created_at}
         contactName={(profile.contact_name as string) || data.user.email}
@@ -105,28 +100,32 @@ export default function ClientProfilePage() {
         generatingInvoice={generating}
         onInitiateUpgrade={() => setUpgradeModal(true)}
       />
-
-      {data.user.account_state === "pending" && isCustomPackage && (
+      {data.user.account_state === "pending" && isCustom && (
         <div className="bg-white rounded-xl border border-line p-5 md:p-6">
           <label className="ec-label" htmlFor="custom-price">Custom package price (GH₵)</label>
           <input id="custom-price" type="number" min="1" className="ec-input mt-1" placeholder="0.00" value={customPrice} onChange={e => setCustomPrice(e.target.value)} />
         </div>
       )}
-
+      {(invoiceNum || generateErr) && (
+        <div className={`rounded-xl border p-4 space-y-1 ${invoiceNum ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
+          {invoiceNum ? (<>
+            <p className="text-sm font-semibold text-green-800">Invoice generated successfully — {invoiceNum}</p>
+            <p className="text-sm text-green-700">The client has been notified by email.</p>
+            <Link href="/admin/invoices" className="text-xs font-medium text-gold hover:text-gold-dark">View invoice manager</Link>
+          </>) : <p className="text-sm text-red-700" role="alert">{generateErr}</p>}
+        </div>
+      )}
       <ClientInfoSections profile={profile} pkg={data.package} invoice={data.invoice} agreement={data.agreement} />
-
       <ClientPaymentSection
         timer={data.timer} proofs={data.proofs}
         onConfirmPayment={(proofId) => setModal({ type: "confirm", proofId })}
         onRejectPayment={(proofId) => setModal({ type: "reject", proofId })}
         onDownload={handleDownload}
       />
-
       <ClientDocumentsSection
         clientId={data.user.id} docRequests={data.doc_requests}
         onRequestCreated={fetchData} onDownload={handleDownload}
       />
-
       {upgradeModal && (
         <PackageUpgradeModal
           clientId={data.user.id}
@@ -134,7 +133,6 @@ export default function ClientProfilePage() {
           onClose={() => setUpgradeModal(false)}
         />
       )}
-
       {modal && (
         <ConfirmModal
           title={modal.type === "confirm" ? "Confirm payment" : "Reject payment"}
