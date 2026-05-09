@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,6 +22,13 @@ const LOCKOUT_MSG  = "Too many failed attempts. Please try again in 15 minutes."
 const INVALID_MSG  = "Invalid email or password.";
 
 export default function LoginPage() {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes("type=magiclink") || hash.includes("access_token=")) {
+      window.location.replace("/portal/set-password" + hash);
+    }
+  }, []);
+
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading]         = useState(false);

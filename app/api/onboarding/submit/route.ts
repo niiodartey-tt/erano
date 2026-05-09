@@ -45,9 +45,8 @@ export async function POST(request: Request) {
     }
 
     // Rate limiting
-    const rateLimitResult = await onboardingRatelimit.limit(ip);
-    console.log("[RATELIMIT] result:", JSON.stringify(rateLimitResult), "ip:", ip);
-    if (!rateLimitResult.success) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    const { success } = await onboardingRatelimit.limit(ip);
+    if (!success) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
     // Input validation
     const result = submitSchema.safeParse(body);
