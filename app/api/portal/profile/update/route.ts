@@ -4,6 +4,7 @@ import { createServerClient as createSSRClient } from "@supabase/ssr";
 import { createServerClient } from "@/lib/supabase-server";
 import { requireState, StateValidationError } from "@/lib/validateState";
 import { z } from "zod";
+import { verifyCsrfOrigin } from "@/lib/csrf";
 
 const updateSchema = z.object({
   contactName:  z.string().min(2).max(200).trim(),
@@ -29,6 +30,12 @@ export async function PATCH(request: Request) {
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    verifyCsrfOrigin(request);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   try {

@@ -545,7 +545,105 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 12 — Admin Dashboard
-*Claude will populate this section during Sprint 12.*
+
+### T020 — Admin shell, navigation, and dashboard (Group 1 — layout + context + metrics)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `context/AdminContext.tsx` — "use client". `AdminContextValue` interface: `adminId`, `adminName`. `AdminProvider` passes both via React Context. `useAdmin()` hook throws if called outside provider. Mirrors PortalContext pattern with no state — admin context is simpler (no mobile nav toggle needed since admin is desktop-first).
+- `app/api/admin/metrics/route.ts` — GET. SSR client (`createSSRClient` from `@supabase/ssr`) for `auth.getUser()`. Service role client (`createServerClient` from `@/lib/supabase-server`) for all DB ops. Role check: queries `users.role` for the authenticated user, returns 403 if not admin. 4 count queries run in `Promise.all` using `{ count: "exact", head: true }`: total clients (role=client), pending_submissions (state=pending), awaiting_confirmation, active_clients. Plus a 5th query for recent submissions: selects from `users` with nested `client_profiles(contact_name, legal_name, industry, packages(name))` via PostgREST embedding, filtered to `role=client`, ordered by `created_at DESC`, limit 10. Returns `{ metrics: {...}, submissions: [...] }`.
+- `components/admin/layout/AdminSidebar.tsx` — "use client". Desktop-only (`hidden md:flex`), fixed 260px, navy bg — mirrors PortalSidebar. 4 nav items: Inbox (/admin, exact match), All Clients (/admin/clients), Invoice Manager (/admin/invoices), Document Manager (/admin/documents). Active item: gold left border + gold text + white/10 bg. Pending count badge on Inbox link: gold bg, navy text, visible only when `pendingCount > 0`. Sign out button (LogOut icon) at bottom. No mobile drawer — admin is desktop-first per project spec.
+- `components/admin/layout/AdminHeader.tsx` — "use client". Reads `adminName` from `useAdmin()`, derives page title from `usePathname()` via `PAGE_TITLES` map (same pattern as PortalHeader). Shows `<h1>` page title + admin avatar button (initials in navy circle, full name, ChevronDown). No notification bell — admin sees client activity in Inbox. No hamburger — admin has no mobile nav.
+- `app/admin/layout.tsx` — Server component. SSR client verifies authenticated user; redirects to `/login` if no session. Service role client fetches `users.role` + `users.email` for the user; redirects to `/login` if no row, `/portal/dashboard` if role is not admin. `adminName` derived from `user.user_metadata.full_name ?? users.email ?? "Admin"`. Fetches `pendingCount` (pending client accounts) and passes to `AdminSidebar` as a prop for the inbox badge. Wraps `AdminProvider` → sidebar + header + `<main id="main-content">`. Middleware already covers `/admin/:path*` — no changes to `middleware.ts` needed.
+- `app/admin/page.tsx` — "use client". Fetches `/api/admin/metrics` on mount (loading: 4 skeleton cards + 1 skeleton block; error: red alert; success: metrics + table). 4 metric cards in `grid-cols-2 lg:grid-cols-4`: Total Clients (Users icon), Pending Submissions (Clock icon, gold accent if >0), Awaiting Confirmation (CreditCard icon, gold accent if >0), Active Clients (CheckCircle icon). Recent submissions table (last 10 clients): columns Client / Business / Industry / Package / State badge / Date / View link. Responsive table: Business + Date hidden below md, Industry + Package hidden below lg. State badges follow same colour map as portal sidebar (gray/blue/amber/purple/green/red per account_state). Under 150 lines.
+
+**Key decisions:**
+- `hidden md:flex` on `AdminSidebar` — admin portal is desktop-first; no mobile drawer needed or built per project spec ("Mobile: hidden"). The header and content remain accessible on mobile (header renders on all sizes, main content is scrollable), but sidebar nav requires a desktop viewport.
+- `pendingCount` fetched server-side in layout.tsx and passed as prop to sidebar — avoids a separate client-side fetch in the sidebar; count refreshes on every navigation (server render). Sidebar is static after render; no Realtime needed at this stage.
+- Middleware already covers `/admin/:path*` (confirmed at line 88 of `middleware.ts`). Layout.tsx adds a second layer of defence using the service role client (bypasses RLS for reliable role read). Double-check is intentional per security standard.
+- PostgREST nested embed `client_profiles(contact_name, ..., packages(name))` — `client_profiles` FK on `user_id` → `users.id` (one-to-one), `packages` FK on `package_id` → `packages.id` (one-to-one). Both auto-resolved by Supabase PostgREST. Returns objects (not arrays) for each nested resource.
+- Gold count on admin dashboard page: (1) pending card value text-gold, (2) awaiting_confirmation card value text-gold. Maximum 2 at once (can't have both >0 simultaneously in practice); design tokens within the 4× per page rule.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /admin ƒ Dynamic (3.05 kB), /api/admin/metrics ƒ Dynamic. 44 pages total.
+
+---
+
+### T021 + T022 + T044 — Submissions inbox tabs, client list, pagination (Group 2 — inbox + clients)
+**Status:** ✅ tsc clean · build clean
+
+**Files modified:**
+- `app/api/admin/metrics/route.ts` — Extended Promise.all from 5 to 8 queries. Added `byState(state)` helper to DRY the count queries. Now returns `state_counts` object alongside existing `metrics`: all 6 account states keyed (`pending`, `awaiting_agreement`, `awaiting_payment`, `awaiting_confirmation`, `active`, `expired`). Backward-compatible — existing `metrics` shape unchanged.
+- `app/admin/page.tsx` — Replaced inline submissions table with `<SubmissionsPanel>`. Added `stateCounts` to state. Reads `json.state_counts` from metrics response. Page is now 98 lines (under 150).
+
+**Files created:**
+- `components/admin/inbox/SubmissionsPanel.tsx` — "use client". Props: `submissions[]`, `stateCounts`. `activeTab` state (default "all"). Tab bar with 7 tabs (All + 6 states); each tab has count badge from `stateCounts` (All = sum of all state counts). Active tab: gold bottom border + gold text. Clicking tab filters `submissions` array locally (last 10 are already fetched). "View all pending" link → `/admin/clients?state=pending`. Filtered table mirrors the original inbox table. Under 150 lines.
+- `app/api/admin/clients/route.ts` — GET. SSR client for auth, service role for DB. Admin role check returns 403 if not admin. Query params: `page` (int ≥0, default 0), `state` (validated against VALID_STATES Set), `search` (trimmed string). Two-step search: if search is provided, first queries `client_profiles` via `.or("legal_name.ilike.%X%,contact_name.ilike.%X%")` to get matching user_ids; returns early with empty result if 0 matches. Main query: `users` with nested `client_profiles(contact_name, legal_name, packages(name))`, filtered by role=client + optional state + optional user_ids, ordered by `created_at DESC`, paginated with `.range(page*20, (page+1)*20-1)`, `{ count: "exact" }` for total. Returns `{ clients, total, page, pageSize: 20 }`.
+- `components/admin/clients/ClientsTable.tsx` — "use client". Exports `Client` interface (reused by `page.tsx` via named import). Loading state: 5-row skeleton with `animate-pulse`. Empty state: "No clients match your search." Table: 5 columns (Client name / Business name / Package hidden lg / State badge / Date joined hidden md / View link). State badge uses same colour map as portal. Under 150 lines.
+- `components/admin/clients/PaginationBar.tsx` — "use client". Props: `page, total, pageSize, onPrev, onNext`. Computes `from`, `to`, `hasPrev`, `hasNext`. Shows "Showing X–Y of Z clients" text on left, Prev/Next chevron buttons on right. Disabled buttons: `cursor-not-allowed`, reduced opacity. Under 50 lines.
+- `app/admin/clients/layout.tsx` — Metadata: title "Clients — Erano Admin".
+- `app/admin/clients/page.tsx` — "use client". Reads `?state=` from `useSearchParams()` to pre-select dropdown on "View all pending" navigation. State: search, debouncedSearch, stateFilter, page, loading, error, clients, total. Debounce: `useEffect` on `search` with 400ms `setTimeout`; sets page=0 and debouncedSearch atomically — prevents double-fetch when search changes. State filter change: `handleStateChange` sets stateFilter + page=0 in same handler — prevents double-fetch. `fetchClients` wrapped in `useCallback` with empty deps (args passed directly). Main `useEffect` depends on `[debouncedSearch, stateFilter, page, fetchClients]`. Search input (Search icon, `aria-label`), state dropdown (select), `<ClientsTable>`, `<PaginationBar>`. Under 150 lines.
+
+**Key decisions:**
+- Tab filtering in SubmissionsPanel is client-side (filters the 10 fetched rows) — this is correct since the tab purpose is to highlight different states in the "recent activity" view. For exhaustive per-state listings, "View all pending" and the full /admin/clients page are the correct paths.
+- Two-step search in the clients API: PostgREST cannot directly filter on `client_profiles.legal_name` from a `users` query without `!inner` join notation, which isn't reliably supported across Supabase client versions. Two-step (get user_ids from client_profiles, then filter users by id) is explicit, reliable, and fast enough for admin pagination use.
+- `Client` interface exported from `ClientsTable.tsx` (not a separate types file) — keeps the type collocated with the component that owns its rendering without adding a new abstraction file.
+- Page reset is atomic with filter changes (same `setState` call or same `setTimeout` callback) — prevents the double-fetch race where a filter change triggers a fetch with the old page, then the page=0 reset triggers a second fetch.
+- `useSearchParams()` in the clients page allows the "View all pending" link to pre-populate the state dropdown, connecting the inbox link to the full client list seamlessly.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /admin ƒ Dynamic (3.48 kB), /admin/clients ƒ Dynamic (3.52 kB), /api/admin/clients ƒ Dynamic. 46 pages total.
+
+### T023 + T019 + T026 + T041 — Individual client profile, payment confirm/reject, document request, confirm modal (Group 3 — client profile actions)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `app/api/admin/clients/[id]/route.ts` — GET. Auth + admin role check. Fetches client user row, client_profiles (with `packages:package_id(name, description, price_ghs)` embed), then `Promise.all` for 6 parallel queries: latest invoice (with file_path for signed URL), latest agreement (with `agreement_versions(version_number)` embed), active payment timer, all payment proofs, all document requests (with nested `document_uploads`), last 10 audit entries (`.or("actor_id.eq.${clientId},target_id.eq.${clientId}")`). Invoice signed URL generated inline (1-hour). Destructures `packages` from rawProfile: `const { packages: _pkg, ...profileFields } = profile ?? {}`. Type assertions through `unknown` for Supabase FK embed inference. Returns 9-key JSON response.
+- `app/api/admin/clients/[id]/update-state/route.ts` — PATCH. Auth + admin check. Validates state against VALID_STATES Set (6 values). Client existence check. Updates `users.account_state`. Audit logs `account_state_updated` with `new_state` in metadata.
+- `app/api/admin/payments/confirm/route.ts` — POST. Auth + admin check. Body: `{ client_id, proof_id }`. Updates `payment_proofs.status → approved`. Updates `users.account_state → active`. Fetches latest invoice ID, updates `invoices.status → paid`. Audit logs `payment_confirmed`. Non-fatal: fetches contact_name + package name for email, inserts client notification, renders + sends `PaymentConfirmedEmail` to client's email.
+- `app/api/admin/payments/reject/route.ts` — POST. Auth + admin check. Body: `{ client_id, proof_id, reason }`. Validates reason is non-empty. Updates proof to `rejected`, state to `awaiting_payment`. Audit logs `payment_rejected` with reason in metadata. Non-fatal: sends `PaymentRejectedEmail` with reason, inserts client notification.
+- `app/api/admin/documents/request/route.ts` — POST. Auth + admin check. Body: `{ client_id, title, description, category }`. Validates all fields + category against VALID_CATEGORIES Set (5 values). Inserts `document_requests` with `requested_by = adminId`. Audit logs `document_requested`. Non-fatal: inserts client notification, renders + sends `DocumentRequestedEmail`.
+- `app/api/admin/signed-url/route.ts` — GET `?bucket=...&path=...`. Auth + admin check. Validates bucket against ALLOWED_BUCKETS (payment-proofs/15m, document-uploads/30m, invoices/1h). Calls `generateSignedUrl` from `lib/storage.ts`. Returns `{ url }`. Used for admin downloads of any client file.
+- `app/admin/clients/[id]/layout.tsx` — Metadata: title "Client Profile — Erano Admin".
+- `app/admin/clients/[id]/page.tsx` — "use client". `useParams` for `id`. State: data, loading, error, modal (`{ type: "confirm"|"reject", proofId }|null`), modalLoading, comingSoon. `fetchData` in `useCallback` for refetch. Handlers: `handleModalConfirm` (POST confirm/reject, refetch on success), `handleDownload` (fetch signed URL, `window.open`), `handleComingSoon` (2s auto-dismiss setTimeout). Renders: back link, ClientProfileHeader, ClientInfoSections, ClientPaymentSection, ClientDocumentsSection, ConfirmModal (when modal state is set). Under 150 lines.
+- `components/admin/ui/ConfirmModal.tsx` — "use client". Props: title, body, confirmLabel, loading, onConfirm, onClose, withReason?, destructive?. Focus trap via `querySelectorAll("button:not([disabled]), textarea")` + Escape + Tab key handlers. Optional `<textarea>` for reject reason (ref forwarded to `onConfirm`). Destructive variant: red confirm button. `role="dialog"` + `aria-modal="true"` + `aria-labelledby`. Under 100 lines.
+- `components/admin/clients/DocumentRequestForm.tsx` — "use client". Title, category (select from 5 values), description (textarea). Validates all fields before POST. Inline error display. Calls `onSuccess()` on 201 response. Under 100 lines.
+- `components/admin/clients/ClientProfileHeader.tsx` — "use client". Contact name, legal name, email, joined date. State badge with colour map. Context-sensitive action buttons: if `awaiting_confirmation`, shows Confirm Payment + Reject Payment (disabled if no pending proof); all states show Reactivate button (shows "Coming soon" text on click via `comingSoon` prop). Under 100 lines.
+- `components/admin/clients/ClientInfoSections.tsx` — "use client". Three sections: Business Information (12 fields, 2-col→3-col grid), Compliance & Financials (5 fields), Package & Agreements (package name/price, invoice number/amount/status/view link, agreement version/accepted date). `Row` helper component for label+value pairs. Formats GHS amounts via `fmt()`. Under 150 lines.
+- `components/admin/clients/ClientPaymentSection.tsx` — "use client". Payment timer banner (days remaining or expired, colour-coded). Proofs table: reference (monospace), amount, uploaded date (hidden md), status badge, actions (download + confirm/reject for pending proofs). Under 150 lines.
+- `components/admin/clients/ClientDocumentsSection.tsx` — "use client". Doc requests list: category badge, status badge, title, description, date, nested uploaded files with download buttons. "Request Document" toggle button shows/hides DocumentRequestForm inline. Calls `onRequestCreated` (fetchData) on form success. Under 150 lines.
+
+**Key decisions:**
+- Confirm/Reject buttons exist in both `ClientProfileHeader` (for quick access from the top) and `ClientPaymentSection` (per-proof row actions) — header picks the pending proof automatically via `pendingProofId` prop; table shows buttons only for `status === "pending"` rows.
+- `handleDownload` in page calls `/api/admin/signed-url` which verifies admin role server-side — client components never access storage directly.
+- `comingSoon` state + 2s setTimeout auto-dismiss in page — no toast library needed, minimal code.
+- Invoice status updated by ID (not by `client_id` in a filtered update) — Supabase SDK doesn't support `.order(...).limit(1)` on update queries; fetch the ID first then update by primary key.
+- All notifications and email sends wrapped in non-fatal try/catch after DB writes succeed — same pattern as portal routes.
+- `as unknown as T` cast for `prof?.packages` in confirm route — Supabase infers FK embed as an array type even for one-to-one relations when using the untyped client.
+
+**TypeScript:** clean (0 errors — 1 fix: `as unknown as { name: string } | null` for Supabase FK embed)
+**Build:** clean — /admin/clients/[id] ƒ Dynamic (6.82 kB), + 5 admin API routes. 50 pages total.
+
+### T042 — CSRF origin protection on all state-mutating API routes (Group 4 — security hardening)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `lib/csrf.ts` — `verifyCsrfOrigin(request: Request): void`. Reads `origin` header; compares against `NEXT_PUBLIC_SITE_URL` prefix. Throws `"CSRF_ORIGIN_MISMATCH"` if origin is present and does not match. Passes through if origin header is absent (same-origin server-to-server calls have no origin header). SERVER SIDE ONLY.
+
+**Files modified (9 total):**
+- `app/api/admin/payments/confirm/route.ts` — import + try/catch after admin role check
+- `app/api/admin/payments/reject/route.ts` — import + try/catch after admin role check
+- `app/api/admin/documents/request/route.ts` — import + try/catch after admin role check
+- `app/api/admin/clients/[id]/update-state/route.ts` — import + try/catch after admin role check
+- `app/api/portal/agreements/accept/route.ts` — import + try/catch after auth check, before requireState
+- `app/api/portal/payments/upload/route.ts` — import + try/catch after auth check, before requireState
+- `app/api/portal/documents/upload/route.ts` — import + try/catch after auth check, before requireState
+- `app/api/portal/profile/update/route.ts` — import + try/catch after auth check, before requireState
+
+**Placement decision:** CSRF check inserted after auth/role verification (so unauthorized requests still get 401/403, not 403-CSRF) but before any body parsing or business logic. All 8 routes return `{ error: "Forbidden" }` with status 403 on origin mismatch — consistent with the existing auth-failure shape.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — 50 pages, no bundle size change (lib/csrf.ts is 7 lines, server-only).
 
 ---
 

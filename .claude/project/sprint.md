@@ -8,34 +8,25 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 12 — Admin Dashboard
+**Sprint:** Sprint 13 — Invoice Generation + Package Management
 **Started:** TBD
 **Target completion:** TBD
-**Branch:** `sprint-12`
+**Branch:** `sprint-13`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T020 — Admin dashboard shell + navigation | `sprint-12` | ⏳ Not started |
-| T021 — Submissions inbox | `sprint-12` | ⏳ Not started |
-| T022 — Client list + filters | `sprint-12` | ⏳ Not started |
-| T023 — Individual client profile (admin view) | `sprint-12` | ⏳ Not started |
-| T019 — Admin payment confirmation + rejection | `sprint-12` | ⏳ Not started |
-| T041 — Admin confirmation modals | `sprint-12` | ⏳ Not started |
-| T042 — CSRF protection | `sprint-12` | ⏳ Not started |
-| T044 — Pagination on client list | `sprint-12` | ⏳ Not started |
+| T024 — Admin invoice generation (PDF) | `sprint-13` | ⏳ Not started |
+| T028 — Package seeding + display | `sprint-13` | ⏳ Not started |
+| T029 — Package upgrade flow | `sprint-13` | ⏳ Not started |
 
-### Sprint 12 Definition of Done
+### Sprint 13 Definition of Done
 
-- [ ] All tasks merged into `sprint-12` branch
-- [ ] Admin can view all client submissions
-- [ ] Admin can view and filter the client list
-- [ ] Admin can view individual client profile
-- [ ] Admin can confirm or reject payment proofs
-- [ ] All admin actions logged in audit_log
-- [ ] CSRF protection on all admin mutation routes
+- [ ] All tasks merged into `sprint-13` branch
+- [ ] Admin can generate and send a PDF invoice to a client
+- [ ] Packages are seeded and display correctly
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
@@ -49,6 +40,25 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 12 — Admin Dashboard
+**Completed:** May 2026
+**Branch:** `sprint-12`
+**Approved by Naa:** [ ]
+**Merged to main:** [ ]
+**Merged date:** —
+
+- [x] T020 — Admin dashboard shell + navigation (AdminContext, AdminSidebar, AdminHeader, admin layout, admin metrics API + dashboard page)
+- [x] T021 — Submissions inbox with state filter tabs + counts (SubmissionsPanel, extended metrics API)
+- [x] T022 — Client list with search, state filter, pagination (clients API, ClientsTable, clients page)
+- [x] T044 — Pagination on client list (PaginationBar)
+- [x] T023 — Individual client profile admin view (clients/[id] GET API, profile page, ClientProfileHeader, ClientInfoSections)
+- [x] T019 — Admin payment confirmation + rejection (payments/confirm + reject API routes, ClientPaymentSection)
+- [x] T026 — Admin document request (documents/request API, DocumentRequestForm, ClientDocumentsSection)
+- [x] T041 — Admin confirmation modals (ConfirmModal with focus trap + reason textarea)
+- [x] T042 — CSRF origin protection on all state-mutating admin + portal routes (lib/csrf.ts, 8 routes patched)
+
+---
 
 ### ✅ Sprint 11 — Document Management + Notifications
 **Completed:** May 2026

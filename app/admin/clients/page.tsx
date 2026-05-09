@@ -1,0 +1,112 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
+import { Search } from "lucide-react";
+import { ClientsTable, type Client } from "@/components/admin/clients/ClientsTable";
+import { PaginationBar } from "@/components/admin/clients/PaginationBar";
+
+const PAGE_SIZE = 20;
+
+const STATE_OPTIONS = [
+  { value: "",                       label: "All states" },
+  { value: "pending",                label: "Pending" },
+  { value: "awaiting_agreement",     label: "Awaiting Agreement" },
+  { value: "awaiting_payment",       label: "Awaiting Payment" },
+  { value: "awaiting_confirmation",  label: "Awaiting Confirmation" },
+  { value: "active",                 label: "Active" },
+  { value: "expired",                label: "Expired" },
+];
+
+export default function ClientsPage() {
+  const searchParams   = useSearchParams();
+  const initialState   = searchParams.get("state") ?? "";
+
+  const [search,          setSearch]          = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [stateFilter,     setStateFilter]     = useState(initialState);
+  const [page,            setPage]            = useState(0);
+  const [loading,         setLoading]         = useState(true);
+  const [error,           setError]           = useState<string | null>(null);
+  const [clients,         setClients]         = useState<Client[]>([]);
+  const [total,           setTotal]           = useState(0);
+
+  // Debounce search — resets page to 0 atomically with the debounced value
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPage(0);
+      setDebouncedSearch(search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const fetchClients = useCallback(async (q: string, state: string, p: number) => {
+    setLoading(true);
+    setError(null);
+    const params = new URLSearchParams({ page: String(p) });
+    if (state) params.set("state", state);
+    if (q)     params.set("search", q);
+    const res = await fetch(`/api/admin/clients?${params.toString()}`);
+    if (!res.ok) { setError("Failed to load clients."); setLoading(false); return; }
+    const json = await res.json() as { clients: Client[]; total: number };
+    setClients(json.clients);
+    setTotal(json.total);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    void fetchClients(debouncedSearch, stateFilter, page);
+  }, [debouncedSearch, stateFilter, page, fetchClients]);
+
+  function handleStateChange(val: string) {
+    setStateFilter(val);
+    setPage(0);
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 md:p-6">
+        <p className="text-sm text-red-600" role="alert">{error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 md:p-6 max-w-6xl">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-body/50" aria-hidden="true" />
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name or business..."
+            aria-label="Search clients"
+            className="w-full pl-9 pr-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy placeholder:text-body/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px]"
+          />
+        </div>
+        <select
+          value={stateFilter}
+          onChange={(e) => handleStateChange(e.target.value)}
+          aria-label="Filter by account state"
+          className="px-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px] appearance-none"
+        >
+          {STATE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="bg-white rounded-xl border border-line overflow-hidden">
+        <ClientsTable clients={clients} loading={loading} />
+        <PaginationBar
+          page={page}
+          total={total}
+          pageSize={PAGE_SIZE}
+          onPrev={() => setPage((p) => Math.max(0, p - 1))}
+          onNext={() => setPage((p) => p + 1)}
+        />
+      </div>
+    </div>
+  );
+}

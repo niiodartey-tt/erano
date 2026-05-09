@@ -7,6 +7,7 @@ import { calculatePaymentDeadline } from "@/lib/businessDays";
 import { sendEmail } from "@/lib/email";
 import { AgreementAcceptedEmail, subject as emailSubject } from "@/emails/AgreementAcceptedEmail";
 import { render } from "@react-email/render";
+import { verifyCsrfOrigin } from "@/lib/csrf";
 
 // Seeded when first client accepts — PLACEHOLDER: replace with final legal text before launch
 const SEED_CONTENT = "Erano Consulting Service Agreement v1 — PLACEHOLDER: client to supply final text.";
@@ -28,6 +29,12 @@ export async function POST(request: NextRequest) {
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    verifyCsrfOrigin(request);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const supabase = createServerClient();

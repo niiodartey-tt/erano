@@ -11,6 +11,7 @@ import { uploadFile } from "@/lib/storage";
 import { sendEmail } from "@/lib/email";
 import { PaymentProofReceivedEmail, subject as emailSubjectFn } from "@/emails/PaymentProofReceivedEmail";
 import { render } from "@react-email/render";
+import { verifyCsrfOrigin } from "@/lib/csrf";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
@@ -44,6 +45,12 @@ export async function POST(request: NextRequest) {
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    verifyCsrfOrigin(request);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const supabase = createServerClient();

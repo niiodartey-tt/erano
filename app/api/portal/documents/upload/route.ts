@@ -10,6 +10,7 @@ import { uploadFile } from "@/lib/storage";
 import { sendEmail } from "@/lib/email";
 import { DocumentUploadedEmail, subject as emailSubjectFn } from "@/emails/DocumentUploadedEmail";
 import { render } from "@react-email/render";
+import { verifyCsrfOrigin } from "@/lib/csrf";
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const requestIdSchema = z.string().uuid("Invalid request ID");
@@ -30,6 +31,12 @@ export async function POST(request: NextRequest) {
 
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    verifyCsrfOrigin(request);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   try {
     await requireState(user.id, ["active"]);
