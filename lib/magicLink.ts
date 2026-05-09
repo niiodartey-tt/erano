@@ -11,7 +11,7 @@ export async function generateMagicLink(email: string): Promise<string> {
     type: "magiclink",
     email,
     options: {
-      redirectTo: `${siteUrl}/portal/set-password`,
+      redirectTo: `${siteUrl}/auth/callback`,
     },
   });
 
