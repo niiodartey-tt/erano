@@ -1,44 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createBrowserClient } from "@supabase/ssr";
-import { usePortal } from "@/context/PortalContext";
 import ContactDetailsForm from "@/components/portal/profile/ContactDetailsForm";
 import ChangePasswordForm from "@/components/portal/profile/ChangePasswordForm";
 
-interface ProfileData {
+interface ProfileApiData {
+  legal_name: string;
   contact_name: string;
   contact_role: string;
   contact_phone: string;
   address: string;
-  legal_name: string;
+  email: string;
 }
 
 export default function ProfilePage() {
-  const { userId } = usePortal();
-  const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [email, setEmail] = useState("");
+  const [profile, setProfile] = useState<ProfileApiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const sb = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
-    Promise.all([
-      sb.auth.getUser(),
-      sb.from("client_profiles")
-        .select("contact_name, contact_role, contact_phone, address, legal_name")
-        .eq("user_id", userId)
-        .single(),
-    ]).then(([{ data: { user } }, { data, error: e }]) => {
-      if (e || !data || !user) { setError(true); setLoading(false); return; }
-      setEmail(user.email ?? "");
-      setProfile(data as ProfileData);
-      setLoading(false);
-    });
-  }, [userId]);
+    fetch("/api/portal/profile/me")
+      .then(async (r) => {
+        if (!r.ok) { setError(true); setLoading(false); return; }
+        const data = await r.json() as ProfileApiData;
+        setProfile(data);
+        setLoading(false);
+      })
+      .catch(() => { setError(true); setLoading(false); });
+  }, []);
 
   if (loading) {
     return (
@@ -69,13 +58,13 @@ export default function ProfilePage() {
           contactPhone: profile.contact_phone,
           address:      profile.address,
         }}
-        email={email}
+        email={profile.email}
         legalName={profile.legal_name}
       />
 
       <div className="my-8 border-t border-line" role="separator" aria-hidden="true" />
 
-      <ChangePasswordForm email={email} />
+      <ChangePasswordForm email={profile.email} />
     </div>
   );
 }

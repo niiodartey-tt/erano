@@ -16,6 +16,11 @@ function timeAgo(iso: string): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
+interface ProfileApiData {
+  legal_name: string;
+  package_name: string | null;
+}
+
 interface DashData {
   packageName: string;
   legalName: string;
@@ -35,23 +40,24 @@ export default function ActiveView() {
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     );
-    Promise.all([
-      sb.from("client_profiles").select("legal_name, packages(name)").eq("user_id", userId).single(),
-      sb.from("document_requests").select("id", { count: "exact", head: true }).eq("client_id", userId).eq("status", "pending"),
-      sb.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("read", false),
-      sb.from("notifications").select("id, message, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(5),
-    ]).then(([p, d, n, nr]) => {
-      if (p.error) { setError(true); setLoading(false); return; }
-      const prof = p.data as unknown as { legal_name: string; packages: { name: string } | null };
+    (async () => {
+      const [profileRes, d, n, nr] = await Promise.all([
+        fetch("/api/portal/profile/me"),
+        sb.from("document_requests").select("id", { count: "exact", head: true }).eq("client_id", userId).eq("status", "pending"),
+        sb.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("read", false),
+        sb.from("notifications").select("id, message, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(5),
+      ]);
+      if (!profileRes.ok) { setError(true); setLoading(false); return; }
+      const prof = await profileRes.json() as ProfileApiData;
       setData({
-        legalName: prof.legal_name,
-        packageName: prof.packages?.name ?? "—",
-        pendingDocs: d.count ?? 0,
-        unreadNotifs: n.count ?? 0,
-        recentNotifs: (nr.data ?? []) as DashData["recentNotifs"],
+        legalName:     prof.legal_name,
+        packageName:   prof.package_name ?? "—",
+        pendingDocs:   d.count ?? 0,
+        unreadNotifs:  n.count ?? 0,
+        recentNotifs:  (nr.data ?? []) as DashData["recentNotifs"],
       });
       setLoading(false);
-    });
+    })().catch(() => { setError(true); setLoading(false); });
   }, [userId]);
 
   if (loading) return <div className="h-48 rounded-xl bg-line animate-pulse" />;
