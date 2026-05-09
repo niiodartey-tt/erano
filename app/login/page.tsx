@@ -24,8 +24,8 @@ const INVALID_MSG  = "Invalid email or password.";
 export default function LoginPage() {
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash.includes("type=magiclink") || hash.includes("access_token=")) {
-      window.location.replace("/portal/set-password" + hash);
+    if (hash && (hash.includes("type=magiclink") || hash.includes("access_token="))) {
+      window.location.href = "/portal/set-password" + hash;
     }
   }, []);
 
