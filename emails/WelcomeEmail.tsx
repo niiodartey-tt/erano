@@ -25,7 +25,7 @@ export function WelcomeEmail({ contactName, magicLinkUrl }: WelcomeEmailProps) {
             </Text>
             <Button href={magicLinkUrl} style={styles.button}>Activate my account</Button>
             <Text style={styles.small}>
-              This link expires in 24 hours. If it expires, use the Forgot Password link on the login page.
+              This link expires in 24 hours. If it has expired, please contact us at hello@eranoconsulting.com or via WhatsApp and we will send you a new activation link.
             </Text>
             <Text style={styles.small}>
               If you did not request this account, please ignore this email.

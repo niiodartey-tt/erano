@@ -33,7 +33,6 @@ export default function ClientProfilePage() {
   const [error,        setError]        = useState<string | null>(null);
   const [modal,        setModal]        = useState<Modal>(null);
   const [modalLoading, setModalLoading] = useState(false);
-  const [comingSoon,   setComingSoon]   = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -66,11 +65,6 @@ export default function ClientProfilePage() {
     window.open(url, "_blank");
   }
 
-  function handleComingSoon() {
-    setComingSoon(true);
-    setTimeout(() => setComingSoon(false), 2000);
-  }
-
   if (loading) return <div className="p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-white border border-line animate-pulse" />)}</div>;
   if (error || !data) return <div className="p-4 md:p-6"><p className="text-sm text-red-600" role="alert">{error ?? "Client not found."}</p></div>;
 
@@ -88,10 +82,8 @@ export default function ClientProfilePage() {
         contactName={(profile.contact_name as string) || data.user.email}
         legalName={(profile.legal_name as string) || "—"}
         pendingProofId={pendingProof?.id ?? null}
-        comingSoon={comingSoon}
         onConfirmPayment={() => pendingProof && setModal({ type: "confirm", proofId: pendingProof.id })}
         onRejectPayment={() => pendingProof && setModal({ type: "reject", proofId: pendingProof.id })}
-        onComingSoon={handleComingSoon}
       />
 
       <ClientInfoSections profile={profile} pkg={data.package} invoice={data.invoice} agreement={data.agreement} />

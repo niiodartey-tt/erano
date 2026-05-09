@@ -64,7 +64,7 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
           id="req-category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-3 py-2 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 appearance-none"
+          className="admin-select w-full px-3 py-2 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20"
         >
           <option value="">Select category</option>
           {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}

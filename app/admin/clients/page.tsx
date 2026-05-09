@@ -89,7 +89,7 @@ export default function ClientsPage() {
           value={stateFilter}
           onChange={(e) => handleStateChange(e.target.value)}
           aria-label="Filter by account state"
-          className="px-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px] appearance-none"
+          className="admin-select px-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px]"
         >
           {STATE_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>

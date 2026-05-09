@@ -28,15 +28,13 @@ interface Props {
   contactName:    string;
   legalName:      string;
   pendingProofId: string | null;
-  comingSoon:     boolean;
   onConfirmPayment: () => void;
   onRejectPayment:  () => void;
-  onComingSoon:     () => void;
 }
 
 export function ClientProfileHeader({
   email, accountState, createdAt, contactName, legalName,
-  pendingProofId, comingSoon, onConfirmPayment, onRejectPayment, onComingSoon,
+  pendingProofId, onConfirmPayment, onRejectPayment,
 }: Props) {
   const joined = new Date(createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
@@ -83,12 +81,13 @@ export function ClientProfileHeader({
               </button>
             </>
           )}
-          <button
-            onClick={onComingSoon}
-            className="px-4 py-2 text-sm font-medium border border-line text-body rounded-lg hover:bg-off transition-colors"
+          <span
+            title="Available in next update"
+            aria-disabled="true"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium border border-line text-body/40 rounded-lg cursor-not-allowed select-none"
           >
-            {comingSoon ? "Coming soon" : "Reactivate"}
-          </button>
+            Reactivate
+          </span>
         </div>
       </div>
     </div>
