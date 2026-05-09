@@ -404,7 +404,93 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 10 — Legal, Invoice, Payment Flow
-*Claude will populate this section during Sprint 10.*
+
+### T036 + T037 — MIME validation + unpredictable storage paths (Group 1 — server utilities)
+**Status:** ✅ tsc clean
+
+**Package installed:**
+- `file-type@22.0.1` — ESM-only, Node ≥18, detects MIME from file magic bytes. Installed with `--save-exact`. No new vulnerabilities introduced (pre-existing 5 in Next.js 14 transitive deps unchanged). Compatible: `tsconfig.json` uses `"module": "esnext"` + `"moduleResolution": "bundler"`.
+
+**Files created:**
+- `lib/validateMime.ts` — `ALLOWED_MIME_TYPES` constant (paymentProofs: jpeg/png/pdf; documentUploads: jpeg/png/pdf/xlsx/docx). `UploadContext` type. `InvalidMimeTypeError` class (stores `detectedType`). `validateMimeType(buffer, context)` — calls `fileTypeFromBuffer`, throws `InvalidMimeTypeError` if type is missing or not in the allowed list for that context. Returns the detected MIME string on success.
+- `lib/generateStoragePath.ts` — `generateInvoicePath(clientId, invoiceNumber)` → `invoices/{clientId}/{uuid}-{invoiceNumber}.pdf`. `generatePaymentProofPath(clientId, filename)` → `payment-proofs/{clientId}/{uuid}.{ext}`. `generateDocumentUploadPath(clientId, requestId, filename)` → `document-uploads/{clientId}/{requestId}/{uuid}.{ext}`. All use `crypto.randomUUID()` — unpredictable, non-sequential.
+
+**Key decisions:**
+- MIME detection from magic bytes (not file extension) — enforces the "File uploads validated by MIME type server-side — never by extension" rule. A renamed `.exe` → `.pdf` is caught because the magic bytes don't match.
+- `ALLOWED_MIME_TYPES as const` — allows the `UploadContext` type to be derived directly, and the `readonly string[]` cast in `validateMimeType` ensures TypeScript doesn't widen the tuple to `string[]`.
+- `generateStoragePath` uses `crypto` (built-in Node.js) — no additional dependency needed. UUID prepended on each path means even if an attacker knows the `clientId` and filename, they cannot predict or enumerate paths.
+- Both files marked `// SERVER SIDE ONLY` — neither exports anything that would make sense client-side; the comment prevents accidental import.
+
+**TypeScript:** clean (0 errors)
+
+### T015 + T014 + T034 — Invoice display, agreement gate, duplicate ref check (Group 2 — invoice flow)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `lib/businessDays.ts` — `calculatePaymentDeadline(start: Date): Date`. Iterates forward one calendar day at a time, counting only Mon–Fri (skips 0=Sunday and 6=Saturday) until 5 business days have been added. Pure function, no dependencies.
+- `lib/checkDuplicateRef.ts` — `checkDuplicateTransactionRef(reference: string): Promise<boolean>`. Service role client. Queries `payment_proofs.transaction_reference` with `.ilike()` for case-insensitive match. Returns true if any existing record matches (duplicate), false if unique. Throws on DB error. Marked SERVER SIDE ONLY.
+- `app/api/portal/invoice/me/route.ts` — GET. SSR client for auth. Service role fetches `invoices` (most recent by generated_at, limit 1) for the authenticated user. Joins `packages(name)` via FK. Returns 404 if no invoice found. Returns `{ id, invoice_number, final_price_ghs (Number), status, generated_at, package_name }`.
+- `app/api/portal/agreements/accept/route.ts` — POST. Auth check + `requireState(["awaiting_agreement"])`. Gets or seeds `agreement_versions` (seeds version_number=1 with SEED_CONTENT placeholder on first accept). Returns 409 if client already accepted this version. Captures IP from `x-forwarded-for`. Inserts to `agreements`. Creates `payment_timers` row (5 business days via `calculatePaymentDeadline`). Updates `users.account_state → awaiting_payment`. Inserts `notifications` row and `audit_log` row. Sends `AgreementAcceptedEmail` via `lib/email.ts` (non-fatal — email failure does not roll back the state change). Returns `{ success: true, expires_at }`.
+- `components/portal/invoice/AgreementGate.tsx` — "use client". Scrollable T&Cs panel (h-96, overflow-y-scroll) with 13 placeholder paragraphs (PLACEHOLDER note in code — client to supply final text). Scroll tracking via `onScroll` + `scrollHeight - scrollTop - clientHeight < 10` threshold. `scrolledToBottom` state gates the accept button via both `disabled` and `aria-disabled`. On accept: POST to agreements/accept, handles 409 as "already accepted" (just refresh), shows inline error on failure. On success: sets `accepted` state + calls `router.refresh()` (re-runs portal layout server component, picks up new accountState from DB). Gold: 1 use (FileText icon). Under 150 lines.
+- `app/portal/invoice/layout.tsx` — Metadata: title "My invoice — Erano Consulting".
+- `app/portal/invoice/page.tsx` — "use client". Reads `accountState` from `usePortal()`. Parallel fetch: `invoice/me` + `profile/me`. Three early-return states: loading, error, noInvoice (404 from invoice API). Renders AgreementGate above the invoice ONLY when `accountState === "awaiting_agreement"`. Bank details section (`bg-navy` card with hardcoded GCB Bank details) rendered ONLY when `isStateAtLeast(accountState, "awaiting_payment")` — these two sections are mutually exclusive. Print button uses `window.print()` (hidden via `print:hidden`). Uses `<article>` + `<header>` + `<dl>` semantic HTML. Gold: 1 use (Reference value `text-gold` in bank details). Under 150 lines.
+
+**Key decisions:**
+- Bank details absent from DOM when state is `awaiting_agreement` — not just hidden with CSS. `isStateAtLeast("awaiting_agreement", "awaiting_payment")` = false, so the block never renders.
+- `router.refresh()` after agreement acceptance re-fetches the portal layout's server-side Supabase query for `account_state`, so PortalContext updates without a full page reload.
+- 409 on agreement double-submit treated as silent refresh rather than error — if the state already advanced, the page should just update.
+- Email send is inside a try/catch after all DB writes complete — a failed email does not roll back the agreement acceptance or state transition.
+- `calculatePaymentDeadline` called with `new Date()` at the moment of agreement acceptance — expires_at is always fresh, not based on any client-provided timestamp.
+- Bank details hardcoded (GCB Bank placeholder) — no bank_details table in schema; admin will update before launch. Marked with constant names at the top of `page.tsx` for easy replacement.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /portal/invoice ƒ Dynamic (5.5 kB), /api/portal/agreements/accept ƒ Dynamic, /api/portal/invoice/me ƒ Dynamic. 29 pages total.
+
+### T016 + T017 + T018 — Payment timer, proof upload, payment history (Group 3 — payments flow)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `components/portal/payments/PaymentTimer.tsx` — Display-only countdown. Props: `expiresAt: string`. `useReducedMotion()` from framer-motion: if true, skips `setInterval` and shows a static snapshot. Updates every 60s (not 1s — display is minutes-precision). Three states: ok (>24h, white border), urgent (<24h, amber), expired (red). `role="status"` + `aria-live="polite"` for screen reader announcements.
+- `app/api/cron/check-expired-timers/route.ts` — GET handler protected by `Authorization: Bearer CRON_SECRET` header check. Fetches all `payment_timers` where `is_active=true AND expires_at < now()`. Per expired timer: marks timer inactive, sets `account_state → expired`, inserts notification, inserts audit_log (`action: account_expired_by_cron`), sends `AccountExpiredEmail` (non-fatal). Inserts into `cron_log` (job_name, records_processed, errors_encountered, duration_ms). Returns `{ processed, errors }`.
+- `vercel.json` — Cron schedule: `/api/cron/check-expired-timers` at `0 6 * * *` (daily 6am UTC).
+- `app/api/portal/payments/timer/route.ts` — GET. Auth check. Service role fetches most recent active `payment_timers` row for the user. Returns `{ expires_at: string | null }`.
+- `app/api/portal/payments/upload/route.ts` — POST. Auth + `requireState(["awaiting_payment"])`. Parses `request.formData()`. Validates 7 fields via Zod. File validation: instanceof File check, 5MB limit, `validateMimeType("paymentProofs")` for magic-byte MIME check. Duplicate ref check via `checkDuplicateTransactionRef` (409 if duplicate). Generates UUID path via `generatePaymentProofPath`. Uploads via `uploadFile` to `payment-proofs` bucket. Fetches latest invoice_id. Inserts `payment_proofs` row (`file_url = file_path` placeholder — real signed URL generated on access). Updates `account_state → awaiting_confirmation`. Audit logs. Sends `PaymentProofReceivedEmail` to `ADMIN_EMAIL` (non-fatal). Creates admin notification. Returns 201.
+- `components/portal/payments/PaymentUploadForm.tsx` — "use client". react-hook-form + zodResolver. 7 fields (amount + currency grid, payment_date, payment_method, bank_name, transaction_reference, notes, file). `valueAsNumber: true` on amount_paid input — avoids zod coerce input-type mismatch with resolver. File input: `z.any().refine()` chain — presence check, 5MB limit, type whitelist. Builds FormData and POSTs to `/api/portal/payments/upload`. Handles 409 duplicate ref with specific message. Shows success state with `CheckCircle` + `router.refresh()`. Under 150 lines.
+- `app/api/portal/payments/history/route.ts` — GET. Auth + service role. Returns all `payment_proofs` for user ordered by `uploaded_at DESC`.
+- `app/api/portal/payments/proof-url/route.ts` — GET. Auth + ownership check (verifies `file_path` belongs to `client_id = user.id`). Generates 15-minute signed URL via `getPaymentProofUrl`. Returns `{ url }`.
+- `components/portal/payments/PaymentHistory.tsx` — "use client". Fetches `/api/portal/payments/history` on mount. Table: date / amount (formatCurrency for GHS, raw USD) / method / transaction ref (monospace) / status badge (amber/green/red) / Download button. Download opens signed URL in new tab via `/api/portal/payments/proof-url?path=...`. Empty state, error state. Under 150 lines.
+- `app/portal/payments/layout.tsx` — Metadata: title "Payments — Erano Consulting".
+- `app/portal/payments/page.tsx` — "use client". Fetches timer on mount, renders `PaymentTimer` if active. Bank details card (`bg-navy`) shown only when `accountState === "awaiting_payment"` — hardcoded placeholder (clearly marked). `PaymentUploadForm` shown only when `accountState === "awaiting_payment"`. `PaymentHistory` always shown. Under 150 lines.
+
+**Key decisions:**
+- `useReducedMotion` from framer-motion (already a project dependency) — if true, skips countdown interval. Timer shows the moment-of-mount value as a static snapshot, which is still accurate enough for a "days remaining" display.
+- `valueAsNumber: true` on the number input — cleanest way to use `z.number()` (not `z.coerce.number()`) with react-hook-form + zodResolver. `z.coerce.number()` sets the input type to `unknown`, causing a resolver type mismatch. `valueAsNumber: true` makes react-hook-form register the value as a JS number directly.
+- Payment timer fetched client-side via API route (not Supabase browser client) — consistent with the "all portal data via API routes" pattern established for client_profiles reads.
+- `file_url = file_path` in payment_proofs — spec explicitly allows this as a placeholder. Signed URLs are generated on-demand per access, not stored. The `proof-url` route enforces ownership before generating.
+- Cron secret validated before any DB access — prevents unauthenticated execution of the expiry job.
+- Admin notification: looks up first `role = 'admin'` user in users table. Non-fatal — if no admin exists yet, the notification is skipped silently.
+- `CRON_SECRET` added to `.env.example` — new env var, existing variables untouched.
+
+**TypeScript:** clean (0 errors — 2 fixes: zod enum `required_error` → `message`, `z.coerce.number()` → `z.number()` + `valueAsNumber: true`)
+**Build:** clean — /portal/payments ƒ Dynamic (5.63 kB), /api/cron/check-expired-timers ƒ Dynamic, + 5 portal API routes. 35 pages total.
+
+### T040 — PDF generation utility (Group 4 — server utility)
+**Status:** ✅ tsc clean · build clean
+
+**Package installed (previous session):**
+- `pdf-lib@1.17.1` — `--save-exact`. Pure JS, no native deps. 5 packages added. No new vulnerabilities (pre-existing 5 in transitive deps unchanged).
+
+**Files created:**
+- `lib/generateInvoicePdf.ts` — SERVER SIDE ONLY. Exports `InvoiceData` interface and `generateInvoicePdf(data: InvoiceData): Promise<Uint8Array>`. A4 portrait layout (595.28 × 841.89 pt, 50pt margins). Uses `StandardFonts.Helvetica` + `StandardFonts.HelveticaBold` exclusively (WinAnsi encoding — no Unicode above U+00FF). Layout sections (y-coordinate decremented from top): navy header rect (80pt) with company name + INVOICE label in gold + subtitle in light grey → invoice number + date row → 2-column info block (Billed To / From, side by side) → gold separator line → service table (navy header, 1 data row) → grey total row → conditional bank details block (5 rows) → fixed footer at y=40. `clip(text, maxWidth, font, size)` helper uses `font.widthOfTextAtSize()` for pixel-accurate truncation with "..." suffix. `fmtCurrency(n)` returns "GHC X,XXX.XX" — CRITICAL: "GH₵" (U+20B5) deliberately excluded: Helvetica WinAnsi encoding does not include this character; pdf-lib throws at render time if used. `fmtDate(d)` uses `toLocaleDateString("en-GH", ...)` for Ghanaian date format. Colors defined as `rgb()` constants: NAVY, GOLD, WHITE, GREY, LIGHT.
+
+**Key decisions:**
+- "GHC" not "GH₵" — U+20B5 (Ghana Cedi sign) is not in Helvetica's WinAnsi encoding. pdf-lib throws an "Input string contains characters outside WinAnsi encoding" error at runtime if this character is included in any `drawText` call. Using "GHC" is the safe alternative.
+- `rgb()` only takes 3 params in pdf-lib (no alpha channel). The header subtitle uses `rgb(0.75, 0.78, 0.84)` as a light-grey approximation rather than white-with-opacity, which is not supported.
+- `bankDetails` is optional in `InvoiceData` — the payment section is omitted from the PDF if not provided (e.g., if account is already `active`).
+- Standard A4 dimensions and MARGIN=50 chosen for readability with the chosen font sizes (8–16pt range).
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — 35 pages, all routes identical to Group 3 output. pdf-lib correctly tree-shaken from client bundles (imported only in server utility).
 
 ---
 

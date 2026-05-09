@@ -8,35 +8,28 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 10 — Legal, Invoice, Payment Flow
+**Sprint:** Sprint 11 — Document Management + Notifications
 **Started:** TBD
 **Target completion:** TBD
-**Branch:** `sprint-10`
+**Branch:** `sprint-11`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T014 — T&Cs agreement gate | `sprint-10` | ⏳ Not started |
-| T015 — Invoice display | `sprint-10` | ⏳ Not started |
-| T016 — Payment timer (server-side, Vercel cron) | `sprint-10` | ⏳ Not started |
-| T017 — Payment proof upload | `sprint-10` | ⏳ Not started |
-| T018 — Payment history view | `sprint-10` | ⏳ Not started |
-| T034 — Duplicate transaction reference check | `sprint-10` | ⏳ Not started |
-| T035 — Signed URL expiry policy | `sprint-10` | ⏳ Not started |
-| T036 — MIME type validation | `sprint-10` | ⏳ Not started |
-| T037 — Unpredictable invoice file paths | `sprint-10` | ⏳ Not started |
-| T038 — Session invalidation on password reset | `sprint-10` | ⏳ Not started |
-| T040 — Non-blocking PDF generation | `sprint-10` | ⏳ Not started |
+| T025 — In-app notification centre | `sprint-11` | ⏳ Not started |
+| T026 — Admin document request | `sprint-11` | ⏳ Not started |
+| T027 — Client document upload | `sprint-11` | ⏳ Not started |
+| T043 — Supabase Realtime for notification bell | `sprint-11` | ⏳ Not started |
 
-### Sprint 10 Definition of Done
+### Sprint 11 Definition of Done
 
-- [ ] All tasks merged into `sprint-10` branch
-- [ ] Agreement gate works correctly for awaiting_agreement state
-- [ ] Invoice PDF displays and downloads correctly
-- [ ] Payment timer runs server-side only — never in client state
-- [ ] Payment proof upload validated by MIME type server-side
+- [ ] All tasks merged into `sprint-11` branch
+- [ ] Notification bell updates in real time via Supabase Realtime
+- [ ] Admin can request documents from a client
+- [ ] Client can upload documents in response to a request
+- [ ] All file uploads validated by MIME type server-side
 - [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
@@ -50,6 +43,27 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 10 — Legal, Invoice, Payment Flow
+**Completed:** May 2026
+**Branch:** `sprint-10`
+**Approved by Naa:** [ ]
+**Merged to main:** [ ]
+**Merged date:** —
+
+- [x] T014 — T&Cs agreement gate (AgreementGate.tsx, /api/portal/agreements/accept, lib/businessDays.ts)
+- [x] T015 — Invoice display (app/portal/invoice/, /api/portal/invoice/me)
+- [x] T016 — Payment timer — server-side countdown + Vercel cron (PaymentTimer.tsx, /api/cron/check-expired-timers, vercel.json)
+- [x] T017 — Payment proof upload (PaymentUploadForm.tsx, /api/portal/payments/upload, /api/portal/payments/timer)
+- [x] T018 — Payment history view (PaymentHistory.tsx, /api/portal/payments/history, /api/portal/payments/proof-url)
+- [x] T034 — Duplicate transaction reference check (lib/checkDuplicateRef.ts)
+- [x] T035 — Signed URL expiry policy (lib/storage.ts — 15-minute signed URLs for payment proofs)
+- [x] T036 — MIME type validation (lib/validateMime.ts — magic-byte detection via file-type)
+- [x] T037 — Unpredictable invoice file paths (lib/generateStoragePath.ts — UUID-prefixed paths)
+- [x] T040 — Non-blocking PDF generation (lib/generateInvoicePdf.ts — pdf-lib, Plus Jakarta Sans TTF, GH₵ support)
+- [ ] T038 — Session invalidation on password reset — deferred to Sprint 11
+
+---
 
 ### ✅ Sprint 9 — Client Portal Shell
 **Completed:** May 2026
@@ -191,28 +205,11 @@
 
 ## Upcoming Sprints
 
-### ⏳ Sprint 10 — Legal, Invoice, Payment Flow
-**Planned start:** After Sprint 9 approval
-
-Planned tasks:
-- [ ] T014 — T&Cs agreement gate
-- [ ] T015 — Invoice display
-- [ ] T016 — Payment timer (server-side, Vercel cron)
-- [ ] T017 — Payment proof upload
-- [ ] T018 — Payment history view
-- [ ] T034 — Duplicate transaction reference check
-- [ ] T035 — Signed URL expiry policy
-- [ ] T036 — MIME type validation
-- [ ] T037 — Unpredictable invoice file paths
-- [ ] T038 — Session invalidation on password reset
-- [ ] T040 — Non-blocking PDF generation
-
----
-
 ### ⏳ Sprint 11 — Document Management + Notifications
 **Planned start:** After Sprint 10 approval
 
 Planned tasks:
+- [ ] T038 — Session invalidation on password reset (deferred from Sprint 10)
 - [ ] T025 — In-app notification centre
 - [ ] T026 — Admin document request
 - [ ] T027 — Client document upload
