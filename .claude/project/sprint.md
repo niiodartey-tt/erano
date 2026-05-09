@@ -18,10 +18,10 @@
 
 | Task | Branch | Status |
 |---|---|---|
-| T025 — In-app notification centre | `sprint-11` | ⏳ Not started |
+| T025 — In-app notification centre | `sprint-11` | ✅ Complete |
 | T026 — Admin document request | `sprint-11` | ⏳ Not started |
-| T027 — Client document upload | `sprint-11` | ⏳ Not started |
-| T043 — Supabase Realtime for notification bell | `sprint-11` | ⏳ Not started |
+| T027 — Client document upload | `sprint-11` | ✅ Complete |
+| T043 — Supabase Realtime for notification bell | `sprint-11` | ✅ Complete |
 
 ### Sprint 11 Definition of Done
 

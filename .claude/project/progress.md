@@ -495,7 +495,52 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 11 — Document Management + Notifications
-*Claude will populate this section during Sprint 11.*
+**Status:** 🔄 In progress
+
+### T025 + T043 — Notification centre + Supabase Realtime (Group 1 — notifications)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `app/api/portal/notifications/route.ts` — GET returns all notifications for authenticated user ordered by `created_at DESC`. PATCH marks a single notification as read (`read = true`) by id, with `eq("user_id", user.id)` ownership check. Both handlers use `getAuthUser()` helper (SSR client + anon key for cookie-based auth) then service role for DB queries. Zod validates PATCH body `{ id: uuid }`.
+- `app/api/portal/notifications/mark-all-read/route.ts` — POST marks all `read = false` notifications as read for authenticated user. Auth via SSR client, service role for update.
+- `components/portal/notifications/NotificationBell.tsx` — "use client". Bell icon button with unread count badge (gold bg, white text, hidden when 0). Click toggles dropdown panel (w-80, max-h-[400px], right-aligned). Outside-click closes via `useEffect` + `document.addEventListener("mousedown", ...)`. Dropdown: "Notifications" header + "Mark all as read" button (disabled when unread=0). List of notifications — unread: white bg, 3px gold left border, bold text; read: off-white bg, normal weight. `timeAgo()` helper for relative timestamps (just now / Xm / Xh / Xd). Clicking an item PATCHes read state then navigates to `notification.link` if set. Supabase Realtime subscription (T043): `createBrowserClient` from `@supabase/ssr`, channel `portal-notifications-${userId}`, subscribes to INSERT on `notifications` table filtered by `user_id=eq.${userId}` — on new row: prepends to items list. Unsubscribes on unmount via cleanup function. Accessible: `aria-label`, `aria-expanded`, `aria-haspopup="dialog"`, `role="dialog"` on panel. Under 150 lines.
+- `app/portal/notifications/layout.tsx` — Metadata: title "Notifications — Erano Consulting".
+- `app/portal/notifications/page.tsx` — "use client". Full notifications page. Fetches `/api/portal/notifications` on mount. Loading state: 3-row skeleton. Error state: red alert text. Empty state: Bell icon (Lucide) + "No notifications yet" message. Notification list: rounded-xl border, divide-y rows, same gold left border / unread styling as bell dropdown. "Mark all as read" button shown only when unread > 0. Clicking a row marks as read + navigates to link. Under 150 lines.
+
+**Files modified:**
+- `components/portal/layout/PortalHeader.tsx` — Replaced placeholder `<button>` + `Bell` import with `<NotificationBell />` component. Bell and ChevronDown imports updated (Bell removed).
+
+**Key decisions:**
+- Schema uses `read` (not `is_read`) with no `read_at` column — discovered from schema.sql before writing; PATCH and mark-all-read use `{ read: true }`.
+- Realtime channel named `portal-notifications-${userId}` — unique per user per tab, prevents cross-user event delivery and multiple-subscription conflicts on same channel name.
+- `on<Notification>(...)` generic on the Realtime `.on()` call — types `payload.new` correctly as `Notification` without an unsafe double-cast.
+- `timeAgo` function duplicated between NotificationBell and NotificationsPage — avoids adding a file for a 7-line utility; acceptable duplication at this scale.
+- PortalHeader is a locked Sprint 9 file but explicitly modified per Naa's instruction — minimum change (swap one button for one component, update imports).
+- Unread badge hidden via conditional render (not CSS visibility) when count is 0 — removes the element from DOM entirely for screen readers.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /portal/notifications ƒ Dynamic (2.3 kB), /api/portal/notifications ƒ Dynamic, /api/portal/notifications/mark-all-read ƒ Dynamic. 38 pages total.
+
+### T027 — Client document upload system (Group 2 — documents)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `app/api/portal/documents/requests/route.ts` — GET. Auth via SSR client, service role for DB. Fetches `document_requests` with nested `document_uploads(id, file_path, uploaded_at)` via Supabase PostgREST embedding. Filtered to `client_id = user.id`, ordered `created_at DESC`. Returns `{ requests: [] }`.
+- `app/api/portal/documents/upload/route.ts` — POST. Auth + `requireState(["active"])` — document uploads only for active accounts. Validates `requestId` as UUID via Zod. IDOR check: queries `document_requests WHERE id = requestId AND client_id = user.id` — returns 404 if not found. File validation: 10MB max, `validateMimeType(arrayBuffer, "documentUploads")` for magic-byte MIME check (PDF/JPEG/PNG/XLSX/DOCX). Generates path via `generateDocumentUploadPath(user.id, requestId, filename)`. Uploads to "document-uploads" bucket. Inserts `document_uploads` row (`file_url = file_path`). Updates `document_requests.status → uploaded`. Audit logs `document_uploaded`. Admin notification + `DocumentUploadedEmail` (non-fatal). Returns 201.
+- `app/api/portal/documents/download/route.ts` — GET with `?path=` query param. Auth. IDOR check: queries `document_uploads WHERE file_path = path AND client_id = user.id`. Generates 30-minute signed URL via `getDocumentUploadUrl(path)`. Returns `{ signedUrl }`.
+- `components/portal/documents/DocumentRequestCard.tsx` — "use client". Props: `request`, `uploads[]`, `onUploaded()`. Shows category badge (grey pill), status badge (amber/blue/green), title, description, date. If status is pending: file input (`accept=".pdf,.jpg,.jpeg,.png,.xlsx,.docx"`) + "Upload document" button (disabled when no file or loading). If status is uploaded/reviewed: uploaded file row with filename + upload date + Download button (fetches signed URL, opens in new tab). Inline error display for both upload and download failures. Calls `onUploaded()` on successful upload for parent to refresh. Under 150 lines.
+- `app/portal/documents/layout.tsx` — Metadata: title "My Documents — Erano Consulting".
+- `app/portal/documents/page.tsx` — "use client". Fetches `/api/portal/documents/requests` on mount via `useCallback` (stable ref passed to `useEffect` and as `onUploaded` to each card). Loading state: 3-row skeleton. Error state: red alert. Empty state: `FolderOpen` icon + "No document requests yet" message. Renders `DocumentRequestCard` per request, passes `req.document_uploads` from nested select. Under 150 lines.
+
+**Key decisions:**
+- `document_uploads` fetched as nested relation in a single query (not a separate round-trip) — Supabase PostgREST embedding via `document_uploads(id, file_path, uploaded_at)` in the select string.
+- IDOR prevention on both upload and download: upload checks `document_requests.client_id`, download checks `document_uploads.client_id` — neither can be exploited by guessing a UUID.
+- `requireState(["active"])` server-side — portal layout already gates `/portal/documents` to active users, but API route re-validates independently per security standard.
+- `useCallback` on `fetchRequests` in the documents page — gives a stable function reference so it can be safely passed as `onUploaded` prop and used in the `useEffect` dependency array without causing re-fetch loops.
+- File display name: `latestUpload.file_path.split("/").pop()` — shows the UUID filename (e.g., `a1b2c3.pdf`). Original filename not stored in DB; this is the best available display without schema changes.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /portal/documents ƒ Dynamic (3.04 kB), + 3 API routes. 42 pages total.
 
 ---
 

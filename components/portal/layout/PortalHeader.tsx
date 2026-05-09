@@ -1,8 +1,9 @@
 "use client";
 
-import { Menu, Bell, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { usePortal } from "@/context/PortalContext";
+import NotificationBell from "@/components/portal/notifications/NotificationBell";
 
 const PAGE_TITLES: Record<string, string> = {
   "/portal/dashboard":     "Dashboard",
@@ -41,12 +42,7 @@ export default function PortalHeader() {
       </div>
 
       <div className="flex items-center gap-2 md:gap-3">
-        <button
-          className="relative flex items-center justify-center w-10 h-10 rounded-lg text-body hover:bg-off transition-colors"
-          aria-label="Notifications — 0 unread"
-        >
-          <Bell className="h-5 w-5" aria-hidden="true" />
-        </button>
+        <NotificationBell />
 
         <span className="hidden sm:block w-px h-6 bg-line" aria-hidden="true" />
 
