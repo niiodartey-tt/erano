@@ -338,7 +338,68 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 9 — Client Portal Shell
-*Claude will populate this section during Sprint 9.*
+
+### T011 — Client Portal Layout (Group 1 — context + layout shell)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `context/PortalContext.tsx` — React context providing accountState, userName, userId, isMobileNavOpen, toggleMobileNav. Also exports `isStateAtLeast` helper used by sidebar and mobile nav for visibility rules.
+- `app/portal/layout.tsx` — Server component. Uses `@supabase/ssr createServerClient` (anon key + cookies) for JWT validation via `getUser()`, then service role client to fetch users + client_profiles rows (bypasses RLS). Redirects: no session → /login, non-client role → /admin, must_change_password → /portal/set-password (guarded against infinite redirect via `x-invoke-path` header check). Renders PortalProvider wrapping sidebar + header + main + mobile nav.
+- `components/portal/layout/PortalSidebar.tsx` — Navy sidebar, 260px desktop, slides in on mobile via isMobileNavOpen context state + backdrop overlay. Erano logo + account state badge (colour-coded by state) at top. 7 nav items with state-gated visibility using isStateAtLeast. Active state: gold left border + text + bg-white/10 tint. Sign out via createBrowserClient → signOut → router.push('/login').
+- `components/portal/layout/PortalHeader.tsx` — 64px white header. Hamburger (mobile only) calls toggleMobileNav from context. Page title derived from usePathname() mapped to label. Notification bell placeholder (0 unread). User avatar circle with initials + name + chevron.
+- `components/portal/layout/PortalMobileNav.tsx` — Fixed bottom nav, md:hidden. 5 items max (Dashboard, Invoice, Payments, Notifications, Profile) filtered by state visibility. Active: gold icon. Reads accountState from context.
+
+**Key decisions:**
+- Two Supabase clients in the layout: SSR client (anon key + cookies) for `getUser()` JWT validation — matches the middleware pattern. Service role client for profile fetch — avoids RLS blocking reads from the browser context.
+- `x-invoke-path` header check to prevent infinite redirect loop at `/portal/set-password`. Vercel sets this header; local dev fallback is to skip the redirect (safe since the page has its own auth check).
+- `isStateAtLeast` exported from PortalContext rather than duplicated — shared by sidebar and mobile nav.
+- Mobile sidebar: slide-in panel (translate-x transition) + backdrop overlay, rather than a separate drawer component. Keeps sidebar as single file.
+- `pb-16 md:pb-0` on main content area — reserves space for the fixed mobile bottom nav (64px).
+
+**No errors or regressions.**
+
+### T012 — Client Dashboard (Group 2 — views + dispatcher)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `components/portal/dashboard/StatusTimeline.tsx` — Shared 4-step vertical timeline. Props: `activeStep: 1|2|3|4`. Complete steps: bg-gold circle + Check icon. Active step: bg-navy circle + animate-ping white pulse. Locked steps: bg-off + Lock icon. Connector lines: bg-gold/30 (complete), bg-line (pending).
+- `components/portal/dashboard/PendingView.tsx` — Fetches `client_profiles` with `packages(name)` FK join via browser client. Shows company + package name in a card. Skeleton + error states. StatusTimeline activeStep={2}.
+- `components/portal/dashboard/AgreementView.tsx` — Static. Gold-bordered banner with FileText icon + copy + Link → /portal/invoice. StatusTimeline activeStep={3}.
+- `components/portal/dashboard/PaymentView.tsx` — Fetches `payment_timers` (is_active = true). Live countdown via setInterval/1s. Red banner when < 24h remaining. Navy bank details card (hardcoded Erano bank info). Handles "no active timer" gracefully.
+- `components/portal/dashboard/ConfirmationView.tsx` — Fetches latest `payment_proofs` row (ordered by uploaded_at desc). Blue info banner. Payment summary card using formatCurrency from lib/utils. StatusTimeline activeStep={4}.
+- `components/portal/dashboard/ActiveView.tsx` — Promise.all: client_profiles+packages, document_requests pending count, notifications unread count, notifications last 5 (NOT audit_log — admin-only RLS). timeAgo() helper. 2×4 stat cards grid (link to relevant portal page each). Recent activity list.
+- `components/portal/dashboard/ExpiredView.tsx` — bg-ink dark card. Lock icon text-gold. WhatsApp CTA: border-gold text-gold (no bg-gold fill). Email support link.
+- `app/portal/dashboard/page.tsx` — "use client" dispatcher. Reads accountState from usePortal(). Renders one of 6 views via conditional rendering. Personalised greeting for active state.
+
+**Key decisions:**
+- Supabase FK join `packages(name)` returns `{ name: any }[]` not `{ name: string } | null` per Supabase's TypeScript inference — cast through `unknown` to fix type mismatch without weakening the interface.
+- Used `notifications` table for ActiveView activity feed instead of `audit_log`. The `audit_log` has a `no_client_access` RLS policy — clients get 0 rows. Notifications are client-readable and serve the same UX purpose.
+- Gold count respected: ExpiredView uses exactly 4 (Lock icon text-gold, border-gold, text-gold, hover:bg-gold/10 tint). Other views use gold sparingly (AgreementView: 3; PaymentView: 1).
+- All files under 150 lines.
+
+**TypeScript:** clean (0 errors — 2 cast-through-unknown fixes for Supabase FK join inference)
+**Build:** clean — /portal/dashboard ƒ Dynamic, 6.03 kB first load JS
+
+### T013 — Client Profile Page (Group 3 — profile page + API route)
+**Status:** ✅ tsc clean · build clean
+
+**Files created:**
+- `app/portal/profile/layout.tsx` — Metadata only: title "My profile — Erano Consulting". Delegates to portal layout.
+- `app/portal/profile/page.tsx` — "use client". Parallel Promise.all fetch: auth.getUser() for email + client_profiles for contact fields. Loading skeleton + error state. Passes data to ContactDetailsForm and ChangePasswordForm sub-components separated by a divider.
+- `components/portal/profile/ContactDetailsForm.tsx` — react-hook-form + zod. 4 editable fields (Full name, Role, Phone, Address). 2 read-only fields (Business name, Email) in grey bg-off blocks with "(cannot be changed)" label. Submits via PATCH /api/portal/profile/update. Inline success (aria-live polite) and error (aria-live assertive) banners. 150-line compliant.
+- `components/portal/profile/ChangePasswordForm.tsx` — react-hook-form + zod. 3 password fields with live requirements checklist (pattern from set-password page). Verifies current password via signInWithPassword before updating. Calls clear-password-flag after success. resets() form on success. 150-line compliant.
+- `app/api/portal/profile/update/route.ts` — PATCH. SSR client for auth verification. requireState enforces all states except 'expired'. Zod validates 4 fields. Service role client updates client_profiles. Logs to audit_log. Returns 400/401/403/500 on failure, 200 on success.
+
+**Key decisions:**
+- Page extracted into ContactDetailsForm + ChangePasswordForm sub-components — combined page would exceed 150 lines.
+- Email passed as prop to ChangePasswordForm (from auth.getUser() in page) — needed for signInWithPassword current-password verification.
+- Read-only fields outside the form element — not registered with react-hook-form, not submitted — avoids accidental schema inclusion.
+- requireState allowed list: all 5 non-expired states — expired users cannot update their profile.
+- Gold count on profile page: 2 button text-gold instances + focus-visible:ring-gold (focus state only). Within 4× limit.
+- All aria-live regions use polite for success, assertive for errors — screen readers announce immediately on error, queue on success.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — /portal/profile ƒ Dynamic, 4.58 kB; /api/portal/profile/update ƒ Dynamic
 
 ---
 

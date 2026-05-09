@@ -18,9 +18,9 @@
 
 | Task | Branch | Status |
 |---|---|---|
-| T011 — Client portal layout (sidebar, header, notification bell placeholder) | `sprint-9` | ⏳ Not started |
-| T012 — Client dashboard state-gated views (all 6 states) | `sprint-9` | ⏳ Not started |
-| T013 — Client profile page (edit + change password) | `sprint-9` | ⏳ Not started |
+| T011 — Client portal layout (sidebar, header, notification bell placeholder) | `sprint-9` | ✅ Complete |
+| T012 — Client dashboard state-gated views (all 6 states) | `sprint-9` | ✅ Complete |
+| T013 — Client profile page (edit + change password) | `sprint-9` | ✅ Complete |
 
 ### Sprint 9 Definition of Done
 
