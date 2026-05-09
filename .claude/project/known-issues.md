@@ -119,4 +119,14 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### PENDING-004 — Resend sandbox restriction — emails to verified address only
+**Identified:** Sprint 8
+**Symptom:** Email delivery only works when sending to the Resend account owner's email (eranoconsulting@gmail.com). Any other recipient gets rejected with "can only send to your own email address" on the free plan.
+**Root cause:** Resend free plan with unverified domain — from address is onboarding@resend.dev (sandbox)
+**Fix:** Verify Erano's custom domain on Resend dashboard. Update RESEND_FROM_EMAIL to hello@[erano-domain].com in Vercel and .env.local. Blocked on client deposit → domain purchase from GoDaddy.
+**Workaround for testing:** Use eranoconsulting@gmail.com as the recipient email in all test form submissions.
+**Permanent fix sprint:** Sprint 15 — post domain activation
+
+---
+
 *ApexSource Ventures · Accra, Ghana · May 2026*
