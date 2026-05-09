@@ -84,22 +84,32 @@ export default function AuthCallbackPage() {
       supabase: ReturnType<typeof createBrowserClient>,
       userId: string,
     ) {
-      console.log("[AUTH-CALLBACK] querying users table for id:", userId);
+      console.log("[AUTH-CALLBACK] doRedirect — querying users table for id:", userId);
       const { data: userData, error: dbError } = await supabase
         .from("users")
         .select("must_change_password, role")
         .eq("id", userId)
         .single();
 
-      console.log("[AUTH-CALLBACK] dbError:", dbError?.message ?? null);
-      console.log("[AUTH-CALLBACK] must_change_password:", userData?.must_change_password ?? null);
-      console.log("[AUTH-CALLBACK] role:", userData?.role ?? null);
+      console.log("[AUTH-CALLBACK] doRedirect — dbError:", dbError?.message ?? null);
+      console.log("[AUTH-CALLBACK] doRedirect — userData is null:", userData === null);
+      console.log("[AUTH-CALLBACK] doRedirect — must_change_password raw:", userData?.must_change_password);
+      console.log("[AUTH-CALLBACK] doRedirect — role raw:", userData?.role);
 
-      if (userData?.role === "admin") {
+      if (dbError || !userData) {
+        console.log("[AUTH-CALLBACK] doRedirect — users row unreadable (RLS or missing row) — defaulting to /portal/set-password");
+        window.location.href = "/portal/set-password";
+        return;
+      }
+
+      if (userData.role === "admin") {
+        console.log("[AUTH-CALLBACK] doRedirect — role = admin → /admin");
         window.location.href = "/admin";
-      } else if (userData?.must_change_password) {
+      } else if (userData.must_change_password === true) {
+        console.log("[AUTH-CALLBACK] doRedirect — must_change_password = true → /portal/set-password");
         window.location.href = "/portal/set-password";
       } else {
+        console.log("[AUTH-CALLBACK] doRedirect — must_change_password = false → /portal/dashboard");
         window.location.href = "/portal/dashboard";
       }
     }
