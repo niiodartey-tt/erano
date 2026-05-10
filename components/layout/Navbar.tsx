@@ -163,7 +163,7 @@ export default function Navbar() {
           {!isMobile && (
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
 
-              {/* Client login with lock icon */}
+              {/* Log in with lock icon */}
               <Link
                 href="/login"
                 style={{
@@ -195,7 +195,7 @@ export default function Navbar() {
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                   <path d="M7 11V7a5 5 0 0110 0v4"/>
                 </svg>
-                Client login
+                Log in
               </Link>
 
               {/* Divider */}
@@ -326,7 +326,7 @@ export default function Navbar() {
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                   <path d="M7 11V7a5 5 0 0110 0v4"/>
                 </svg>
-                Client login
+                Log in
               </Link>
               <Link href="/onboarding" style={{
                 display:        "block",
