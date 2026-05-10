@@ -38,7 +38,7 @@ export default function PaymentsPage() {
     <div className="max-w-3xl p-4 md:p-6">
       <h1 className="mb-6 text-xl font-bold text-navy">Payments</h1>
 
-      {timerLoaded && expiresAt && (
+      {timerLoaded && expiresAt && accountState !== "active" && (
         <div className="mb-6">
           <PaymentTimer expiresAt={expiresAt} />
         </div>

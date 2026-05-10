@@ -674,6 +674,31 @@ Claude does this automatically — without being asked.
 **TypeScript:** clean (0 errors)
 **Build:** clean — `/admin/invoices` ƒ Dynamic added, all new API routes registered.
 
+### Bug fixes + services page (Group 2 — fixes + new feature)
+**Status:** ✅ tsc clean · build clean
+
+**Files modified (6):**
+- `components/admin/clients/ClientPaymentSection.tsx` — FIX 1 (admin): `PROOF_COLORS` key corrected from `"approved"` → `"confirmed"` to match payment_status enum. Timer banner now hidden when any proof has `status === "confirmed"`; replaced by a green "Payment completed" banner instead.
+- `app/portal/payments/page.tsx` — FIX 1 (client): `PaymentTimer` now only renders when `accountState !== "active"`. Previously the timer would show even after payment was confirmed and account activated.
+- `app/api/portal/profile/me/route.ts` — FIX 3: Supabase FK embedding for `packages(name)` returns a single object at runtime (many-to-one relation), not an array. Corrected cast from `{ name: string }[] | null` → `unknown` → `{ name: string } | null`. The previous `[0]?.name` access on an object always returned `undefined`, causing the package name to show as "—" on the active dashboard.
+- `components/portal/dashboard/ActiveView.tsx` — FIX 3: `StatCard` now accepts optional `href`. Package stat card no longer links to `/portal/services` (route was 404). Renders a static `<div>` when `href` is omitted; all other stat cards keep their links. FIX 2 verified already present — `PaymentConfirmedEmail` was already wired in `confirm/route.ts`.
+- `app/portal/dashboard/page.tsx` — FIX 4: Added `mx-auto` to page container div — centers the `max-w-4xl` wrapper within the portal main area.
+- `components/portal/dashboard/PaymentView.tsx` — FIX 4: Added `mx-auto` to inner `max-w-lg` div.
+
+**Files created (3):**
+- `app/api/portal/services/route.ts` — GET. Auth via SSR client + anon key. Service role client fetches `client_profiles` (with `packages:package_id(name, description, price_ghs)` FK embed) + `users.account_state` in `Promise.all`. Returns `{ services_needed, package, account_state }`.
+- `app/portal/services/layout.tsx` — Metadata: title "My Services — Erano Consulting".
+- `app/portal/services/page.tsx` — "use client". Fetches `/api/portal/services` + `/api/portal/documents/requests` in parallel. 4 sections: (1) Active package card — navy bg, gold eyebrow, package name/description/price, green "Active" badge; (2) Services included grid — CheckCircle icons (text-gold) + service name, 1→2 col at sm breakpoint; (3) Account manager — email (mailto), phone (tel), WhatsApp CTA (border-gold text-gold, never bg-gold fill); (4) Quick actions — pending document request count with link to /portal/documents, or "fully set up" message. Gold: 3 instances (eyebrow, CheckCircle, WhatsApp button). Loading skeleton + error state. Under 150 lines.
+
+**Key decisions:**
+- `unknown` cast required for Supabase FK embed type: the TS client infers `{ name: any }[]` (array) even for many-to-one relations; the actual runtime value is a single object. Cast through `unknown` avoids TS error while preserving runtime correctness.
+- `PaymentConfirmedEmail` was already wired — FIX 2 required no code change.
+- WhatsApp button uses `border-gold text-gold` (not `bg-gold`) to comply with "never as a background fill" rule.
+- Services page is mobile-first: `grid-cols-1` → `sm:grid-cols-2` for the services list.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — `/portal/services` ƒ Dynamic added, `/api/portal/services` ƒ Dynamic added.
+
 ---
 
 ## Sprint 14 — Account Reactivation + Cron + Hardening

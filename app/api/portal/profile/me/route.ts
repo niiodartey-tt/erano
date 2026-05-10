@@ -40,7 +40,7 @@ export async function GET() {
   }
 
   const packageName =
-    (data.packages as { name: string }[] | null)?.[0]?.name ?? null;
+    (data.packages as unknown as { name: string } | null)?.name ?? null;
 
   return NextResponse.json({
     legal_name:    data.legal_name,

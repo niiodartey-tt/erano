@@ -7,9 +7,9 @@ interface Timer { expires_at: string; is_active: boolean }
 interface Proof { id: string; amount_paid: number; currency: string; transaction_reference: string; status: string; uploaded_at: string; file_path: string | null }
 
 const PROOF_COLORS: Record<string, string> = {
-  pending:  "bg-yellow-100 text-yellow-800",
-  approved: "bg-green-100 text-green-800",
-  rejected: "bg-red-100 text-red-800",
+  pending:   "bg-yellow-100 text-yellow-800",
+  confirmed: "bg-green-100 text-green-800",
+  rejected:  "bg-red-100 text-red-800",
 };
 
 interface Props {
@@ -27,12 +27,18 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
   const daysLeft = expiresAt && !expired
     ? Math.ceil((expiresAt.getTime() - now.getTime()) / 86_400_000)
     : null;
+  const isConfirmed = proofs.some(p => p.status === "confirmed");
 
   return (
     <section className="bg-white rounded-xl border border-line p-5 md:p-6">
       <h2 className="text-sm font-semibold text-navy mb-4">Payments</h2>
 
-      {timer && (
+      {isConfirmed && (
+        <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-green-50 text-green-700">
+          Payment completed.
+        </div>
+      )}
+      {timer && !isConfirmed && (
         <div className={cn("mb-4 px-4 py-3 rounded-lg text-sm", expired ? "bg-red-50 text-red-700" : "bg-blue-50 text-blue-700")}>
           {expired
             ? "Payment window expired."

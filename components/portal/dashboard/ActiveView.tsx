@@ -72,7 +72,7 @@ export default function ActiveView() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <StatCard label="Package" value={data.packageName} icon={<Briefcase className="h-4 w-4" />} href="/portal/services" />
+        <StatCard label="Package" value={data.packageName} icon={<Briefcase className="h-4 w-4" />} />
         <StatCard label="Pending docs" value={String(data.pendingDocs)} icon={<FolderOpen className="h-4 w-4" />} href="/portal/documents" />
         <StatCard label="Unread" value={String(data.unreadNotifs)} icon={<Bell className="h-4 w-4" />} href="/portal/notifications" />
         <StatCard label="Invoice" value="View" icon={<FileText className="h-4 w-4" />} href="/portal/invoice" />
@@ -98,24 +98,17 @@ export default function ActiveView() {
 }
 
 function StatCard({
-  label,
-  value,
-  icon,
-  href,
+  label, value, icon, href,
 }: {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-  href: string;
+  label: string; value: string; icon: React.ReactNode; href?: string;
 }) {
-  return (
-    <Link
-      href={href}
-      className="flex flex-col gap-2 rounded-xl border border-line bg-white p-4 hover:border-navy transition-colors min-h-[44px]"
-    >
+  const cls = "flex flex-col gap-2 rounded-xl border border-line bg-white p-4 hover:border-navy transition-colors min-h-[44px]";
+  const inner = (
+    <>
       <span className="text-body">{icon}</span>
       <span className="text-xl font-bold text-navy truncate">{value}</span>
       <span className="text-xs text-body">{label}</span>
-    </Link>
+    </>
   );
+  return href ? <Link href={href} className={cls}>{inner}</Link> : <div className={cls}>{inner}</div>;
 }

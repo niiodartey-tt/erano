@@ -50,7 +50,7 @@ export default function PaymentView() {
   if (loading) return <div className="h-32 rounded-xl bg-line animate-pulse" />;
 
   return (
-    <div className="space-y-4 max-w-lg">
+    <div className="mx-auto max-w-lg space-y-4">
       {expiresAt ? (
         <div
           className={cn(
