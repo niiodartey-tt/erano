@@ -2,6 +2,7 @@
 import fs   from "fs";
 import path from "path";
 import { PDFDocument, rgb } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
 
 export interface InvoiceData {
   invoiceNumber:    string;
@@ -49,6 +50,7 @@ function fmtDate(d: string): string {
 
 export async function generateInvoicePdf(data: InvoiceData): Promise<Uint8Array> {
   const doc    = await PDFDocument.create();
+  doc.registerFontkit(fontkit);
   const page   = doc.addPage([W, H]);
   const regularBytes = fs.readFileSync(path.join(process.cwd(), "public/fonts/PlusJakartaSans-Regular.ttf"));
   const boldBytes    = fs.readFileSync(path.join(process.cwd(), "public/fonts/PlusJakartaSans-Bold.ttf"));
