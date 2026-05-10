@@ -37,11 +37,17 @@ export async function POST(req: Request) {
   const { client_id, proof_id } = body;
   if (!client_id || !proof_id) return NextResponse.json({ error: "client_id and proof_id required" }, { status: 400 });
 
-  const { error: proofErr } = await service.from("payment_proofs").update({ status: "approved" }).eq("id", proof_id);
-  if (proofErr) return NextResponse.json({ error: "Failed to update proof" }, { status: 500 });
+  const { error: proofErr } = await service.from("payment_proofs").update({ status: "confirmed" }).eq("id", proof_id);
+  if (proofErr) {
+    console.error("[payments:confirm] proof_update_failed:", proofErr.code, proofErr.message, proofErr.details, proofErr.hint);
+    return NextResponse.json({ error: "Failed to update proof" }, { status: 500 });
+  }
 
   const { error: stateErr } = await service.from("users").update({ account_state: "active" }).eq("id", client_id);
-  if (stateErr) return NextResponse.json({ error: "Failed to update account state" }, { status: 500 });
+  if (stateErr) {
+    console.error("[payments:confirm] state_update_failed:", stateErr.code, stateErr.message);
+    return NextResponse.json({ error: "Failed to update account state" }, { status: 500 });
+  }
 
   const { data: latestInvoice } = await service
     .from("invoices").select("id").eq("client_id", client_id)
