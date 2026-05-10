@@ -18,6 +18,7 @@ export default function PaymentsPage() {
   const { accountState } = usePortal();
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [timerLoaded, setTimerLoaded] = useState(false);
+  const [uploadVersion, setUploadVersion] = useState(0);
 
   useEffect(() => {
     fetch("/api/portal/payments/timer")
@@ -64,13 +65,13 @@ export default function PaymentsPage() {
       {isAwaitingPayment && (
         <section className="mb-8" aria-labelledby="upload-heading">
           <h2 id="upload-heading" className="mb-4 text-base font-semibold text-navy">Upload payment proof</h2>
-          <PaymentUploadForm />
+          <PaymentUploadForm onSuccess={() => setUploadVersion(v => v + 1)} />
         </section>
       )}
 
       <section aria-labelledby="history-heading">
         <h2 id="history-heading" className="mb-4 text-base font-semibold text-navy">Payment history</h2>
-        <PaymentHistory />
+        <PaymentHistory key={uploadVersion} />
       </section>
     </div>
   );

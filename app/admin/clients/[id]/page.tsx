@@ -51,8 +51,10 @@ export default function ClientProfilePage() {
     const isConfirm = modal.type === "confirm";
     const url = isConfirm ? "/api/admin/payments/confirm" : "/api/admin/payments/reject";
     const body = isConfirm ? { client_id: data.user.id, proof_id: modal.proofId } : { client_id: data.user.id, proof_id: modal.proofId, reason: reason ?? "" };
-    await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    setModalLoading(false); setModal(null); void fetchData();
+    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    setModalLoading(false); setModal(null);
+    if (res.ok && isConfirm) setData(p => p ? { ...p, user: { ...p.user, account_state: "active" }, proofs: p.proofs.map(pr => pr.id === modal.proofId ? { ...pr, status: "approved" } : pr) } : p);
+    else void fetchData();
   }
 
   async function handleGenerateInvoice() {
