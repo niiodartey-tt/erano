@@ -31,7 +31,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="p-4 md:p-6 max-w-2xl space-y-4 animate-pulse" aria-busy="true" aria-label="Loading profile">
+      <div className="mx-auto max-w-2xl p-4 md:p-6 space-y-4 animate-pulse" aria-busy="true" aria-label="Loading profile">
         <div className="h-7 w-36 rounded bg-line" />
         <div className="h-72 rounded-xl bg-line" />
         <div className="h-72 rounded-xl bg-line" />
@@ -41,14 +41,14 @@ export default function ProfilePage() {
 
   if (error || !profile) {
     return (
-      <div className="p-4 md:p-6 max-w-2xl">
+      <div className="mx-auto max-w-2xl p-4 md:p-6">
         <p className="text-sm text-body">Unable to load your profile. Please refresh the page.</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-2xl">
+    <div className="mx-auto max-w-2xl p-4 md:p-6">
       <h1 className="text-lg font-semibold text-navy mb-6">My profile</h1>
 
       <ContactDetailsForm

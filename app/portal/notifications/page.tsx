@@ -56,7 +56,7 @@ export default function NotificationsPage() {
   }
 
   if (loading) return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="animate-pulse space-y-3">
         {[1, 2, 3].map((i) => <div key={i} className="h-16 rounded-lg bg-off" />)}
       </div>
@@ -64,13 +64,13 @@ export default function NotificationsPage() {
   );
 
   if (error) return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <p className="text-sm text-red-600" role="alert">Failed to load notifications. Please refresh the page.</p>
     </div>
   );
 
   return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-bold text-navy">Notifications</h1>
         {unread > 0 && (

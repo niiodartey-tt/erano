@@ -35,7 +35,7 @@ export default function PaymentsPage() {
   const isAwaitingPayment = accountState === "awaiting_payment";
 
   return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <h1 className="mb-6 text-xl font-bold text-navy">Payments</h1>
 
       {timerLoaded && expiresAt && accountState !== "active" && (

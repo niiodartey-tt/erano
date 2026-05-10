@@ -52,11 +52,12 @@ export default function PaymentHistory() {
       <table className="w-full text-sm">
         <thead className="bg-off">
           <tr>
-            {["Date submitted", "Amount", "Method", "Transaction ref", "Status", "Receipt"].map((h) => (
-              <th key={h} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">
-                {h}
-              </th>
-            ))}
+            <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Date submitted</th>
+            <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Amount</th>
+            <th className="hidden whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body sm:table-cell">Method</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Transaction ref</th>
+            <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Status</th>
+            <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Receipt</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line bg-white">
@@ -72,8 +73,10 @@ export default function PaymentHistory() {
                   ? formatCurrency(Number(proof.amount_paid))
                   : `USD ${Number(proof.amount_paid).toFixed(2)}`}
               </td>
-              <td className="whitespace-nowrap px-4 py-3 text-body">{proof.payment_method}</td>
-              <td className="px-4 py-3 font-mono text-xs text-body">{proof.transaction_reference}</td>
+              <td className="hidden whitespace-nowrap px-4 py-3 text-body sm:table-cell">{proof.payment_method}</td>
+              <td className="px-4 py-3">
+                <span className="block w-24 truncate font-mono text-xs text-body sm:w-auto">{proof.transaction_reference}</span>
+              </td>
               <td className="whitespace-nowrap px-4 py-3">
                 <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${STATUS_CLASSES[proof.status]}`}>
                   {proof.status}

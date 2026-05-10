@@ -41,7 +41,7 @@ export default function DocumentsPage() {
   useEffect(() => { void fetchRequests(); }, [fetchRequests]);
 
   if (loading) return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="animate-pulse space-y-4">
         {[1, 2, 3].map((i) => <div key={i} className="h-32 rounded-xl bg-off" />)}
       </div>
@@ -49,7 +49,7 @@ export default function DocumentsPage() {
   );
 
   if (error) return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <p className="text-sm text-red-600" role="alert">
         Failed to load document requests. Please refresh the page.
       </p>
@@ -57,7 +57,7 @@ export default function DocumentsPage() {
   );
 
   return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <h1 className="mb-6 text-xl font-bold text-navy">My Documents</h1>
 
       {requests.length === 0 ? (

@@ -54,7 +54,7 @@ export default function InvoicePage() {
   );
 
   if (error) return (
-    <div className="p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="rounded-lg border border-red-200 bg-red-50 p-6">
         <p className="text-sm text-red-700">Failed to load invoice. Please refresh and try again.</p>
       </div>
@@ -62,7 +62,7 @@ export default function InvoicePage() {
   );
 
   if (noInvoice) return (
-    <div className="p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="rounded-lg border border-line bg-off p-8 text-center">
         <FileText className="mx-auto mb-3 h-10 w-10 text-body/40" aria-hidden="true" />
         <p className="font-semibold text-navy">Invoice not yet generated</p>
@@ -79,7 +79,7 @@ export default function InvoicePage() {
   const showBankDetails = isStateAtLeast(accountState, "awaiting_payment");
 
   return (
-    <div className="max-w-3xl p-4 md:p-6">
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
       <div className="mb-4 flex items-center justify-between print:hidden">
         <h1 className="text-xl font-bold text-navy">Invoice</h1>
         <button
