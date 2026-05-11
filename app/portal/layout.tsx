@@ -15,6 +15,8 @@ export default async function PortalLayout({
 }) {
   const cookieStore = cookies();
   const headersList = headers();
+  const invokePath = headersList.get("x-invoke-path") ?? "";
+  const isSetPasswordPath = invokePath.includes("set-password");
 
   // Cookie-based client — validates JWT without bypassing RLS
   const supabase = createSsrClient(
@@ -41,7 +43,8 @@ export default async function PortalLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user && !isSetPasswordPath) redirect("/login");
+  if (!user) return <>{children}</>;
 
   // Service role client — bypasses RLS to reliably read the users row
   const admin = createServiceClient();
@@ -54,8 +57,6 @@ export default async function PortalLayout({
   if (!profile) redirect("/login");
   if (profile.role !== "client") redirect("/admin");
 
-  // Guard against infinite redirect: x-invoke-path is set by Vercel/Next.js
-  const invokePath = headersList.get("x-invoke-path") ?? "";
   if (profile.must_change_password && !invokePath.includes("set-password")) {
     redirect("/portal/set-password");
   }

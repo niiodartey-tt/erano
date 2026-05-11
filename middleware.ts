@@ -29,9 +29,10 @@ export default async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
+  const isSetPasswordPath = pathname === "/portal/set-password";
 
   // RULE 1 — Unauthenticated user accessing /portal/* or /admin/*
-  if (!user && (pathname.startsWith("/portal") || pathname.startsWith("/admin"))) {
+  if (!user && (pathname.startsWith("/portal") || pathname.startsWith("/admin")) && !isSetPasswordPath) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
