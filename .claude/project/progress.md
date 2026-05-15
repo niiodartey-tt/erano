@@ -699,6 +699,46 @@ Claude does this automatically — without being asked.
 **TypeScript:** clean (0 errors)
 **Build:** clean — `/portal/services` ƒ Dynamic added, `/api/portal/services` ƒ Dynamic added.
 
+### Auth redirect hardening + set-password redirect-loop fix (Group 3)
+**Status:** ✅ user-verified tsc clean · build clean
+
+**Files modified (4):**
+- `lib/magicLink.ts` — Magic-link generation now normalizes `NEXT_PUBLIC_SITE_URL`, builds `callbackUrl = <site>/auth/callback`, and force-sets `redirect_to` on returned `action_link` before email send.
+- `middleware.ts` — Added `/portal/set-password` exception so unauthenticated requests to this route are not redirected to `/login` before client session establishment.
+- `app/portal/layout.tsx` — Added set-password invoke-path exception: if server cannot resolve user for `/portal/set-password`, layout renders child page instead of forcing `/login`, preventing redirect loops.
+- `app/portal/set-password/page.tsx` — On mount, consumes `access_token` + `refresh_token` from URL hash via `supabase.auth.setSession()`, removes hash from URL, then runs user check.
+
+**Files removed (1):**
+- `components/auth/MagicLinkRootRedirect.tsx` — removed after policy review to avoid reliance on locked public home route behavior.
+
+**Key decisions:**
+- Kept callback-driven flow as source of truth (`/auth/callback`) and hardened generated links at source.
+- Fixed loop at auth-guard boundaries (middleware + portal layout) rather than bypassing auth globally.
+- Removed locked-route workaround and kept changes within auth and portal surfaces.
+
+**Validation evidence:**
+- User confirmed fresh `activate` links now include `/auth/callback` in `redirect_to`.
+- User ran:
+  - `npx tsc --noEmit` ✅
+  - `npm run build` ✅
+
+### Magic link root-cause fix — hardcode production callback URL (Group 4)
+**Status:** ✅ tsc clean · build clean · pushed sprint-13
+
+**Root cause diagnosed:** `NEXT_PUBLIC_SITE_URL` on preview deployments equals the preview Vercel URL, which is not in Supabase's redirect allowlist. When Supabase rejected the `redirect_to`, it fell back to the Site URL root (`https://erano.vercel.app/`) appending hash tokens. Without `MagicLinkRootRedirect` on `main`, these tokens were silently ignored and clients were never sent to `/portal/set-password`.
+
+**Files modified (2) + restored (1):**
+- `lib/magicLink.ts` — Replaced dynamic `NEXT_PUBLIC_SITE_URL` construction with hardcoded `CALLBACK_URL = "https://erano.vercel.app/auth/callback"`. Both `options.redirectTo` and the manual `redirect_to` override on the action URL now always use this constant. Two-line comment documents why the URL must be hardcoded (preview URLs are not in Supabase allowlist). Env var logic removed.
+- `components/auth/MagicLinkRootRedirect.tsx` — Recreated as a named export (`export function MagicLinkRootRedirect()`), per project naming rules. Logic simplified: detects `type=magiclink` + `access_token=` in the root hash and calls `window.location.replace("/auth/callback" + hash)`. Provides fallback coverage if Supabase ever drops tokens at the root (e.g., if Site URL is configured without a path).
+- `app/(site)/page.tsx` — Updated import to named import `{ MagicLinkRootRedirect }`.
+
+**Key decisions:**
+- Hardcoding the production URL is the correct approach — the redirect URL must be in Supabase's allowlist, which is a Supabase Dashboard setting tied to the production domain, not the deployment URL.
+- `MagicLinkRootRedirect` retained as a safety net even though the hardcoded URL should make it redundant — if Supabase config changes or tokens land at root for any reason, the component catches them.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — 58 pages, 0 errors
+
 ---
 
 ## Sprint 14 — Account Reactivation + Cron + Hardening
