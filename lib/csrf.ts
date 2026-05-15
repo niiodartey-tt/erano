@@ -1,14 +1,23 @@
 // SERVER SIDE ONLY — never import this file in client components
 export function verifyCsrfOrigin(request: Request): void {
-  const origin = request.headers.get("origin");
-  if (!origin) return;
+  const method = request.method.toUpperCase();
+  if (!["POST", "PATCH", "PUT", "DELETE"].includes(method)) return;
 
+  const origin  = request.headers.get("origin");
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
-  const isProduction = process.env.NODE_ENV === "production" && !siteUrl.includes("vercel.app");
 
-  if (!isProduction) return;
+  if (!origin) {
+    const referer = request.headers.get("referer") ?? "";
+    if (referer && !referer.startsWith(siteUrl)) {
+      throw new Error("CSRF_ORIGIN_MISMATCH");
+    }
+    return;
+  }
 
-  if (!origin.startsWith(siteUrl)) {
+  const normalizedSite   = siteUrl.replace(/\/$/, "");
+  const normalizedOrigin = origin.replace(/\/$/, "");
+
+  if (normalizedOrigin !== normalizedSite) {
     throw new Error("CSRF_ORIGIN_MISMATCH");
   }
 }

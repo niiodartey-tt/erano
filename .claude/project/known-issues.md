@@ -129,6 +129,20 @@ When a bug is found and resolved, add an entry with:
 
 ---
 
+### PENDING-005 — Next.js 14 → 16 upgrade deferred to post-launch
+**Identified:** Sprint 15
+**Details:** 34 files need changes for Next.js 15/16 compatibility:
+- 33 files: cookies() and headers() must be awaited (async API change)
+- 3 files: params must be awaited (async props change)
+- Pattern is fully uniform — mechanical find-and-replace
+- All files already use async functions — no signature changes needed
+**Affected files:** All app/api/ routes (31 files), app/portal/layout.tsx, app/admin/layout.tsx, app/(site)/resources/[slug]/page.tsx
+**Fix:** npm install next@latest, then await all cookies() and headers() calls, await params in dynamic routes
+**Deferred because:** Site is live, no current runtime bug, CVEs are in dev dependencies not runtime
+**Priority:** First sprint post-launch
+
+---
+
 ### PENDING-004 — Resend sandbox restriction — emails to verified address only
 **Identified:** Sprint 8
 **Symptom:** Email delivery only works when sending to the Resend account owner's email (eranoconsulting@gmail.com). Any other recipient gets rejected with "can only send to your own email address" on the free plan.

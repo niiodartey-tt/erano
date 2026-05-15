@@ -14,7 +14,6 @@ interface DocRequest {
 
 interface DocUpload {
   id: string;
-  file_path: string;
   uploaded_at: string;
 }
 
@@ -65,10 +64,10 @@ export default function DocumentRequestCard({ request, uploads, onUploaded }: Pr
     }
   }
 
-  async function handleDownload(filePath: string) {
+  async function handleDownload(uploadId: string) {
     setError(null);
     try {
-      const res = await fetch(`/api/portal/documents/download?path=${encodeURIComponent(filePath)}`);
+      const res = await fetch(`/api/portal/documents/download?uploadId=${encodeURIComponent(uploadId)}`);
       if (!res.ok) {
         if      (res.status === 401) setError("Your session has expired. Please refresh the page.");
         else if (res.status === 404) setError("File not found. Please contact us.");
@@ -124,10 +123,10 @@ export default function DocumentRequestCard({ request, uploads, onUploaded }: Pr
       {(request.status === "uploaded" || request.status === "reviewed") && latestUpload && (
         <div className="flex items-center justify-between gap-3 rounded-lg bg-off px-3 py-2.5">
           <p className="truncate text-xs text-body">
-            {latestUpload.file_path.split("/").pop()} &middot; {fmtDate(latestUpload.uploaded_at)}
+            Uploaded document &middot; {fmtDate(latestUpload.uploaded_at)}
           </p>
           <button
-            onClick={() => handleDownload(latestUpload.file_path)}
+            onClick={() => handleDownload(latestUpload.id)}
             className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-navy transition-colors hover:text-gold"
             aria-label={`Download document for ${request.title}`}
           >

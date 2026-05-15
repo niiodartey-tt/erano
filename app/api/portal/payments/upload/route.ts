@@ -12,6 +12,7 @@ import { sendEmail } from "@/lib/email";
 import { PaymentProofReceivedEmail, subject as emailSubjectFn } from "@/emails/PaymentProofReceivedEmail";
 import { render } from "@react-email/render";
 import { verifyCsrfOrigin } from "@/lib/csrf";
+import { apiRatelimit, getClientIp } from "@/lib/ratelimit";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
@@ -46,6 +47,10 @@ export async function POST(request: NextRequest) {
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const ip = getClientIp(request);
+  const { success: rateLimitOk } = await apiRatelimit.limit(`upload:${user.id}`);
+  if (!rateLimitOk) return NextResponse.json({ error: "Too many requests. Please wait before uploading again." }, { status: 429 });
 
   try {
     verifyCsrfOrigin(request);

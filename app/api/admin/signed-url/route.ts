@@ -36,10 +36,24 @@ export async function GET(req: NextRequest) {
   const expiry = ALLOWED_BUCKETS[bucket];
   if (expiry === undefined) return NextResponse.json({ error: "Invalid bucket" }, { status: 400 });
 
+  let url: string;
   try {
-    const url = await generateSignedUrl(bucket, path, expiry);
-    return NextResponse.json({ url });
+    url = await generateSignedUrl(bucket, path, expiry);
   } catch {
     return NextResponse.json({ error: "Failed to generate signed URL" }, { status: 500 });
   }
+
+  try {
+    await service.from("audit_log").insert({
+      actor_id:    user.id,
+      actor_role:  "admin",
+      action:      "file_accessed",
+      target_type: "storage",
+      metadata:    { bucket, path },
+    });
+  } catch (auditErr) {
+    console.error("audit_log insert (file_accessed):", auditErr instanceof Error ? auditErr.message : auditErr);
+  }
+
+  return NextResponse.json({ url });
 }

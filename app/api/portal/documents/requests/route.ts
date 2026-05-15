@@ -24,7 +24,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("document_requests")
-    .select("id, title, description, category, status, created_at, document_uploads(id, file_path, uploaded_at)")
+    .select("id, title, description, category, status, created_at, document_uploads(id, uploaded_at)")
     .eq("client_id", user.id)
     .order("created_at", { ascending: false });
 

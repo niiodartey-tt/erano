@@ -11,6 +11,7 @@ import { sendEmail } from "@/lib/email";
 import { DocumentUploadedEmail, subject as emailSubjectFn } from "@/emails/DocumentUploadedEmail";
 import { render } from "@react-email/render";
 import { verifyCsrfOrigin } from "@/lib/csrf";
+import { apiRatelimit, getClientIp } from "@/lib/ratelimit";
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const requestIdSchema = z.string().uuid("Invalid request ID");
@@ -31,6 +32,10 @@ export async function POST(request: NextRequest) {
 
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const ip = getClientIp(request);
+  const { success: rateLimitOk } = await apiRatelimit.limit(`upload:${user.id}`);
+  if (!rateLimitOk) return NextResponse.json({ error: "Too many requests. Please wait before uploading again." }, { status: 429 });
 
   try {
     verifyCsrfOrigin(request);
@@ -69,16 +74,17 @@ export async function POST(request: NextRequest) {
 
   const supabase = createServerClient();
 
-  // IDOR check — request must belong to this user
+  // IDOR check — request must belong to this user and still be pending
   const { data: docRequest } = await supabase
     .from("document_requests")
     .select("id, title, client_id")
     .eq("id", requestId)
     .eq("client_id", user.id)
+    .eq("status", "pending")
     .maybeSingle();
 
   if (!docRequest) {
-    return NextResponse.json({ error: "Document request not found." }, { status: 404 });
+    return NextResponse.json({ error: "Document request not found or has already been fulfilled." }, { status: 409 });
   }
 
   const arrayBuffer = await fileEntry.arrayBuffer();

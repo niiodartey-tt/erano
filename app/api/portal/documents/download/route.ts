@@ -21,23 +21,23 @@ export async function GET(request: NextRequest) {
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const filePath = request.nextUrl.searchParams.get("path");
-  if (!filePath) return NextResponse.json({ error: "path is required." }, { status: 400 });
+  const uploadId = request.nextUrl.searchParams.get("uploadId");
+  if (!uploadId) return NextResponse.json({ error: "uploadId is required." }, { status: 400 });
 
   const supabase = createServerClient();
 
-  // Ownership check — prevents IDOR
+  // Ownership check — look up file_path server-side; file_path never leaves the server
   const { data: upload } = await supabase
     .from("document_uploads")
-    .select("id")
-    .eq("file_path", filePath)
+    .select("file_path")
+    .eq("id", uploadId)
     .eq("client_id", user.id)
     .maybeSingle();
 
   if (!upload) return NextResponse.json({ error: "File not found." }, { status: 404 });
 
   try {
-    const signedUrl = await getDocumentUploadUrl(filePath);
+    const signedUrl = await getDocumentUploadUrl(upload.file_path);
     return NextResponse.json({ signedUrl });
   } catch (err) {
     console.error("documents/download signed URL:", err instanceof Error ? err.message : err);
