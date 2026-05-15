@@ -6,7 +6,7 @@ import StatsSection from "@/components/sections/StatsSection";
 import Testimonial from "@/components/sections/Testimonial";
 import SectorsGrid from "@/components/sections/SectorsGrid";
 import HomeCTA from "@/components/sections/HomeCTA";
-import MagicLinkRootRedirect from "@/components/auth/MagicLinkRootRedirect";
+import { MagicLinkRootRedirect } from "@/components/auth/MagicLinkRootRedirect";
 
 export default function HomePage() {
   return (
