@@ -8,26 +8,25 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 13 — Invoice Generation + Package Management
+**Sprint:** Sprint 14 — Account Reactivation + Cron + Hardening
 **Started:** TBD
 **Target completion:** TBD
-**Branch:** `sprint-13`
+**Branch:** `sprint-14`
 **Vercel preview:** TBD
 
 ### Active Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T024 — Admin invoice generation (PDF) | `sprint-13` | ✅ Complete |
-| T028 — Package seeding + display | `sprint-13` | ✅ Complete |
-| T029 — Package upgrade flow | `sprint-13` | ✅ Complete |
+| T030 — Admin account reactivation | `sprint-14` | ⏳ Planned |
+| T045 — Cron job logging + alert | `sprint-14` | ⏳ Planned |
 
-### Sprint 13 Definition of Done
+### Sprint 14 Definition of Done
 
-- [x] All tasks merged into `sprint-13` branch
-- [x] Admin can generate and send a PDF invoice to a client
-- [x] Packages are seeded and display correctly
-- [x] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
+- [ ] All tasks merged into `sprint-14` branch
+- [ ] Admin can reactivate an expired client account
+- [ ] Cron job logs are visible and alerting works
+- [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
 - [ ] Naa reviewed on Vercel preview URL
@@ -40,6 +39,28 @@
 ---
 
 ## Sprint History
+
+### ✅ Sprint 13 — Invoice Generation + Package Management
+**Completed:** May 2026
+**Branch:** `sprint-13`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] T024 — Admin invoice generation (PDF) — generateInvoicePdf, upload to storage, invoice row insert, state → awaiting_agreement, InvoiceReadyEmail
+- [x] T028 — Package seeding + display — /api/admin/packages, PackageUpgradeModal package list, Step6Package display
+- [x] T029 — Package upgrade flow — /api/admin/invoices/upgrade, PackageUpgradeModal, ClientProfileHeader "Initiate upgrade" button
+- [x] Fix — payment confirm uses correct `confirmed` enum value (was `approved`)
+- [x] Fix — payment timer hidden when account is active
+- [x] Fix — profile/me package name cast (array → object) so ActiveView shows package correctly
+- [x] Fix — portal services page added (`/portal/services`, `/api/portal/services`)
+- [x] Fix — admin page centering: all admin pages now use `mx-auto max-w-6xl`; clients/[id] corrected from `max-w-4xl` to `max-w-6xl`
+- [x] Fix — portal page centering: invoice loading state and services error state missing `mx-auto max-w-3xl`
+- [x] Fix — PaymentHistory table: transaction ref truncated (`max-w-[8rem]`), Receipt column sticky right
+- [x] Fix — magic link always uses production callback URL (`erano.vercel.app/auth/callback`), preview URL mismatch resolved
+- [x] Fix — MagicLinkRootRedirect recreated as named export, wired to homepage as root hash fallback
+
+---
 
 ### ✅ Sprint 12 — Admin Dashboard
 **Completed:** May 2026
@@ -236,25 +257,6 @@
 
 ## Upcoming Sprints
 
-### ⏳ Sprint 13 — Invoice Generation + Package Management
-**Planned start:** After Sprint 12 approval
-
-Planned tasks:
-- [ ] T024 — Admin invoice generation (PDF)
-- [ ] T028 — Package seeding + display
-- [ ] T029 — Package upgrade flow
-
----
-
-### ⏳ Sprint 14 — Account Reactivation + Cron + Hardening
-**Planned start:** After Sprint 13 approval
-
-Planned tasks:
-- [ ] T030 — Admin account reactivation
-- [ ] T045 — Cron job logging + alert
-
----
-
 ### ⏳ Sprint 15 — Mobile QA + Pre-Launch
 **Planned start:** After Sprint 14 approval
 
@@ -273,7 +275,7 @@ Planned tasks:
 
 ---
 
-## Do Not Touch During Sprint 12
+## Do Not Touch During Sprint 14
 
 > These are stable completed components. Do not modify without explicit instruction from Naa.
 
@@ -290,14 +292,16 @@ Planned tasks:
 - `lib/images.ts` — locked (Cloudinary keys)
 - `next-sitemap.config.js` — locked
 - `next.config.mjs` — locked unless adding new image domain
-- All Sprint 8 files — see do-not-touch.md for full list
-- All Sprint 9 files — see do-not-touch.md for full list
-- All Sprint 10 files — see do-not-touch.md for full list
-- All Sprint 11 files — see do-not-touch.md for full list
+- All Sprint 8–13 files — see do-not-touch.md for full list
 
 ---
 
 ## Sprint Notes
+
+### Sprint 13 Notes
+- All Sprint 8–12 infrastructure is locked — do not modify
+- Magic link redirect URL is hardcoded to `https://erano.vercel.app/auth/callback` in `lib/magicLink.ts` — do not change to NEXT_PUBLIC_SITE_URL
+- Admin pages use `mx-auto max-w-6xl`; portal pages use `mx-auto max-w-3xl` or `max-w-2xl` — do not mix
 
 ### Sprint 10 Notes
 - All Sprint 8 and Sprint 9 infrastructure is locked — do not modify

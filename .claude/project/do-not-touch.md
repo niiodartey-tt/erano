@@ -286,6 +286,35 @@ Completed and approved in Sprint 12. Do not modify.
 
 ---
 
+## Locked — Sprint 13 Invoice Generation + Package Management
+
+Completed and approved in Sprint 13. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `lib/generateInvoicePdf.ts` | PDF generation — A4 layout, Plus Jakarta Sans, GH₵ symbol via TTF | Breaks invoice PDF generation for all clients |
+| `lib/businessDays.ts` | Business day calculator — payment deadline from agreement acceptance | Wrong payment deadline set for all new agreements |
+| `lib/checkDuplicateRef.ts` | Duplicate transaction reference guard | Allows duplicate payment submissions |
+| `lib/validateMime.ts` | MIME type validation from magic bytes | File type bypass — extension spoofing allowed |
+| `lib/generateStoragePath.ts` | UUID-prefixed storage path generator | Predictable file paths — enumeration attack possible |
+| `lib/csrf.ts` | CSRF origin check — updated Sprint 13, used by all state-mutating routes | Removes CSRF protection from mutation endpoints |
+| `lib/magicLink.ts` | Magic link generation — hardcoded to production callback URL | Breaks account activation; preview URL mismatch returns clients to homepage |
+| `app/admin/invoices/page.tsx` | Invoice Manager admin page | Breaks admin invoice list |
+| `app/admin/invoices/layout.tsx` | Invoice Manager page metadata | Breaks invoice manager SEO |
+| `app/api/admin/invoices/generate/route.ts` | Invoice generation POST — PDF, storage upload, state transition, email | Breaks invoice generation flow |
+| `app/api/admin/invoices/route.ts` | Invoice list GET — all invoices with client + package embed | Breaks invoice manager data load |
+| `app/api/admin/invoices/upgrade/route.ts` | Package upgrade POST — new invoice, state → awaiting_agreement, email | Breaks package upgrade flow |
+| `app/api/admin/packages/route.ts` | Packages list GET — active packages for admin UI | Breaks package selection in upgrade modal |
+| `app/portal/services/page.tsx` | Client services page — active package, services list, account manager, quick actions | Breaks client services page |
+| `app/portal/services/layout.tsx` | Services page metadata | Breaks services SEO |
+| `app/api/portal/services/route.ts` | Services GET API — client profile + package + account state | Breaks services page data load |
+| `components/admin/clients/PackageUpgradeModal.tsx` | Package upgrade modal — package dropdown, custom price input, upgrade POST | Breaks admin package upgrade UI |
+| `components/auth/MagicLinkRootRedirect.tsx` | Root hash interceptor — catches magic-link tokens dropped at site root by Supabase | Magic link tokens silently lost if Supabase falls back to site root |
+| `public/fonts/PlusJakartaSans-Regular.ttf` | TTF font for PDF generation — contains U+20B5 GH₵ glyph | PDF generation throws WinAnsi encoding error |
+| `public/fonts/PlusJakartaSans-Bold.ttf` | TTF bold font for PDF generation — contains U+20B5 GH₵ glyph | PDF generation throws WinAnsi encoding error |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
