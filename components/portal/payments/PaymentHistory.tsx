@@ -48,7 +48,7 @@ export default function PaymentHistory() {
   if (proofs.length === 0) return <p className="text-sm text-body">No payment submissions yet.</p>;
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-line">
+    <div className="rounded-lg border border-line">
       <table className="w-full text-sm">
         <thead className="bg-off">
           <tr>
@@ -57,7 +57,7 @@ export default function PaymentHistory() {
             <th className="hidden whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body sm:table-cell">Method</th>
             <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Transaction ref</th>
             <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Status</th>
-            <th className="sticky right-0 bg-off whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Receipt</th>
+            <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-body">Receipt</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line bg-white">
@@ -75,14 +75,14 @@ export default function PaymentHistory() {
               </td>
               <td className="hidden whitespace-nowrap px-4 py-3 text-body sm:table-cell">{proof.payment_method}</td>
               <td className="px-4 py-3">
-                <span className="block max-w-[8rem] truncate font-mono text-xs text-body sm:max-w-[12rem]">{proof.transaction_reference}</span>
+                <span className="whitespace-nowrap font-mono text-xs text-body">{proof.transaction_reference}</span>
               </td>
               <td className="whitespace-nowrap px-4 py-3">
                 <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${STATUS_CLASSES[proof.status]}`}>
                   {proof.status}
                 </span>
               </td>
-              <td className="sticky right-0 bg-white whitespace-nowrap px-4 py-3">
+              <td className="whitespace-nowrap px-4 py-3">
                 <button
                   type="button"
                   onClick={() => openReceipt(proof.file_path)}

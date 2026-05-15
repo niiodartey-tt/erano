@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createServerClient as createSSRClient } from "@supabase/ssr";
@@ -71,14 +72,14 @@ export async function POST(request: Request) {
       finalPriceGhs = Number(pkg.price_ghs);
     }
 
-    const year = new Date().getFullYear();
-    const { data: lastInvoice } = await service
-      .from("invoices").select("invoice_number")
-      .like("invoice_number", `ERN-${year}-%`)
-      .order("invoice_number", { ascending: false }).limit(1).maybeSingle();
-
-    const seq = lastInvoice ? parseInt(lastInvoice.invoice_number.split("-")[2], 10) + 1 : 1;
-    const invoiceNumber = `ERN-${year}-${String(seq).padStart(4, "0")}`;
+    let invoiceNumber = "";
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const random = randomBytes(6).toString("base64url").toUpperCase().slice(0, 8).replace(/[^A-Z0-9]/g, "X").slice(0, 8);
+      invoiceNumber = `ERN-${random}`;
+      const { data: existing } = await service.from("invoices").select("id").eq("invoice_number", invoiceNumber).maybeSingle();
+      if (!existing) break;
+      if (attempt === 2) return NextResponse.json({ error: "Failed to generate unique invoice number." }, { status: 500 });
+    }
     console.log("[invoice:generate] invoice number", invoiceNumber, "price", finalPriceGhs);
 
     const bankDetails = process.env.INVOICE_BANK_NAME ? {
