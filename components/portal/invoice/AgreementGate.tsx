@@ -77,6 +77,7 @@ export default function AgreementGate() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
+        onMouseEnter={(e) => e.currentTarget.focus()}
         className="mb-4 h-96 overflow-y-scroll rounded border border-line bg-white p-4"
         tabIndex={0}
         role="document"
