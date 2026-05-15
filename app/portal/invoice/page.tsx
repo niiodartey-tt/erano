@@ -48,7 +48,7 @@ export default function InvoicePage() {
   }, []);
 
   if (loading) return (
-    <div className="flex h-64 items-center justify-center">
+    <div className="mx-auto max-w-3xl p-4 md:p-6 flex h-64 items-center justify-center">
       <p className="text-sm text-body">Loading invoice...</p>
     </div>
   );

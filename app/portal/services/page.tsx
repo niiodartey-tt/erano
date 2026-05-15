@@ -43,7 +43,7 @@ export default function ServicesPage() {
   }
   if (error || !data) {
     return (
-      <div className="p-4 md:p-6">
+      <div className="mx-auto max-w-3xl p-4 md:p-6">
         <p className="text-sm text-red-600" role="alert">Failed to load services. Please refresh the page.</p>
       </div>
     );
