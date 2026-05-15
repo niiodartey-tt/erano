@@ -15,7 +15,7 @@ export default async function PortalLayout({
 }) {
   const cookieStore = cookies();
   const headersList = headers();
-  const invokePath = headersList.get("x-invoke-path") ?? "";
+  const invokePath = headersList.get("x-pathname") ?? "";
   const isSetPasswordPath = invokePath.includes("set-password");
 
   // Cookie-based client — validates JWT without bypassing RLS
