@@ -53,7 +53,14 @@ export async function POST(req: Request) {
     .from("invoices").select("id").eq("client_id", client_id)
     .order("generated_at", { ascending: false }).limit(1).maybeSingle();
   if (latestInvoice) {
-    await service.from("invoices").update({ status: "paid" }).eq("id", latestInvoice.id);
+    const today   = new Date();
+    const endDate = new Date(today);
+    endDate.setFullYear(endDate.getFullYear() + 1);
+    await service.from("invoices").update({
+      status:             "paid",
+      service_start_date: today.toISOString().slice(0, 10),
+      service_end_date:   endDate.toISOString().slice(0, 10),
+    }).eq("id", latestInvoice.id);
   }
 
   await service.from("audit_log").insert({

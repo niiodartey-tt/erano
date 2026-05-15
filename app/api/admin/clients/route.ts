@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
   let query = supabase
     .from("users")
-    .select("id, account_state, created_at, client_profiles(contact_name, legal_name, packages(name))", { count: "exact" })
+    .select("id, account_state, created_at, client_profiles(contact_name, legal_name, packages(name)), invoices(service_end_date, status)", { count: "exact" })
     .eq("role", "client")
     .order("created_at", { ascending: false })
     .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
@@ -74,5 +74,17 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to load clients." }, { status: 500 });
   }
 
-  return NextResponse.json({ clients: data ?? [], total: count ?? 0, page, pageSize: PAGE_SIZE });
+  const clients = (data ?? []).map((row) => {
+    const invoicesArr = (row.invoices ?? []) as Array<{ service_end_date: string | null; status: string }>;
+    const paidInvoice = invoicesArr.find((inv) => inv.status === "paid") ?? null;
+    return {
+      id:              row.id,
+      account_state:   row.account_state,
+      created_at:      row.created_at,
+      client_profiles: row.client_profiles,
+      service_end_date: paidInvoice?.service_end_date ?? null,
+    };
+  });
+
+  return NextResponse.json({ clients, total: count ?? 0, page, pageSize: PAGE_SIZE });
 }

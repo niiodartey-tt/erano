@@ -69,7 +69,13 @@ export default function DocumentRequestCard({ request, uploads, onUploaded }: Pr
     setError(null);
     try {
       const res = await fetch(`/api/portal/documents/download?path=${encodeURIComponent(filePath)}`);
-      if (!res.ok) { setError("Could not generate download link."); return; }
+      if (!res.ok) {
+        if      (res.status === 401) setError("Your session has expired. Please refresh the page.");
+        else if (res.status === 404) setError("File not found. Please contact us.");
+        else if (res.status === 500) setError("Download failed. Please try again.");
+        else                         setError("Could not generate download link.");
+        return;
+      }
       const { signedUrl } = await res.json() as { signedUrl: string };
       window.open(signedUrl, "_blank", "noopener,noreferrer");
     } catch {

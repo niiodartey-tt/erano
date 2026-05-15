@@ -20,7 +20,7 @@ type Proof      = { id: string; amount_paid: number; currency: string; transacti
 type DocUpload  = { id: string; file_path: string; uploaded_at: string };
 type DocRequest = { id: string; title: string; description: string; category: string; status: string; created_at: string; document_uploads: DocUpload[] };
 type ClientData = { user: UserRow; profile: Record<string, unknown>; package: Package | null; invoice: Invoice | null; agreement: Agreement | null; timer: Timer | null; proofs: Proof[]; doc_requests: DocRequest[]; audit_log: { id: string; action: string; actor_role: string; created_at: string }[] };
-type Modal      = { type: "confirm" | "reject"; proofId: string } | null;
+type Modal      = { type: "confirm" | "reject"; proofId: string } | { type: "reactivate" } | null;
 
 export default function ClientProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +31,9 @@ export default function ClientProfilePage() {
   const [modalLoading, setModalLoading] = useState(false);
   const [generating,   setGenerating]   = useState(false);
   const [customPrice,  setCustomPrice]  = useState("");
-  const [upgradeModal, setUpgradeModal] = useState(false);
+  const [upgradeModal,  setUpgradeModal]  = useState(false);
+  const [reactivating,  setReactivating]  = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [invoiceNum,   setInvoiceNum]   = useState<string | null>(null);
   const [generateErr,  setGenerateErr]  = useState<string | null>(null);
 
@@ -47,6 +49,16 @@ export default function ClientProfilePage() {
 
   async function handleModalConfirm(reason?: string) {
     if (!modal || !data) return;
+    if (modal.type === "reactivate") {
+      setReactivating(true); setModal(null);
+      const res = await fetch("/api/admin/clients/reactivate", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ client_id: data.user.id }),
+      });
+      setReactivating(false);
+      void fetchData();
+      if (!res.ok) console.error("[reactivate] failed");
+      return;
+    }
     setModalLoading(true);
     const isConfirm = modal.type === "confirm";
     const url = isConfirm ? "/api/admin/payments/confirm" : "/api/admin/payments/reject";
@@ -74,8 +86,9 @@ export default function ClientProfilePage() {
   }
 
   async function handleDownload(bucket: string, path: string) {
+    setDownloadError(null);
     const res = await fetch(`/api/admin/signed-url?bucket=${encodeURIComponent(bucket)}&path=${encodeURIComponent(path)}`);
-    if (!res.ok) return;
+    if (!res.ok) { setDownloadError("Download failed — could not generate a secure link. Please try again."); return; }
     window.open((await res.json() as { url: string }).url, "_blank");
   }
 
@@ -101,6 +114,8 @@ export default function ClientProfilePage() {
         onGenerateInvoice={() => void handleGenerateInvoice()}
         generatingInvoice={generating}
         onInitiateUpgrade={() => setUpgradeModal(true)}
+        onReactivate={() => setModal({ type: "reactivate" })}
+        reactivating={reactivating}
       />
       {data.user.account_state === "pending" && isCustom && (
         <div className="bg-white rounded-xl border border-line p-5 md:p-6">
@@ -124,6 +139,11 @@ export default function ClientProfilePage() {
         onRejectPayment={(proofId) => setModal({ type: "reject", proofId })}
         onDownload={handleDownload}
       />
+      {downloadError && (
+        <p className="text-sm text-red-600 rounded-lg border border-red-200 bg-red-50 px-4 py-2" role="alert">
+          {downloadError}
+        </p>
+      )}
       <ClientDocumentsSection
         clientId={data.user.id} docRequests={data.doc_requests}
         onRequestCreated={fetchData} onDownload={handleDownload}
@@ -137,11 +157,24 @@ export default function ClientProfilePage() {
       )}
       {modal && (
         <ConfirmModal
-          title={modal.type === "confirm" ? "Confirm payment" : "Reject payment"}
-          body={modal.type === "confirm" ? "Mark this payment as approved and activate the client account?" : "The client will be notified and asked to re-upload a valid proof."}
-          confirmLabel={modal.type === "confirm" ? "Confirm" : "Reject"}
-          loading={modalLoading} withReason={modal.type === "reject"} destructive={modal.type === "reject"}
-          onConfirm={(reason) => void handleModalConfirm(reason)} onClose={() => setModal(null)}
+          title={
+            modal.type === "reactivate" ? "Reactivate account" :
+            modal.type === "confirm"    ? "Confirm payment"     : "Reject payment"
+          }
+          body={
+            modal.type === "reactivate" ? "This will start a new 5 business day payment window and set the account to awaiting payment. The client will be notified by email." :
+            modal.type === "confirm"    ? "Mark this payment as approved and activate the client account?" :
+            "The client will be notified and asked to re-upload a valid proof."
+          }
+          confirmLabel={
+            modal.type === "reactivate" ? "Reactivate" :
+            modal.type === "confirm"    ? "Confirm"    : "Reject"
+          }
+          loading={modal.type === "reactivate" ? reactivating : modalLoading}
+          withReason={modal.type === "reject"}
+          destructive={modal.type === "reject"}
+          onConfirm={(reason) => void handleModalConfirm(reason)}
+          onClose={() => setModal(null)}
         />
       )}
     </div>

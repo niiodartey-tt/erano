@@ -399,3 +399,12 @@ INSERT INTO packages (name, description, price_ghs, is_active) VALUES
   ('Business Pro',       'Full-service accounting, tax advisory, and business support.',           32500.00, true),
   ('Elite Advantage',    'Premium end-to-end financial management for established firms.',         37500.00, true),
   ('Custom',             'Tailored to your exact needs. Price set after consultation.',            NULL,     true);
+
+-- ─────────────────────────────────────────────────────────────────────
+-- 8. SPRINT 14 MIGRATIONS
+--    Run these ALTER TABLE statements against the live database.
+-- ─────────────────────────────────────────────────────────────────────
+
+ALTER TABLE invoices
+  ADD COLUMN IF NOT EXISTS service_start_date date,
+  ADD COLUMN IF NOT EXISTS service_end_date   date;

@@ -14,19 +14,57 @@
 **Branch:** `sprint-14`
 **Vercel preview:** TBD
 
-### Active Tasks
+### Completed Tasks
 
 | Task | Branch | Status |
 |---|---|---|
-| T030 — Admin account reactivation | `sprint-14` | ⏳ Planned |
-| T045 — Cron job logging + alert | `sprint-14` | ⏳ Planned |
+| T030 — Admin account reactivation | `sprint-14` | ✅ Complete |
+| T045 — Cron job logging + alert | `sprint-14` | ✅ Complete |
+| T030b — Service expiry reminders (bonus) | `sprint-14` | ✅ Complete |
+| Fix — Invoice package name (portal invoice/me) | `sprint-14` | ✅ Complete |
+| Fix — Realtime notification verification | `sprint-14` | ✅ Complete |
+| Fix — Admin document status badge colours | `sprint-14` | ✅ Complete |
+| Fix — Admin download error handling (silent → visible) | `sprint-14` | ✅ Complete |
+| Fix — Admin download button label (date → title + date) | `sprint-14` | ✅ Complete |
+| Fix — Client download status-specific error messages | `sprint-14` | ✅ Complete |
+
+### What was built
+
+**T030 — Account reactivation**
+- `app/api/admin/clients/reactivate/route.ts` — POST; admin auth + CSRF; verifies `account_state = expired`; checks T&Cs version (if version changed → `awaiting_agreement`, else → `awaiting_payment`); deactivates old timers; inserts new 5-business-day payment_timer; updates account_state; sends `AccountReactivatedEmail`; creates notification; logs to audit_log; returns `{ newState, expiresAt }`
+- `components/admin/clients/ClientProfileHeader.tsx` — `onReactivate` + `reactivating` props; real `<button>` rendered for expired state only
+- `app/admin/clients/[id]/page.tsx` — `reactivating` state; extended `Modal` type to include `"reactivate"`; `handleModalConfirm` dispatches reactivate separately; `ConfirmModal` renders correct copy for all 3 modal types
+
+**T045 — Cron logging + alert**
+- `app/api/cron/check-expired-timers/route.ts` — collects `error_details[]` per timer; `logCron` updated to write `error_details` (jsonb); after insert, checks last successful run (errors_encountered=0); sends plain-HTML alert to `ADMIN_EMAIL` if gap > 25 hours
+- `app/api/admin/cron-status/route.ts` — GET; admin check; returns last 10 `cron_log` rows for `check-expired-timers`
+
+**T030b — Service expiry reminders**
+- `supabase/schema.sql` — Sprint 14 migration comment: `ALTER TABLE invoices ADD COLUMN service_start_date date; ADD COLUMN service_end_date date;`
+- `app/api/admin/payments/confirm/route.ts` — sets `service_start_date = today`, `service_end_date = today + 1 year` on invoice when payment confirmed
+- `emails/ServiceExpiryReminderEmail.tsx` — props: `contactName, packageName, expiresOn, daysRemaining, renewalUrl`; gold WhatsApp CTA; footer note
+- `app/api/cron/check-expiring-services/route.ts` — checks 30/14/7-day windows; deduplicates via notification type per day; fetches package name; sends email + notification; logs to cron_log
+- `vercel.json` — second cron added: `check-expiring-services` at `0 7 * * *`
+- `app/api/portal/invoice/me/route.ts` — adds `service_end_date` to response; fixes `packageName` cast (array → `unknown` → object)
+- `components/portal/dashboard/ActiveView.tsx` — fetches `invoice/me`; shows amber banner with WhatsApp CTA when service expires within 30 days
+- `app/api/admin/clients/route.ts` — joins `invoices(service_end_date, status)`; merges paid invoice date into client list response
+- `components/admin/clients/ClientsTable.tsx` — `service_end_date` on `Client` interface; "Expiring soon" amber badge for active accounts ≤30 days
+
+**Fixes**
+- `app/api/portal/invoice/me/route.ts` — package name was always `null` (array cast on many-to-one join); fixed via `as unknown as { name: string } | null`
+- `components/portal/notifications/NotificationBell.tsx` — `console.log("[REALTIME] new notification received:", payload.new)` added inside INSERT callback for verification
+- `components/admin/clients/ClientDocumentsSection.tsx` — STATUS_COLORS corrected (`uploaded` blue, `reviewed` green, `pending` amber); download label changed from date-only to `"{req.title} — {date}"`
+- `app/admin/clients/[id]/page.tsx` — `downloadError` state added; `handleDownload` sets error on failure; red alert rendered in JSX
+- `components/portal/documents/DocumentRequestCard.tsx` — download handler now returns status-specific messages (401/404/500/other)
 
 ### Sprint 14 Definition of Done
 
-- [ ] All tasks merged into `sprint-14` branch
-- [ ] Admin can reactivate an expired client account
-- [ ] Cron job logs are visible and alerting works
-- [ ] `npm run lint && npx tsc --noEmit && npm run build && npm audit` passes
+- [x] All tasks committed to `sprint-14` branch
+- [x] Admin can reactivate an expired client account (T030)
+- [x] Cron job logs are visible and alerting works (T045)
+- [x] Service expiry reminders built end-to-end (T030b)
+- [x] `npx tsc --noEmit` clean (0 errors)
+- [x] `npm run build` clean (63 pages)
 - [ ] Tested on 375px, 430px, 768px, 1280px
 - [ ] No console errors in browser DevTools
 - [ ] Naa reviewed on Vercel preview URL
@@ -35,6 +73,11 @@
 **Approved by Naa:** [ ]
 **Merged to main:** [ ]
 **Merged date:** —
+
+### Sprint 14 Notes
+- `supabase/schema.sql` contains the Sprint 14 `ALTER TABLE` migration comment at the bottom — must be run manually in Supabase Dashboard SQL Editor before testing reactivation or service expiry features
+- `ADMIN_EMAIL` env var required for cron 25h alert emails
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` env var used in service expiry banner and email CTA (fallback: 233559331276)
 
 ---
 

@@ -33,12 +33,15 @@ interface Props {
   onGenerateInvoice?:  () => void;
   generatingInvoice?:  boolean;
   onInitiateUpgrade?:  () => void;
+  onReactivate?:       () => void;
+  reactivating?:       boolean;
 }
 
 export function ClientProfileHeader({
   email, accountState, createdAt, contactName, legalName,
   pendingProofId, onConfirmPayment, onRejectPayment,
   onGenerateInvoice, generatingInvoice, onInitiateUpgrade,
+  onReactivate, reactivating,
 }: Props) {
   const joined = new Date(createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
@@ -102,13 +105,15 @@ export function ClientProfileHeader({
               Initiate Package Upgrade
             </button>
           )}
-          <span
-            title="Available in next update"
-            aria-disabled="true"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium border border-line text-body/40 rounded-lg cursor-not-allowed select-none"
-          >
-            Reactivate
-          </span>
+          {accountState === "expired" && onReactivate && (
+            <button
+              onClick={onReactivate}
+              disabled={reactivating}
+              className="px-4 py-2 text-sm font-medium border border-navy text-navy rounded-lg hover:bg-navy hover:text-white transition-colors disabled:opacity-40"
+            >
+              {reactivating ? "Reactivating…" : "Reactivate"}
+            </button>
+          )}
         </div>
       </div>
     </div>

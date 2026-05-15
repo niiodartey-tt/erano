@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 
 export interface Client {
   id: string;
-  account_state: string;
-  created_at: string;
+  account_state:    string;
+  created_at:       string;
+  service_end_date?: string | null;
   client_profiles: {
     contact_name: string;
-    legal_name: string;
-    packages: { name: string } | null;
+    legal_name:   string;
+    packages:     { name: string } | null;
   } | null;
 }
 
@@ -69,15 +70,26 @@ export function ClientsTable({ clients, loading }: Props) {
         <tbody>
           {clients.map((c) => {
             const badge = STATE_BADGE[c.account_state] ?? STATE_BADGE["pending"];
+            const daysLeft = c.service_end_date
+              ? Math.ceil((new Date(c.service_end_date).getTime() - Date.now()) / 86_400_000)
+              : null;
+            const expiringSoon = daysLeft !== null && daysLeft <= 30 && c.account_state === "active";
             return (
               <tr key={c.id} className="border-b border-line last:border-0 hover:bg-off/50 transition-colors">
                 <td className="px-4 py-3 font-medium text-navy">{c.client_profiles?.contact_name ?? "—"}</td>
                 <td className="px-4 py-3 text-body hidden md:table-cell">{c.client_profiles?.legal_name ?? "—"}</td>
                 <td className="px-4 py-3 text-body hidden lg:table-cell">{c.client_profiles?.packages?.name ?? "—"}</td>
                 <td className="px-4 py-3">
-                  <span className={cn("inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium", badge.cls)}>
-                    {badge.label}
-                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    <span className={cn("inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium", badge.cls)}>
+                      {badge.label}
+                    </span>
+                    {expiringSoon && (
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700">
+                        Expiring soon
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-body hidden md:table-cell">{fmtDate(c.created_at)}</td>
                 <td className="px-4 py-3">

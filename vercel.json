@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/check-expired-timers",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/check-expiring-services",
+      "schedule": "0 7 * * *"
     }
   ]
 }

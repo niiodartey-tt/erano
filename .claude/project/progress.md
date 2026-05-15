@@ -742,7 +742,51 @@ Claude does this automatically — without being asked.
 ---
 
 ## Sprint 14 — Account Reactivation + Cron + Hardening
-*Claude will populate this section during Sprint 14.*
+
+### T030 + T045 + Service Expiry + Invoice fix + Realtime verification (Group 1 — all tasks)
+**Status:** ✅ tsc clean · build clean · PENDING Naa review before commit
+
+**Files created (5):**
+- `app/api/admin/clients/reactivate/route.ts` — POST. Admin check + CSRF verify. Verifies target `account_state === "expired"` (422 if not). Deactivates all existing timers (`update is_active=false`). Inserts new `payment_timers` row via `calculatePaymentDeadline(new Date())`. Updates state → `awaiting_payment`. Audit logs `account_reactivated`. Non-fatal: inserts client notification, sends `AccountReactivatedEmail` with formatted expiry date.
+- `app/api/admin/cron-status/route.ts` — GET. Admin check. Returns last 10 `cron_log` rows for `check-expired-timers`, ordered `ran_at DESC`. Used by admin tooling to monitor cron health.
+- `emails/ServiceExpiryReminderEmail.tsx` — React Email template. Props: `contactName`, `expiryDate`, `daysLeft`. Subject function returns `"Your Erano service expires in N day(s)"`. Navy header, gold CTA button to `/portal/dashboard`.
+- `app/api/cron/check-expiring-services/route.ts` — Daily cron (GET, CRON_SECRET auth). Checks invoices where `service_end_date = today + 30/14/7 days` and `status = paid`. Per match: deduplication check (skip if notification of same type already sent today). Fetches contact_name + email. Inserts notification + sends `ServiceExpiryReminderEmail`. Logs to `cron_log` with `error_details` array. Returns `{ processed, errors }`.
+- `emails/ServiceExpiryReminderEmail.tsx` — (see above)
+
+**Files modified (9):**
+- `components/admin/clients/ClientProfileHeader.tsx` — Added `onReactivate?: () => void` and `reactivating?: boolean` props. Replaced disabled "Reactivate" span with a real `<button>` rendered only when `accountState === "expired" && onReactivate`. Button: navy border + text, hover fills navy bg.
+- `app/admin/clients/[id]/page.tsx` — Added `reactivating` state. Extended `Modal` type to include `{ type: "reactivate" }`. Added reactivate handler (calls POST `/api/admin/clients/reactivate`, then `fetchData`). `handleModalConfirm` now dispatches to reactivate or confirm/reject based on `modal.type`. `ConfirmModal` renders correct title/body/label for all 3 variants. `ClientProfileHeader` receives `onReactivate` + `reactivating` props.
+- `app/api/cron/check-expired-timers/route.ts` — Added `ALERT_THRESHOLD_MS = 25h` constant. `errorsEncountered` loop now collects `errorDetails[]` objects `{ timer_id, error }`. Early-exit fetch error also uses `errorDetails`. `logCron` signature updated to accept `errorDetails`. After `logCron`, queries last successful run (errors_encountered=0) — if none or >25h ago, sends plain-HTML alert email to `ADMIN_EMAIL` (non-fatal).
+- `app/api/admin/payments/confirm/route.ts` — When updating invoice to `paid`, also sets `service_start_date = today` and `service_end_date = today + 1 year` (ISO date strings, YYYY-MM-DD format).
+- `vercel.json` — Added second cron: `{ path: "/api/cron/check-expiring-services", schedule: "0 7 * * *" }`.
+- `app/api/portal/invoice/me/route.ts` — Added `service_end_date` to select + response. Fixed `packageName` cast: was `(data.packages as { name: string }[] | null)?.[0]?.name` (array cast on many-to-one join → always undefined); now `(data.packages as unknown as { name: string } | null)?.name` (correct runtime type). Cast through `unknown` required due to Supabase TS inference generating `{ name: any }[]`.
+- `components/portal/dashboard/ActiveView.tsx` — Added `InvoiceApiData` interface (`service_end_date: string | null`). Added `serviceEndDate` to `DashData`. Parallel fetch now includes `/api/portal/invoice/me` (graceful: skipped if 404). Calculates `daysUntilExpiry` and `showExpiryBanner` (≤30 days). Added amber banner above stat cards with `AlertTriangle` icon, days count, and formatted expiry date.
+- `app/api/admin/clients/route.ts` — Added `invoices(service_end_date, status)` to nested select. JS-side merge: finds the first paid invoice from the returned array, extracts `service_end_date`, includes it in each client object in the response.
+- `components/admin/clients/ClientsTable.tsx` — Added `service_end_date?: string | null` to `Client` interface. In table row: calculates `daysLeft` and `expiringSoon` (≤30 days, only for active accounts). State cell now renders both the state badge and an optional amber "Expiring soon" badge in a flex-wrap container.
+- `components/portal/notifications/NotificationBell.tsx` — Added `console.log("[REALTIME] new notification received:", payload.new)` inside the INSERT callback, before `setItems`. Allows verification that Realtime events are being received correctly.
+- `supabase/schema.sql` — Added Sprint 14 migrations section at bottom: `ALTER TABLE invoices ADD COLUMN IF NOT EXISTS service_start_date date; ALTER TABLE invoices ADD COLUMN IF NOT EXISTS service_end_date date;` — must be run in Supabase Dashboard SQL Editor.
+
+**Key decisions:**
+- Service date stored as `date` type (not `timestamptz`) — only day precision needed for the 30/14/7 day expiry reminder check. ISO date string comparison `YYYY-MM-DD = targetDate` works correctly.
+- `calculatePaymentDeadline(new Date())` used for reactivation timer — same 5 business day window as first activation.
+- Realtime console.log retained in production — useful for ongoing monitoring; does not affect user experience.
+- Cron 25h alert fires only when errorsEncountered=0 streak is broken — fires on first successful run missing, not on every run with errors.
+- `as unknown as { name: string } | null` — Supabase TS types infer `{ name: any }[]` for FK embeds even on many-to-one relations. Direct cast fails TS; cast through `unknown` is required.
+
+**TypeScript:** clean (0 errors — 1 fix: `unknown` intermediate cast for Supabase FK embed)
+**Build:** clean — 63 pages, /api/admin/clients/reactivate + /api/admin/cron-status + /api/cron/check-expiring-services all registered. 0 errors.
+
+**Session 2 corrections (same sprint):**
+After re-reviewing the spec, 4 gaps were identified and corrected:
+1. **Reactivate route** — Added agreement-version check (queries `agreement_versions` + `agreements`; if client's last accepted version differs from latest, state → `awaiting_agreement`; if same → `awaiting_payment`). Return shape changed from `{ success: true }` to `{ newState, expiresAt }`.
+2. **ServiceExpiryReminderEmail** — Props updated to match spec: `{ contactName, packageName, expiresOn, daysRemaining, renewalUrl }`. Subject is now `subject(daysRemaining)` function. Content updated: package name in body, WhatsApp CTA button, footer note about disregarding if already renewed.
+3. **check-expiring-services** — Updated to join `packages(name)` from invoices. Constructs WhatsApp `renewalUrl` from `NEXT_PUBLIC_WHATSAPP_NUMBER` env var. Passes correct props to `ServiceExpiryReminderEmail`.
+4. **ActiveView** — Expiry banner now includes a WhatsApp "Contact us" button (`border-amber-600 text-amber-700`). Banner copy updated to match spec.
+
+**TypeScript:** clean (0 errors) — verified both before and after corrections
+**Build:** clean — 63 pages, 0 errors
+
+**IMPORTANT:** Do NOT commit until Naa reviews Task 4 (invoice package name fix) and Task 5 (Realtime verification console.log) diagnoses.
 
 ---
 

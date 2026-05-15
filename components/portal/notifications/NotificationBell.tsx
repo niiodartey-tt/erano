@@ -59,7 +59,10 @@ export default function NotificationBell() {
       .on<Notification>(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${userId}` },
-        (payload) => { setItems((prev) => [payload.new, ...prev]); },
+        (payload) => {
+          console.log("[REALTIME] new notification received:", payload.new);
+          setItems((prev) => [payload.new, ...prev]);
+        },
       )
       .subscribe();
     return () => { void supabase.removeChannel(channel); };

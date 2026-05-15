@@ -26,7 +26,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("invoices")
-    .select("id, invoice_number, final_price_ghs, status, generated_at, packages(name)")
+    .select("id, invoice_number, final_price_ghs, status, generated_at, service_end_date, packages(name)")
     .eq("client_id", user.id)
     .order("generated_at", { ascending: false })
     .limit(1)
@@ -41,15 +41,15 @@ export async function GET() {
     return NextResponse.json({ error: "No invoice found." }, { status: 404 });
   }
 
-  const packageName =
-    (data.packages as { name: string }[] | null)?.[0]?.name ?? null;
+  const packageName = (data.packages as unknown as { name: string } | null)?.name ?? null;
 
   return NextResponse.json({
-    id:              data.id,
-    invoice_number:  data.invoice_number,
-    final_price_ghs: Number(data.final_price_ghs),
-    status:          data.status,
-    generated_at:    data.generated_at,
-    package_name:    packageName,
+    id:               data.id,
+    invoice_number:   data.invoice_number,
+    final_price_ghs:  Number(data.final_price_ghs),
+    status:           data.status,
+    generated_at:     data.generated_at,
+    service_end_date: (data.service_end_date as string | null) ?? null,
+    package_name:     packageName,
   });
 }

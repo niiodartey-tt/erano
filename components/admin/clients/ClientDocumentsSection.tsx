@@ -9,9 +9,9 @@ interface DocUpload  { id: string; file_path: string; uploaded_at: string }
 interface DocRequest { id: string; title: string; description: string; category: string; status: string; created_at: string; document_uploads: DocUpload[] }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending:   "bg-yellow-100 text-yellow-800",
-  fulfilled: "bg-green-100 text-green-800",
-  cancelled: "bg-gray-100 text-gray-800",
+  pending:  "bg-amber-100 text-amber-800",
+  uploaded: "bg-blue-100 text-blue-800",
+  reviewed: "bg-green-100 text-green-800",
 };
 
 interface Props {
@@ -69,7 +69,7 @@ export function ClientDocumentsSection({ clientId, docRequests, onRequestCreated
                       className="flex items-center gap-1.5 text-xs text-gold hover:underline"
                     >
                       <Download className="h-3 w-3" aria-hidden="true" />
-                      {new Date(upload.uploaded_at).toLocaleDateString("en-GB")}
+                      {req.title} &mdash; {new Date(upload.uploaded_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </button>
                   ))}
                 </div>

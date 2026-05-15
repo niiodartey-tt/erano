@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import Link from "next/link";
-import { Bell, Briefcase, FileText, FolderOpen } from "lucide-react";
+import { AlertTriangle, Bell, Briefcase, FileText, FolderOpen } from "lucide-react";
 import { usePortal } from "@/context/PortalContext";
 
 function timeAgo(iso: string): string {
@@ -17,16 +17,21 @@ function timeAgo(iso: string): string {
 }
 
 interface ProfileApiData {
-  legal_name: string;
+  legal_name:   string;
   package_name: string | null;
 }
 
+interface InvoiceApiData {
+  service_end_date: string | null;
+}
+
 interface DashData {
-  packageName: string;
-  legalName: string;
-  pendingDocs: number;
-  unreadNotifs: number;
-  recentNotifs: Array<{ id: string; message: string; created_at: string }>;
+  packageName:    string;
+  legalName:      string;
+  pendingDocs:    number;
+  unreadNotifs:   number;
+  recentNotifs:   Array<{ id: string; message: string; created_at: string }>;
+  serviceEndDate: string | null;
 }
 
 export default function ActiveView() {
@@ -41,20 +46,23 @@ export default function ActiveView() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     );
     (async () => {
-      const [profileRes, d, n, nr] = await Promise.all([
+      const [profileRes, invoiceRes, d, n, nr] = await Promise.all([
         fetch("/api/portal/profile/me"),
+        fetch("/api/portal/invoice/me"),
         sb.from("document_requests").select("id", { count: "exact", head: true }).eq("client_id", userId).eq("status", "pending"),
         sb.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("read", false),
         sb.from("notifications").select("id, message, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(5),
       ]);
       if (!profileRes.ok) { setError(true); setLoading(false); return; }
-      const prof = await profileRes.json() as ProfileApiData;
+      const prof    = await profileRes.json() as ProfileApiData;
+      const invoice = invoiceRes.ok ? await invoiceRes.json() as InvoiceApiData : null;
       setData({
-        legalName:     prof.legal_name,
-        packageName:   prof.package_name ?? "—",
-        pendingDocs:   d.count ?? 0,
-        unreadNotifs:  n.count ?? 0,
-        recentNotifs:  (nr.data ?? []) as DashData["recentNotifs"],
+        legalName:      prof.legal_name,
+        packageName:    prof.package_name ?? "—",
+        pendingDocs:    d.count ?? 0,
+        unreadNotifs:   n.count ?? 0,
+        recentNotifs:   (nr.data ?? []) as DashData["recentNotifs"],
+        serviceEndDate: invoice?.service_end_date ?? null,
       });
       setLoading(false);
     })().catch(() => { setError(true); setLoading(false); });
@@ -69,8 +77,33 @@ export default function ActiveView() {
     );
   }
 
+  const daysUntilExpiry = data.serviceEndDate
+    ? Math.ceil((new Date(data.serviceEndDate).getTime() - Date.now()) / 86_400_000)
+    : null;
+  const showExpiryBanner = daysUntilExpiry !== null && daysUntilExpiry <= 30;
+
   return (
     <div className="space-y-6">
+      {showExpiryBanner && (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <div className="flex items-start gap-3 flex-1">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" aria-hidden="true" />
+            <p className="text-sm text-amber-800">
+              Your service expires on{" "}
+              <strong>{new Date(data.serviceEndDate!).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</strong>.
+              Contact us to discuss renewal.
+            </p>
+          </div>
+          <a
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233559331276"}?text=${encodeURIComponent("I would like to discuss renewal of my Erano Consulting service.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-lg border border-amber-600 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 transition-colors"
+          >
+            Contact us
+          </a>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard label="Package" value={data.packageName} icon={<Briefcase className="h-4 w-4" />} />
         <StatCard label="Pending docs" value={String(data.pendingDocs)} icon={<FolderOpen className="h-4 w-4" />} href="/portal/documents" />
