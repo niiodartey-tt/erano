@@ -315,6 +315,21 @@ Completed and approved in Sprint 13. Do not modify.
 
 ---
 
+## Locked — Sprint 14 Account Reactivation + Cron + Hardening
+
+Completed and approved in Sprint 14. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `app/api/admin/clients/reactivate/route.ts` | Account reactivation POST — CSRF, agreement-version check, new payment timer, email, audit | Breaks admin reactivation flow |
+| `app/api/admin/cron-status/route.ts` | Cron status GET — last 10 cron_log rows for check-expired-timers | Breaks cron health monitoring |
+| `app/api/cron/check-expiring-services/route.ts` | Daily cron — 30/14/7-day service expiry reminders, dedup via notifications, email + audit | Service expiry reminders stop running |
+| `emails/ServiceExpiryReminderEmail.tsx` | Service expiry reminder email template — packageName, expiresOn, daysRemaining, WhatsApp CTA | Breaks service expiry email send |
+| `components/admin/clients/ClientDocumentsSection.tsx` | Document requests list — correct status badge colours, title+date download labels | Breaks document section on admin client profile |
+| `components/portal/documents/DocumentRequestCard.tsx` | Document request card — status-specific download error messages (401/404/500/other) | Breaks document download error feedback for clients |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
