@@ -79,15 +79,15 @@ export default function ClientProfilePage() {
     window.open((await res.json() as { url: string }).url, "_blank");
   }
 
-  if (loading) return <div className="p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-white border border-line animate-pulse" />)}</div>;
-  if (error || !data) return <div className="p-4 md:p-6"><p className="text-sm text-red-600" role="alert">{error ?? "Client not found."}</p></div>;
+  if (loading) return <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-white border border-line animate-pulse" />)}</div>;
+  if (error || !data) return <div className="mx-auto max-w-6xl p-4 md:p-6"><p className="text-sm text-red-600" role="alert">{error ?? "Client not found."}</p></div>;
 
   const pendingProof   = data.proofs.find(p => p.status === "pending") ?? null;
   const profile        = data.profile;
   const isCustom       = data.package?.name === "Custom";
 
   return (
-    <div className="p-4 md:p-6 max-w-4xl space-y-4">
+    <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">
       <Link href="/admin/clients" className="inline-flex items-center gap-1 text-sm text-body hover:text-navy transition-colors mb-2">
         <ChevronLeft className="h-4 w-4" aria-hidden="true" /> All clients
       </Link>

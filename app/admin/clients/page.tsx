@@ -65,14 +65,14 @@ export default function ClientsPage() {
 
   if (error) {
     return (
-      <div className="p-4 md:p-6">
+      <div className="mx-auto max-w-6xl p-4 md:p-6">
         <p className="text-sm text-red-600" role="alert">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-6xl">
+    <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-body/50" aria-hidden="true" />

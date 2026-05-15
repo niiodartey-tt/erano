@@ -50,7 +50,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="p-4 md:p-6">
+      <div className="mx-auto max-w-6xl p-4 md:p-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-28 rounded-xl bg-white border border-line animate-pulse" />
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
 
   if (error || !metrics) {
     return (
-      <div className="p-4 md:p-6">
+      <div className="mx-auto max-w-6xl p-4 md:p-6">
         <p className="text-sm text-red-600" role="alert">{error ?? "Something went wrong."}</p>
       </div>
     );
@@ -77,7 +77,7 @@ export default function AdminDashboard() {
   ] as const;
 
   return (
-    <div className="p-4 md:p-6 max-w-6xl">
+    <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {CARDS.map(({ label, value, icon: Icon, gold }) => (
           <div key={label} className="bg-white rounded-xl border border-line p-4 md:p-5">

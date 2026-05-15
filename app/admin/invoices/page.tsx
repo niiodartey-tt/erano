@@ -40,7 +40,7 @@ export default function InvoicesPage() {
   }, []);
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-navy">Invoice Manager</h1>
         <p className="text-sm text-body mt-1">All generated client invoices</p>
