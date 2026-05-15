@@ -94,7 +94,7 @@ export default function Footer() {
             {/* Wordmark */}
             <div style={{ marginBottom: "1.25rem" }}>
               <div style={{
-                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily:    "var(--font-playfair), serif",
                 fontSize:      "1.25rem",
                 fontWeight:    800,
                 letterSpacing: "-0.025em",
@@ -104,7 +104,6 @@ export default function Footer() {
                 ERANO
               </div>
               <div style={{
-                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize:      "0.5rem",
                 fontWeight:    600,
                 letterSpacing: "0.22em",
@@ -128,7 +127,6 @@ export default function Footer() {
 
             {/* Tagline */}
             <p style={{
-              fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:    "0.875rem",
               fontStyle:   "italic",
               color:       "#c4973a",
@@ -149,7 +147,6 @@ export default function Footer() {
                   }}
                 >
                   <div style={{
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                     fontSize:      "0.625rem",
                     fontWeight:    700,
                     letterSpacing: "0.12em",
@@ -174,7 +171,6 @@ export default function Footer() {
             {/* Social icons */}
             <div>
               <div style={{
-                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize:      "0.625rem",
                 fontWeight:    600,
                 letterSpacing: "0.18em",
@@ -227,7 +223,6 @@ export default function Footer() {
           {/* Services */}
           <div>
             <div style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "0.625rem",
               fontWeight:    600,
               letterSpacing: "0.18em",
@@ -243,7 +238,6 @@ export default function Footer() {
                   <Link
                     href={s.href}
                     style={{
-                      fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
                       fontSize:       "0.9rem",
                       color:          "rgba(255,255,255,0.55)",
                       textDecoration: "none",
@@ -262,7 +256,6 @@ export default function Footer() {
           {/* Company */}
           <div>
             <div style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "0.625rem",
               fontWeight:    600,
               letterSpacing: "0.18em",
@@ -278,7 +271,6 @@ export default function Footer() {
                   <Link
                     href={c.href}
                     style={{
-                      fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
                       fontSize:       "0.9rem",
                       color:          "rgba(255,255,255,0.55)",
                       textDecoration: "none",
@@ -297,7 +289,6 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <div style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "0.625rem",
               fontWeight:    600,
               letterSpacing: "0.18em",

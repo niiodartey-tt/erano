@@ -19,7 +19,7 @@ User-agent: *
 Disallow: /api
 
 # Host
-Host: https://erano.vercel.app
+Host: https://eranoconsulting.com
 
 # Sitemaps
-Sitemap: https://erano.vercel.app/sitemap.xml
+Sitemap: https://eranoconsulting.com/sitemap.xml

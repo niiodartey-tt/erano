@@ -76,7 +76,6 @@ export default function ContactPage() {
     border:       "1.5px solid #e8eaed",
     borderRadius: "4px",
     padding:      "0 1rem",
-    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
     fontSize:     "0.9375rem",
     color:        "#0d1b2e",
     background:   "#ffffff",
@@ -86,7 +85,6 @@ export default function ContactPage() {
 
   const labelStyle: React.CSSProperties = {
     display:      "block",
-    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
     fontSize:     "0.8125rem",
     fontWeight:   600,
     color:        "#0d1b2e",
@@ -115,7 +113,6 @@ export default function ContactPage() {
         >
           <motion.span variants={fadeUp} style={{
             display: "inline-flex", alignItems: "center", gap: "0.75rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
             textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
           }}>
@@ -124,7 +121,6 @@ export default function ContactPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
             lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
             marginBottom: "1.25rem", maxWidth: "600px",
@@ -134,7 +130,6 @@ export default function ContactPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "1.125rem", lineHeight: 1.8,
             color: "rgba(255,255,255,0.6)", maxWidth: "480px",
           }}>
@@ -164,7 +159,6 @@ export default function ContactPage() {
             viewport={{ once: true, margin: "-100px" }}
           >
             <motion.h2 variants={fadeUp} style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "1.75rem",
               fontWeight:    700,
               letterSpacing: "-0.02em",
@@ -188,14 +182,13 @@ export default function ContactPage() {
               >
                 <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>✓</div>
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   "var(--font-playfair), serif",
                   fontSize:     "1.125rem",
                   fontWeight:   700,
                   color:        "#0d1b2e",
                   marginBottom: "0.5rem",
                 }}>Message received</div>
                 <p style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                   fontSize:   "0.9375rem",
                   color:      "#4a5568",
                   margin:     0,
@@ -334,7 +327,6 @@ export default function ContactPage() {
                       border:       "1.5px solid #e8eaed",
                       borderRadius: "4px",
                       padding:      "0.875rem 1rem",
-                      fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
                       fontSize:     "0.9375rem",
                       color:        "#0d1b2e",
                       background:   "#ffffff",
@@ -349,7 +341,7 @@ export default function ContactPage() {
                 </div>
 
                 {error && (
-                  <p style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", color: "#ef4444", margin: 0 }}>
+                  <p style={{ fontSize: "0.875rem", color: "#ef4444", margin: 0 }}>
                     {error}
                   </p>
                 )}
@@ -358,7 +350,6 @@ export default function ContactPage() {
                   <div style={{
                     background: "#fef2f2", border: "1px solid #fecaca",
                     borderRadius: "4px", padding: "0.875rem 1rem",
-                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                     fontSize: "0.875rem", color: "#dc2626",
                   }}>
                     Something went wrong. Please try again or contact us via WhatsApp.
@@ -377,7 +368,6 @@ export default function ContactPage() {
                     gap:          "0.5rem",
                     background:   "#c4973a",
                     color:        "#ffffff",
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
                     fontSize:     "0.9375rem",
                     fontWeight:   600,
                     padding:      "1rem 2rem",
@@ -410,7 +400,6 @@ export default function ContactPage() {
             viewport={{ once: true, margin: "-100px" }}
           >
             <motion.h2 variants={fadeUp} style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "1.75rem",
               fontWeight:    700,
               letterSpacing: "-0.02em",
@@ -441,10 +430,10 @@ export default function ContactPage() {
                     {item.icon}
                   </div>
                   <div>
-                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.25rem" }}>
+                    <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.25rem" }}>
                       {item.label}
                     </div>
-                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.9375rem", lineHeight: 1.7, color: "#6b7280" }}>
+                    <div style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "#6b7280" }}>
                       {item.content}
                     </div>
                   </div>
@@ -486,10 +475,10 @@ export default function ContactPage() {
                   <MessageCircle size={20} style={{ color: "#ffffff" }} />
                 </div>
                 <div>
-                  <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.9375rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "2px" }}>
+                  <div style={{ fontSize: "0.9375rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "2px" }}>
                     Chat on WhatsApp
                   </div>
-                  <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "#4a5568" }}>
+                  <div style={{ fontSize: "0.8125rem", color: "#4a5568" }}>
                     Fastest response — usually within hours
                   </div>
                 </div>
@@ -503,10 +492,10 @@ export default function ContactPage() {
               borderRadius: "0 4px 4px 0",
               padding:      "1rem 1.25rem",
             }}>
-              <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.375rem" }}>
+              <div style={{ fontSize: "0.875rem", fontWeight: 600, color: "#0d1b2e", marginBottom: "0.375rem" }}>
                 Fast response guaranteed
               </div>
-              <p style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", lineHeight: 1.6, color: "#6b7280", margin: 0 }}>
+              <p style={{ fontSize: "0.8125rem", lineHeight: 1.6, color: "#6b7280", margin: 0 }}>
                 We respond to all enquiries within one business day.
                 For urgent matters, WhatsApp is the fastest route.
               </p>

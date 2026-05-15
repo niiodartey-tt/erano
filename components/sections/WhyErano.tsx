@@ -83,7 +83,7 @@ export default function WhyErano() {
 
           {/* Statements */}
           <div style={{ display: "flex", flexDirection: "column" as const, gap: "1.75rem" }}>
-            {statements.map((s, i) => (
+            {statements.map((s) => (
               <div
                 key={s.title}
                 style={{

@@ -164,7 +164,7 @@ export default function SectorsGrid() {
           background:          "#e2e5ea",
           border:              "1px solid #e2e5ea",
         }}>
-          {sectors.map((sector, i) => (
+          {sectors.map((sector) => (
             <Link
               key={sector.name}
               href="/industries"
