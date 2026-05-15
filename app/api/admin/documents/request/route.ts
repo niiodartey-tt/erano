@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     .from("document_requests")
     .insert({
       client_id,
-      requested_by: user.id,
+      admin_id:     user.id,
       title:        title.trim(),
       description:  description.trim(),
       category,
