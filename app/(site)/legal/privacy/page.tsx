@@ -37,12 +37,12 @@ export default function PrivacyPage() {
 
           <div>
             <h2 className="font-sans font-medium text-ui-lg text-brand-charcoal mb-3">5. Your rights</h2>
-            <p>You have the right to access, correct, or request deletion of your personal information held by us. To exercise these rights, please contact us at enquiries@eranoconsulting.com.</p>
+            <p>You have the right to access, correct, or request deletion of your personal information held by us. To exercise these rights, please contact us at ray.ankrah@eranoconsulting.com.</p>
           </div>
 
           <div>
             <h2 className="font-sans font-medium text-ui-lg text-brand-charcoal mb-3">6. Contact</h2>
-            <p>For any privacy-related questions, contact us at <a href="mailto:enquiries@eranoconsulting.com" className="text-brand-blue hover:text-brand-blue-dark">enquiries@eranoconsulting.com</a> or visit our <Link href="/contact" className="text-brand-blue hover:text-brand-blue-dark">contact page</Link>.</p>
+            <p>For any privacy-related questions, contact us at <a href="mailto:ray.ankrah@eranoconsulting.com" className="text-brand-blue hover:text-brand-blue-dark">ray.ankrah@eranoconsulting.com</a> or visit our <Link href="/contact" className="text-brand-blue hover:text-brand-blue-dark">contact page</Link>.</p>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 export default function WhatsAppFloat() {
   const [visible, setVisible] = useState(false);
-  const number  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233559331276";
+  const number  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233275819606";
   const message = encodeURIComponent("Hello, I would like to enquire about Erano Consulting services.");
   const href    = `https://wa.me/${number}?text=${message}`;
 

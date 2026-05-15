@@ -65,7 +65,7 @@ const socials = [
   { label: "LinkedIn", href: "https://linkedin.com", icon: <LinkedInIcon />, hover: "#0A66C2" },
   { label: "X",        href: "https://x.com",        icon: <XIcon />,        hover: "#000000" },
   { label: "Facebook", href: "https://facebook.com", icon: <FacebookIcon />, hover: "#1877F2" },
-  { label: "WhatsApp", href: "https://wa.me/233559331276", icon: <WhatsAppIcon />, hover: "#25D366" },
+  { label: "WhatsApp", href: "https://wa.me/233275819606", icon: <WhatsAppIcon />, hover: "#25D366" },
 ];
 
 export default function Footer() {
@@ -325,7 +325,7 @@ export default function Footer() {
                 <div>
                   <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#ffffff", marginBottom: "2px" }}>Office</div>
                   <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>
-                    GI-449-1284, Accra<br />Greater Accra, Ghana
+                    The Octagon, Suite 805<br />8th Floor, Accra, Ghana
                   </div>
                 </div>
               </li>
@@ -345,8 +345,9 @@ export default function Footer() {
                 </div>
                 <div>
                   <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#ffffff", marginBottom: "2px" }}>Phone</div>
-                  <a href="tel:+233559233199" style={{ display: "block", fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>+233 55 923 3199</a>
-                  <a href="tel:+233559331276" style={{ display: "block", fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>+233 55 933 1276</a>
+                  <a href="tel:+233275819606" style={{ display: "block", fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>+233 27 581 9606</a>
+                  <a href="tel:+442083760123" style={{ display: "block", fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>+44 208 376 0123</a>
+                  <a href="tel:+447513532576" style={{ display: "block", fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>+44 7513 532 576</a>
                 </div>
               </li>
               <li style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
@@ -366,10 +367,10 @@ export default function Footer() {
                 <div>
                   <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#ffffff", marginBottom: "2px" }}>Email</div>
                   <a
-                    href="mailto:enquiries@eranoconsulting.com"
+                    href="mailto:ray.ankrah@eranoconsulting.com"
                     style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", wordBreak: "break-all" as const }}
                   >
-                    enquiries@eranoconsulting.com
+                    ray.ankrah@eranoconsulting.com
                   </a>
                 </div>
               </li>

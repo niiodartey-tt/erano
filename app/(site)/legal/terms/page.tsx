@@ -47,7 +47,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="font-sans font-medium text-ui-lg text-brand-charcoal mb-3">7. Contact</h2>
-            <p>For any questions about these terms, contact us at <a href="mailto:enquiries@eranoconsulting.com" className="text-brand-blue hover:text-brand-blue-dark">enquiries@eranoconsulting.com</a> or visit our <Link href="/contact" className="text-brand-blue hover:text-brand-blue-dark">contact page</Link>.</p>
+            <p>For any questions about these terms, contact us at <a href="mailto:ray.ankrah@eranoconsulting.com" className="text-brand-blue hover:text-brand-blue-dark">ray.ankrah@eranoconsulting.com</a> or visit our <Link href="/contact" className="text-brand-blue hover:text-brand-blue-dark">contact page</Link>.</p>
           </div>
         </div>
       </div>

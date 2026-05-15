@@ -5,7 +5,7 @@ import { ServiceExpiryReminderEmail, subject } from "@/emails/ServiceExpiryRemin
 import { render } from "@react-email/render";
 
 const REMINDER_DAYS = [30, 14, 7];
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233559331276";
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233275819606";
 const RENEWAL_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("I would like to discuss renewal of my Erano Consulting service.")}`;
 
 export async function GET(request: Request) {

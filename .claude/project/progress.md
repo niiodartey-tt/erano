@@ -791,7 +791,38 @@ After re-reviewing the spec, 4 gaps were identified and corrected:
 ---
 
 ## Sprint 15 — Mobile QA + Pre-Launch
-*Claude will populate this section during Sprint 15.*
+
+### Task 1 + Task 2 — Font migration + Contact info update (Group 1)
+**Status:** ✅ tsc clean · build clean
+
+**Files modified (14):**
+
+**Task 1 — Font migration (Playfair Display + Inter):**
+- `app/layout.tsx` — Removed `Plus_Jakarta_Sans` import + config. Added `Playfair_Display` (weights 400–900, `--font-playfair`) and `Inter` (weights 300–700, `--font-inter`). Both variables applied to `<html>` and `<body>` classNames.
+- `app/globals.css` — Body font updated to `var(--font-inter), "Inter", system-ui, sans-serif`. h1–h6 updated to `var(--font-playfair), "Playfair Display", serif`. Added `nav { font-family: var(--font-inter)... }`. Added explicit `font-family: var(--font-playfair)` to `.ec-h1`, `.ec-h2`, `.ec-h2-white`, `.ec-h3`, `.ec-h3-white`. Added `.font-display` and `.ec-heading` utility classes (Playfair). PDF generation unchanged — public/fonts/PlusJakartaSans*.ttf retained.
+
+**Task 2 — Contact info (WhatsApp + phone + email + address):**
+- `components/layout/WhatsAppFloat.tsx` — Fallback number `233559331276` → `233275819606`
+- `emails/AccountExpiredEmail.tsx` — Fallback number updated
+- `app/api/cron/check-expiring-services/route.ts` — Fallback number updated
+- `components/portal/dashboard/ActiveView.tsx` — Fallback number in renewal URL updated
+- `app/portal/services/page.tsx` — `WHATSAPP_HREF` updated; email `hello@` → `ray.ankrah@eranoconsulting.com`; phone `+233 559 331 276` → `+233 27 581 9606`
+- `app/(site)/contact/page.tsx` — `waNumber` fallback updated; sidebar address → The Octagon, Suite 805, 8th Floor; phone → 3 numbers (Ghana + 2 UK); email → `ray.ankrah@eranoconsulting.com`
+- `components/layout/Footer.tsx` — Social WA href updated; address → The Octagon, Suite 805, 8th Floor; phone section → 3 `<a>` tags (Ghana + 2 UK); email → `ray.ankrah@eranoconsulting.com`
+- `app/api/contact/route.ts` — Auto-reply footer: address + email + phone updated
+- `emails/WelcomeEmail.tsx` — `hello@eranoconsulting.com` → `ray.ankrah@eranoconsulting.com`
+- `app/(site)/legal/terms/page.tsx` — `enquiries@eranoconsulting.com` → `ray.ankrah@eranoconsulting.com`
+- `app/(site)/legal/privacy/page.tsx` — Both `enquiries@eranoconsulting.com` instances → `ray.ankrah@eranoconsulting.com`
+
+**Key decisions:**
+- Plus Jakarta Sans TTF files in `public/fonts/` retained — `lib/generateInvoicePdf.ts` uses them directly for PDF generation; font migration does not affect PDF output.
+- Public site pages (Footer, contact) have hardcoded `fontFamily: '"Plus Jakarta Sans"...'` inline styles that override the CSS variable approach. These will need a follow-up pass to update inline style font references for full visual migration on the public site.
+- `NEXT_PUBLIC_WHATSAPP_NUMBER` env var fallback updated in all 7 files that hardcoded the old number.
+- Legal pages updated (terms + privacy) per Naa's explicit instruction to update all contact info — email-only change, no legal substance altered.
+- Verified 0 remaining instances of old number (`233559331276`) or old email (`enquiries@`/`hello@eranoconsulting`) in codebase.
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — 63 pages, 0 errors
 
 ---
 

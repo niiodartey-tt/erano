@@ -8,7 +8,7 @@ export interface AccountExpiredEmailProps {
 export const subject = "Your payment window has closed";
 
 export function AccountExpiredEmail({ contactName }: AccountExpiredEmailProps) {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233559331276";
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233275819606";
 
   return (
     <Html lang="en">

@@ -95,7 +95,7 @@ export default function ActiveView() {
             </p>
           </div>
           <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233559331276"}?text=${encodeURIComponent("I would like to discuss renewal of my Erano Consulting service.")}`}
+            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "233275819606"}?text=${encodeURIComponent("I would like to discuss renewal of my Erano Consulting service.")}`}
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 rounded-lg border border-amber-600 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 transition-colors"

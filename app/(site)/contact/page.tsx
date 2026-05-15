@@ -37,7 +37,7 @@ export default function ContactPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError]   = useState("");
 
-  const waNumber  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233559331276";
+  const waNumber  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233275819606";
   const waMessage = encodeURIComponent("Hello, I would like to enquire about Erano Consulting services.");
   const waHref    = `https://wa.me/${waNumber}?text=${waMessage}`;
 
@@ -422,9 +422,9 @@ export default function ContactPage() {
 
             <motion.div variants={fadeUp} style={{ display: "flex", flexDirection: "column" as const, gap: "1.75rem", marginBottom: "2rem" }}>
               {[
-                { icon: <MapPin size={18} />, label: "Office", content: <span>GI-449-1284, Accra<br />Greater Accra, Ghana</span> },
-                { icon: <Phone size={18} />, label: "Phone",  content: <span>+233 55 923 3199<br />+233 55 933 1276</span>       },
-                { icon: <Mail  size={18} />, label: "Email",  content: <span style={{ wordBreak: "break-all" }}>enquiries@eranoconsulting.com</span> },
+                { icon: <MapPin size={18} />, label: "Office", content: <span>The Octagon, Suite 805<br />8th Floor, Accra, Ghana</span> },
+                { icon: <Phone size={18} />, label: "Phone",  content: <span>+233 27 581 9606<br />+44 208 376 0123<br />+44 7513 532 576</span> },
+                { icon: <Mail  size={18} />, label: "Email",  content: <span style={{ wordBreak: "break-all" }}>ray.ankrah@eranoconsulting.com</span> },
               ].map((item) => (
                 <div key={item.label} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{

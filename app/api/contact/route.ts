@@ -68,8 +68,8 @@ export async function POST(req: NextRequest) {
               <a href="${process.env.NEXT_PUBLIC_SITE_URL}/tools" style="color:#7D92B2;">tax calculators</a>.
             </p>
             <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e5e8f0;color:#9ca3af;font-size:12px;">
-              <p>Erano Consulting · GI-449-1284, Accra, Ghana</p>
-              <p>enquiries@eranoconsulting.com · +233 55 923 1996</p>
+              <p>Erano Consulting · The Octagon, Suite 805, 8th Floor, Accra, Ghana</p>
+              <p>ray.ankrah@eranoconsulting.com · +233 27 581 9606</p>
             </div>
           </div>
         </div>

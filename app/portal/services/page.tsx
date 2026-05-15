@@ -11,7 +11,7 @@ interface ServiceData {
   account_state: string | null;
 }
 
-const WHATSAPP_HREF = "https://wa.me/233559331276";
+const WHATSAPP_HREF = "https://wa.me/233275819606";
 
 export default function ServicesPage() {
   const [data, setData] = useState<ServiceData | null>(null);
@@ -91,13 +91,13 @@ export default function ServicesPage() {
         <h2 className="mb-4 text-base font-semibold text-navy">Your account manager</h2>
         <p className="mb-3 text-sm font-medium text-navy">Erano Consulting Team</p>
         <div className="mb-5 space-y-2">
-          <a href="mailto:hello@eranoconsulting.com" className="flex items-center gap-2 text-sm text-body transition-colors hover:text-navy">
+          <a href="mailto:ray.ankrah@eranoconsulting.com" className="flex items-center gap-2 text-sm text-body transition-colors hover:text-navy">
             <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
-            hello@eranoconsulting.com
+            ray.ankrah@eranoconsulting.com
           </a>
-          <a href="tel:+233559331276" className="flex items-center gap-2 text-sm text-body transition-colors hover:text-navy">
+          <a href="tel:+233275819606" className="flex items-center gap-2 text-sm text-body transition-colors hover:text-navy">
             <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
-            +233 559 331 276
+            +233 27 581 9606
           </a>
         </div>
         <a
