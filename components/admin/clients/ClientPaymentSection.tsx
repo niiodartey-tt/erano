@@ -7,9 +7,9 @@ interface Timer { expires_at: string; is_active: boolean }
 interface Proof { id: string; amount_paid: number; currency: string; transaction_reference: string; status: string; uploaded_at: string; file_path: string | null }
 
 const PROOF_COLORS: Record<string, string> = {
-  pending:   "bg-yellow-100 text-yellow-800",
-  confirmed: "bg-green-100 text-green-800",
-  rejected:  "bg-red-100 text-red-800",
+  pending:   "bg-amber-900/30 text-amber-400",
+  confirmed: "bg-green-900/30 text-green-400",
+  rejected:  "bg-red-900/30 text-red-400",
 };
 
 interface Props {
@@ -69,7 +69,7 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
                     {new Date(proof.uploaded_at).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-5 md:px-6 py-3">
-                    <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium capitalize", PROOF_COLORS[proof.status] ?? "bg-gray-100 text-gray-800")}>
+                    <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium capitalize", PROOF_COLORS[proof.status] ?? "bg-white/10 text-white/50")}>
                       {proof.status}
                     </span>
                   </td>
@@ -82,8 +82,8 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
                       )}
                       {proof.status === "pending" && (
                         <>
-                          <button onClick={() => onConfirmPayment(proof.id)} className="text-xs font-medium text-green-700 hover:text-green-900 transition-colors">Confirm</button>
-                          <button onClick={() => onRejectPayment(proof.id)} className="text-xs font-medium text-red-600 hover:text-red-800 transition-colors">Reject</button>
+                          <button onClick={() => onConfirmPayment(proof.id)} className="text-xs font-medium text-green-400 hover:text-green-300 transition-colors">Confirm</button>
+                          <button onClick={() => onRejectPayment(proof.id)} className="text-xs font-medium text-red-400 hover:text-red-300 transition-colors">Reject</button>
                         </>
                       )}
                     </div>

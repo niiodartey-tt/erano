@@ -90,11 +90,18 @@ export function PackageUpgradeModal({ clientId, onSuccess, onClose }: Props) {
           <div className="space-y-4">
             <div>
               <label className="block text-[0.8125rem] font-medium text-white/60 mb-2" htmlFor="upgrade-package">New package</label>
-              <select id="upgrade-package" className="w-full px-3 py-2.5 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none min-h-[44px]" value={selectedId} onChange={e => setSelectedId(e.target.value)}>
-                {packages.map(p => (
-                  <option key={p.id} value={p.id}>{p.name} — {fmtPrice(p.price_ghs)}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select id="upgrade-package" className="w-full px-3 py-2.5 pr-9 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none min-h-[44px]" value={selectedId} onChange={e => setSelectedId(e.target.value)}>
+                  {packages.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} — {fmtPrice(p.price_ghs)}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                  <svg className="h-4 w-4 text-white/40" fill="none" viewBox="0 0 12 12">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {selected && <p className="text-sm text-white/60">{selected.description}</p>}

@@ -13,12 +13,12 @@ const STATE_LABELS: Record<string, string> = {
 };
 
 const STATE_COLORS: Record<string, string> = {
-  pending:               "bg-yellow-100 text-yellow-800",
-  awaiting_agreement:    "bg-blue-100 text-blue-800",
-  awaiting_payment:      "bg-orange-100 text-orange-800",
-  awaiting_confirmation: "bg-purple-100 text-purple-800",
-  active:                "bg-green-100 text-green-800",
-  expired:               "bg-red-100 text-red-800",
+  pending:               "bg-white/10 text-white/50",
+  awaiting_agreement:    "bg-blue-900/30 text-blue-400",
+  awaiting_payment:      "bg-amber-900/30 text-amber-400",
+  awaiting_confirmation: "bg-purple-900/30 text-purple-400",
+  active:                "bg-green-900/30 text-green-400",
+  expired:               "bg-red-900/30 text-red-400",
 };
 
 interface Props {
@@ -64,7 +64,7 @@ export function ClientProfileHeader({
               Joined {joined}
             </span>
           </div>
-          <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium", STATE_COLORS[accountState] ?? "bg-gray-100 text-gray-800")}>
+          <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium", STATE_COLORS[accountState] ?? "bg-white/10 text-white/50")}>
             {STATE_LABELS[accountState] ?? accountState}
           </span>
         </div>

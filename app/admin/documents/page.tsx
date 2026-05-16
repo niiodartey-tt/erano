@@ -17,9 +17,9 @@ interface DocRequest {
 }
 
 const STATUS_CLASSES: Record<DocRequest["status"], string> = {
-  pending:  "bg-amber-100 text-amber-800",
-  uploaded: "bg-blue-100 text-blue-800",
-  reviewed: "bg-green-100 text-green-800",
+  pending:  "bg-amber-900/30 text-amber-400",
+  uploaded: "bg-blue-900/30 text-blue-400",
+  reviewed: "bg-green-900/30 text-green-400",
 };
 
 export default function DocumentsPage() {
@@ -52,7 +52,7 @@ export default function DocumentsPage() {
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+      {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
 
       {!loading && !error && requests.length === 0 && (
         <div className="rounded-xl border border-white/10 bg-navy p-10 text-center">
@@ -84,7 +84,7 @@ export default function DocumentsPage() {
                     <td className="max-w-[200px] truncate px-4 py-3 text-white/60">{req.title}</td>
                     <td className="hidden px-4 py-3 text-white/60 sm:table-cell">{req.category}</td>
                     <td className="px-4 py-3">
-                      <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize", STATUS_CLASSES[req.status] ?? "bg-gray-100 text-gray-800")}>
+                      <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize", STATUS_CLASSES[req.status] ?? "bg-white/10 text-white/50")}>
                         {req.status}
                       </span>
                     </td>

@@ -60,15 +60,22 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
 
       <div>
         <label htmlFor="req-category" className="block text-xs font-medium text-white/60 mb-1">Category</label>
-        <select
-          id="req-category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none"
-        >
-          <option value="">Select category</option>
-          {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
+        <div className="relative">
+          <select
+            id="req-category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-3 py-2 pr-9 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none"
+          >
+            <option value="">Select category</option>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+            <svg className="h-4 w-4 text-white/40" fill="none" viewBox="0 0 12 12">
+              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -83,7 +90,7 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
         />
       </div>
 
-      {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
+      {error && <p className="text-xs text-red-400" role="alert">{error}</p>}
 
       <div className="flex gap-2 justify-end pt-1">
         <button type="button" onClick={onCancel} disabled={loading} className="px-3 py-1.5 text-sm text-white/60 border border-white/10 rounded-lg hover:bg-white/5 transition-colors disabled:opacity-50">

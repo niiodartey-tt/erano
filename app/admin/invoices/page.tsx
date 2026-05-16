@@ -16,8 +16,8 @@ interface InvoiceRow {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  generated: "bg-orange-100 text-orange-800",
-  paid:      "bg-green-100 text-green-800",
+  generated: "bg-amber-900/30 text-amber-400",
+  paid:      "bg-green-900/30 text-green-400",
 };
 
 function fmtCurrency(n: number): string {
@@ -52,7 +52,7 @@ export default function InvoicesPage() {
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+      {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
 
       {!loading && !error && invoices.length === 0 && (
         <div className="bg-navy rounded-xl border border-white/10 p-10 text-center">
@@ -90,12 +90,12 @@ export default function InvoicesPage() {
                       {new Date(inv.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize", STATUS_COLORS[inv.status] ?? "bg-gray-100 text-gray-800")}>
+                      <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize", STATUS_COLORS[inv.status] ?? "bg-white/10 text-white/50")}>
                         {inv.status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/clients/${inv.client_id}`} className="text-xs font-medium text-gold hover:text-gold-dark transition-colors">
+                      <Link href={`/admin/clients/${inv.client_id}`} className="text-xs font-medium text-gold hover:opacity-80 transition-opacity">
                         View client
                       </Link>
                     </td>

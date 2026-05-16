@@ -22,12 +22,12 @@ interface Props {
 }
 
 const STATE_BADGE: Record<string, { cls: string; label: string }> = {
-  pending:               { cls: "bg-gray-100 text-gray-600",    label: "Pending" },
-  awaiting_agreement:    { cls: "bg-blue-50 text-blue-700",     label: "Agreement" },
-  awaiting_payment:      { cls: "bg-amber-50 text-amber-700",   label: "Payment Due" },
-  awaiting_confirmation: { cls: "bg-purple-50 text-purple-700", label: "Confirming" },
-  active:                { cls: "bg-green-50 text-green-700",   label: "Active" },
-  expired:               { cls: "bg-red-50 text-red-700",       label: "Expired" },
+  pending:               { cls: "bg-white/10 text-white/50",        label: "Pending" },
+  awaiting_agreement:    { cls: "bg-blue-900/30 text-blue-400",     label: "Agreement" },
+  awaiting_payment:      { cls: "bg-amber-900/30 text-amber-400",   label: "Payment Due" },
+  awaiting_confirmation: { cls: "bg-purple-900/30 text-purple-400", label: "Confirming" },
+  active:                { cls: "bg-green-900/30 text-green-400",   label: "Active" },
+  expired:               { cls: "bg-red-900/30 text-red-400",       label: "Expired" },
 };
 
 const TABS = [
