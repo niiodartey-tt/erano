@@ -7,16 +7,12 @@
 export const IMAGES = {
 
   // ── Home page ─────────────────────────────────────
-  HOME_HERO_VIDEO:
-    "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4",
-  // Professional office b-roll — looping hero background
-
-  HOME_HERO_POSTER:
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&q=80&auto=format&fit=crop",
-  // Fallback image if video fails to load
+  HOME_HERO_IMAGE:
+    "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&q=80",
+  // Professional financial meeting — documents on table — hero background
 
   HOME_WHYUS_IMAGE:
-    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
   // Professional meeting — raw, no overlay
 
   HOME_STATS_BG:
@@ -53,16 +49,16 @@ export const IMAGES = {
   // Financial professional at desk — dark
 
   SERVICES_ACCOUNTANCY:
-    "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1000&q=80&auto=format&fit=crop",
-  // Accounting desk with documents
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+  // Financial charts and data — accountancy
 
   SERVICES_BUSINESS:
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1000&q=80&auto=format&fit=crop",
-  // Business strategy meeting
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+  // Professional business portrait — advisory
 
   SERVICES_TAX:
-    "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1000&q=80&auto=format&fit=crop",
-  // Tax documents and pen signing
+    "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=800&q=80",
+  // Tax documents and calculator — tax planning
 
   // ── Tools page ────────────────────────────────────
   TOOLS_HERO_BG:

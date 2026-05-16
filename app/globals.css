@@ -24,11 +24,13 @@
 /* ── Base ────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
+  * { font-family: inherit; }
 
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-inter), "Inter", system-ui, sans-serif;
   }
 
   body {
@@ -431,6 +433,11 @@
 @keyframes imgReveal {
   from { clip-path: inset(0 100% 0 0); }
   to   { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.4; transform: scale(0.85); }
 }
 
 /* ServicesStrip image zoom on card hover */

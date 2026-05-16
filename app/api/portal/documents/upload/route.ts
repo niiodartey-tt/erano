@@ -33,8 +33,7 @@ export async function POST(request: NextRequest) {
   const { data: { user }, error: authError } = await authClient.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const ip = getClientIp(request);
-  const { success: rateLimitOk } = await apiRatelimit.limit(`upload:${user.id}`);
+  const { success: rateLimitOk } = await apiRatelimit.limit(`upload:${user.id}:${getClientIp(request)}`);
   if (!rateLimitOk) return NextResponse.json({ error: "Too many requests. Please wait before uploading again." }, { status: 429 });
 
   try {

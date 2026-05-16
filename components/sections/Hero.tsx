@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useParallax } from "@/hooks/useParallax";
@@ -36,28 +37,21 @@ export default function Hero() {
       overflow:   "hidden",
     }}>
 
-      {/* Background video with parallax */}
+      {/* Background image with parallax */}
       <div style={{
         position:  "absolute",
         inset:     0,
         zIndex:    0,
         transform: parallaxY,
       }}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{
-            width:     "100%",
-            height:    "100%",
-            objectFit: "cover",
-            opacity:   0.3,
-          }}
-          poster={IMAGES.HOME_HERO_POSTER}
-        >
-          <source src={IMAGES.HOME_HERO_VIDEO} type="video/mp4" />
-        </video>
+        <Image
+          src={IMAGES.HOME_HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", opacity: 0.3 }}
+        />
       </div>
 
       {/* Overlay */}

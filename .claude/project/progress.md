@@ -20,6 +20,35 @@ Claude does this automatically — without being asked.
 
 ---
 
+## Sprint 15 — Pre-Launch Polish + Security
+**Status:** In progress
+
+**Security fixes (committed: c2a886d)**
+- Created `supabase/migrations/001_fix_notifications_rls.sql` — drops open `system_insert_notifications` RLS (HIGH-01)
+- Created `supabase/migrations/002_fix_audit_log_rls.sql` — drops duplicate `no_client_access` policy (LOW-03)
+- Modified `lib/csrf.ts` — exact origin match, removed vercel.app heuristic bypass (HIGH-03)
+- Modified `app/api/portal/documents/upload/route.ts` — added rate limiting + status=pending check on IDOR query (HIGH-02, LOW-02)
+- Modified `app/api/portal/payments/upload/route.ts` — added rate limiting (HIGH-02)
+- Modified `app/api/admin/signed-url/route.ts` — audit_log entry on every file access (MED-01)
+- Modified `app/api/portal/documents/requests/route.ts` — removed file_path from response (MED-02)
+- Modified `app/api/portal/documents/download/route.ts` — accepts uploadId, looks up file_path server-side (MED-02)
+- Modified `components/portal/documents/DocumentRequestCard.tsx` — removed file_path from interface, download by ID (MED-02)
+- Modified `.claude/project/known-issues.md` — added PENDING-005 (Next.js 14→16 upgrade)
+- Decision: SQL migrations are manual-run only (Naa to run in Supabase SQL Editor)
+
+**Sprint 15 — UI polish (not yet committed)**
+- Modified `app/globals.css` — added `html` font-family, `* { font-family: inherit }`, `pulseDot` keyframe
+- Modified `lib/images.ts` — replaced HOME_HERO_VIDEO/POSTER with HOME_HERO_IMAGE, updated 3 service images and WhyUs image to accounting/finance-themed Unsplash photos
+- Modified `components/sections/Hero.tsx` — replaced video element with next/image (static image + parallax preserved)
+- Created `app/coming-soon/layout.tsx` — standalone metadata, noindex/nofollow, no navbar/footer
+- Created `app/coming-soon/page.tsx` — branded pre-launch page: Playfair wordmark, gold rule, pulseDot, heading, contact line
+- Created `app/opengraph-image.tsx` — 1200×630 ImageResponse, dark bg, wordmark, gold rule, services tagline, domain
+- TypeScript: 0 errors | Build: 65 pages ✅
+- Note: WhatsApp number (233275819606) already correctly read from NEXT_PUBLIC_WHATSAPP_NUMBER env var with correct fallback — no change needed
+- Note: next.config.mjs already had images.unsplash.com in remotePatterns — no change needed
+
+---
+
 ## Sprint 1 — Foundation
 **Status:** ✅ Complete
 
