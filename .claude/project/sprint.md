@@ -8,33 +8,36 @@
 
 ## Current Sprint
 
-### Sprint 16 — Admin Login + Dark Theme + Session Idle Timeout
-**Branch:** `sprint-16`
-**Status:** All tasks complete — awaiting Naa review on Vercel preview before merge to main
-
-**Definition of Done:**
-- **Approved by Naa:** [ ]
-- **Merged to main:** [ ]
-- **Merged date:** —
-
-**Tasks:**
-- [x] TASK 1 — Navbar: "Log in" → "Client login" (desktop + mobile drawer, lock SVG retained, href `/login` unchanged)
-- [x] TASK 2 — Admin login page: `app/admin/login/page.tsx` + `app/admin/login/layout.tsx` — standalone dark login (ink bg, navy card, gold border, Playfair wordmark, 5-attempt lockout, role check, `robots: noindex`)
-- [x] TASK 3a — Middleware: `isAdminLoginPath` exception added; unauthenticated `/admin/*` → `/admin/login`; authenticated at `/admin/login` → `/admin`
-- [x] TASK 3b — `app/admin/layout.tsx`: redirects `/login` → `/admin/login`; outer div `bg-off` → `bg-ink`
-- [x] TASK 3c — `AdminSidebar.tsx`: sign out `window.location.href` → `/admin/login`
-- [x] TASK 4 — Dark theme across all 15 admin files: `bg-white/border-line/text-navy/text-body` → `bg-navy/border-white\/10/text-white/text-white\/60`; primary buttons → `bg-gold text-navy`; `ec-label`/`ec-input`/`ec-select`/`admin-select` CSS classes replaced with direct dark Tailwind
-- [x] TASK 5 — `IdleTimeout.tsx`: 30-min idle, 2-min warning banner (fixed bottom, navy bg, gold "Stay signed in" button); wired to portal layout (`loginUrl="/login"`) and admin layout (`loginUrl="/admin/login"`)
-
-**Pre-merge checklist:**
-- [x] `npm run lint` — warnings only (pre-existing `<img>` in resources pages, not Sprint 16 code)
-- [x] `npx tsc --noEmit` — 0 errors
-- [x] `npm run build` — clean, 66 pages
-- [x] `npm audit` — 5 vulnerabilities (1 moderate, 4 high), all pre-existing in Next.js 14.x; fix requires breaking upgrade to Next.js 16
+> No active sprint. Sprint 16 complete and merged. Awaiting Sprint 17 brief from Naa.
 
 ---
 
 ## Sprint History
+
+### ✅ Sprint 16 — Admin Login + Dark Theme + Session Idle Timeout
+**Completed:** May 2026
+**Branch:** `sprint-16`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] TASK 1 — Navbar: "Log in" → "Client login" (desktop + mobile drawer, lock SVG retained, href `/login` unchanged)
+- [x] TASK 2 — Admin login moved to `app/(admin-auth)/admin-login/` (route group, URL `/admin-login`) — standalone dark login (ink bg, navy card, gold border, Playfair wordmark, 5-attempt lockout, role check via `/api/admin/auth/check-role`, `robots: noindex`)
+- [x] TASK 3a — Middleware: public paths early-return before Supabase client; unauthenticated `/admin/*` → `/admin-login`; authenticated client at `/admin/*` → `/portal/dashboard`
+- [x] TASK 3b — `app/admin/layout.tsx`: redirects unauthenticated + non-admin to `/admin-login`; outer div `bg-off` → `bg-ink`
+- [x] TASK 3c — `AdminSidebar.tsx`: sign out `window.location.href` → `/admin-login`
+- [x] TASK 4 — Dark theme across all 15 admin files + badge dark variants fix (6 files): `bg-white/border-line/text-navy/text-body` → `bg-navy/border-white\/10/text-white/text-white\/60`; status badges → `bg-*-900/30 text-*-400`; select dropdowns → custom SVG arrow; button contrast fixed
+- [x] TASK 5 — `IdleTimeout.tsx`: 30-min idle, 2-min warning banner (fixed bottom, navy bg, gold "Stay signed in" button); wired to portal layout (`loginUrl="/login"`) and admin layout (`loginUrl="/admin-login"`)
+- [x] FIX — Admin login role check via `/api/admin/auth/check-role` (service role bypass for RLS on users table)
+- [x] FIX — Supabase Realtime migration `003_enable_realtime_notifications.sql` — Naa must run in Supabase SQL Editor
+
+**Pre-merge checklist:**
+- [x] `npm run lint` — warnings only (pre-existing `<img>` in resources pages, not Sprint 16 code)
+- [x] `npx tsc --noEmit` — 0 errors
+- [x] `npm run build` — clean, 67 pages
+- [x] `npm audit` — 5 vulnerabilities (1 moderate, 4 high), all pre-existing in Next.js 14.x; fix requires breaking upgrade to Next.js 16
+
+---
 
 ### ✅ Sprint 15 — Mobile QA + Pre-Launch
 **Completed:** May 2026
