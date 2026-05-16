@@ -3,6 +3,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export default async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  const publicPaths = ["/login", "/admin/login", "/reset-password", "/auth/callback", "/onboarding", "/coming-soon"];
+  const isPublicPath = publicPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
+  if (isPublicPath) {
+    return NextResponse.next();
+  }
+
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-pathname", request.nextUrl.pathname);
 
@@ -31,12 +39,10 @@ export default async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const pathname          = request.nextUrl.pathname;
   const isSetPasswordPath = pathname === "/portal/set-password";
-  const isAdminLoginPath  = pathname === "/admin/login";
 
   // RULE 1 — Unauthenticated user accessing protected routes
-  if (!user && !isSetPasswordPath && !isAdminLoginPath) {
+  if (!user && !isSetPasswordPath) {
     if (pathname.startsWith("/portal")) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -60,8 +66,8 @@ export default async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // RULE 3 — Authenticated user accessing /admin/* (not /admin/login)
-  if (user && pathname.startsWith("/admin") && !isAdminLoginPath) {
+  // RULE 3 — Authenticated user accessing /admin/*
+  if (user && pathname.startsWith("/admin")) {
     const { data } = await supabase
       .from("users")
       .select("role")
@@ -75,27 +81,7 @@ export default async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // RULE 4 — Authenticated user at /admin/login → already logged in, skip to admin
-  if (user && isAdminLoginPath) {
-    return NextResponse.redirect(new URL("/admin", request.url));
-  }
-
-  // RULE 5 — Authenticated user accessing /login
-  if (user && pathname === "/login") {
-    const { data } = await supabase
-      .from("users")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (data?.role === "admin") {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    }
-
-    return NextResponse.redirect(new URL("/portal/dashboard", request.url));
-  }
-
-  // RULE 6 — All other routes
+  // RULE 4 — All other routes
   return supabaseResponse;
 }
 
