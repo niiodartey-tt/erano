@@ -17,7 +17,7 @@ export default function ScrollToTop() {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-20 right-6 z-40 flex items-center justify-center w-11 h-11 rounded-full bg-navy text-white shadow-lg transition-opacity duration-300"
+      className="fixed bottom-32 right-6 z-40 flex items-center justify-center w-11 h-11 rounded-full bg-navy text-white shadow-lg transition-opacity duration-300"
       aria-label="Scroll to top"
     >
       <ChevronUp className="h-5 w-5" aria-hidden="true" />
