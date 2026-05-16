@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 
@@ -36,18 +36,6 @@ export default function ContactPage() {
   const [form, setForm] = useState<FormState>({ fullName: "", email: "", phone: "", company: "", industry: "", service: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError]   = useState("");
-  const [isMobile, setIsMobile] = useState(false);
-  const [isSmall,  setIsSmall]  = useState(false);
-  useEffect(() => {
-    const check = () => {
-      setIsMobile(window.innerWidth < 768);
-      setIsSmall(window.innerWidth < 640);
-    };
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
   const waNumber  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "233275819606";
   const waMessage = encodeURIComponent("Hello, I would like to enquire about Erano Consulting services.");
   const waHref    = `https://wa.me/${waNumber}?text=${waMessage}`;
@@ -157,8 +145,8 @@ export default function ContactPage() {
           margin:        "0 auto",
           paddingInline: "clamp(1.5rem, 5.5vw, 5rem)",
           display:       "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "1fr min(380px, 100%)",
-          gap:           isMobile ? "3rem" : "5rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
+          gap:           "clamp(3rem, 5vw, 5rem)",
           alignItems:    "start",
         }}>
 
@@ -215,7 +203,7 @@ export default function ContactPage() {
                 noValidate
                 style={{ display: "flex", flexDirection: "column" as const, gap: "1.25rem" }}
               >
-                <div style={{ display: "grid", gridTemplateColumns: isSmall ? "1fr" : "1fr 1fr", gap: "1.25rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "1.25rem" }}>
                   <div>
                     <label style={labelStyle}>Full name <span style={{ color: "#ef4444" }}>*</span></label>
                     <input
@@ -245,7 +233,7 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: isSmall ? "1fr" : "1fr 1fr", gap: "1.25rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "1.25rem" }}>
                   <div>
                     <label style={labelStyle}>Phone number</label>
                     <input
@@ -275,7 +263,7 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: isSmall ? "1fr" : "1fr 1fr", gap: "1.25rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "1.25rem" }}>
                   <div>
                     <label style={labelStyle}>Industry / Sector</label>
                     <div style={{ position: "relative" }}>

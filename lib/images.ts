@@ -53,8 +53,8 @@ export const IMAGES = {
   // Financial charts and data — accountancy
 
   SERVICES_BUSINESS:
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
-  // Professional business portrait — advisory
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80",
+  // Business team working together at a table with laptops and documents — advisory
 
   SERVICES_TAX:
     "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=800&q=80",

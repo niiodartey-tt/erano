@@ -195,14 +195,6 @@ function QuotesPanel() {
 }
 
 export default function ServicesPage() {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
   return (
     <>
       {/* ── Hero ── */}
@@ -302,8 +294,8 @@ export default function ServicesPage() {
           <div style={{ maxWidth: "1440px", margin: "0 auto", paddingInline: "clamp(1.5rem, 5.5vw, 5rem)" }}>
             <div style={{
               display:             "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-              gap:                 isMobile ? "2rem" : "5rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 480px), 1fr))",
+              gap:                 "4rem",
               alignItems:          "center",
             }}>
 

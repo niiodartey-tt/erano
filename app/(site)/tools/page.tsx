@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -257,13 +257,6 @@ const tabs = [
 
 export default function ToolsPage() {
   const [active, setActive] = useState("vat");
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   return (
     <>
@@ -344,7 +337,7 @@ export default function ToolsPage() {
           </div>
 
           {/* Active calculator */}
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? "2rem" : "5rem", alignItems: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 480px), 1fr))", gap: "clamp(2rem, 5vw, 5rem)", alignItems: "start" }}>
             <motion.div
               key={active}
               initial={{ opacity: 0, y: 20 }}

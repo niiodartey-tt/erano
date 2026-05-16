@@ -359,7 +359,7 @@ export default function Footer() {
                   <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#ffffff", marginBottom: "2px" }}>Email</div>
                   <a
                     href="mailto:ray.ankrah@eranoconsulting.com"
-                    style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", wordBreak: "break-all" as const }}
+                    style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.5)", textDecoration: "none", overflowWrap: "break-word" as const }}
                   >
                     ray.ankrah@eranoconsulting.com
                   </a>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -55,13 +55,6 @@ const categories = ["All", "Tax", "Audit", "Business"];
 
 export default function ResourcesPage() {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   const filtered = activeCategory === "All"
     ? articles
@@ -161,7 +154,7 @@ export default function ResourcesPage() {
                 href={`/resources/${featured.slug}`}
                 style={{
                   display:             "grid",
-                  gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 480px), 1fr))",
                   border:              "1px solid #e8eaed",
                   borderRadius:        "8px",
                   overflow:            "hidden",
@@ -189,7 +182,7 @@ export default function ResourcesPage() {
                 </div>
 
                 {/* Content */}
-                <div style={{ padding: isMobile ? "1.5rem" : "3rem", display: "flex", flexDirection: "column" as const, justifyContent: "center" }}>
+                <div style={{ padding: "clamp(1.5rem, 4vw, 3rem)", display: "flex", flexDirection: "column" as const, justifyContent: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     <span style={{
                       fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
