@@ -195,6 +195,14 @@ function QuotesPanel() {
 }
 
 export default function ServicesPage() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
     <>
       {/* ── Hero ── */}
@@ -294,8 +302,8 @@ export default function ServicesPage() {
           <div style={{ maxWidth: "1440px", margin: "0 auto", paddingInline: "clamp(1.5rem, 5.5vw, 5rem)" }}>
             <div style={{
               display:             "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap:                 "5rem",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap:                 isMobile ? "2rem" : "5rem",
               alignItems:          "center",
             }}>
 
@@ -361,7 +369,7 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-                style={{ order: i % 2 === 0 ? 2 : 1, position: "relative", height: "520px", borderRadius: "8px", overflow: "hidden", cursor: "pointer" }}
+                style={{ order: i % 2 === 0 ? 2 : 1, position: "relative", height: "clamp(240px, 55vw, 520px)", borderRadius: "8px", overflow: "hidden", cursor: "pointer" }}
               >
                 <Image
                   src={svc.image}
@@ -401,7 +409,7 @@ export default function ServicesPage() {
             </motion.h2>
           </motion.div>
 
-<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
+<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}>
             {/* Left — 6 pricing cards in 2 rows of 3 */}
             {plans.map((plan, i) => (
               <motion.div

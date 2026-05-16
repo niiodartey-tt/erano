@@ -9,25 +9,25 @@
 ## Current Sprint
 
 **Sprint:** Sprint 15 — Mobile QA + Pre-Launch
-**Status:** Not started
+**Status:** Complete
 **Branch:** `sprint-15`
 **Vercel preview:** TBD
 
-### Planned Tasks
+### Completed Tasks
 
 | Task | Status |
 |---|---|
-| Full screenshot review at 375px and 430px | Not started |
-| Services page alternating grid — mobile stack fix | Not started |
-| Contact form grid — mobile stack fix | Not started |
-| Pricing grid — mobile stack or horizontal scroll | Not started |
-| Tools calculator grid — mobile stack fix | Not started |
-| About team grid — mobile stack fix | Not started |
-| OG image — branded 1200×630 | Not started |
-| Real team photos from client (replace Unsplash) | Not started |
-| Real company logo SVG | Not started |
-| Analytics setup (Plausible or GA4) | Not started |
-| Full pre-handoff checklist per 17-handoff.md | Not started |
+| Full screenshot review at 375px and 430px | Complete |
+| Services page alternating grid — mobile stack fix | Complete |
+| Contact form grid — mobile stack fix | Complete |
+| Pricing grid — mobile stack or horizontal scroll | Complete |
+| Tools calculator grid — mobile stack fix | Complete |
+| About team grid — mobile stack fix | Complete |
+| OG image — branded 1200×630 | Complete |
+| Real team photos from client (replace Unsplash) | Complete |
+| Real company logo SVG | Complete |
+| Analytics setup (Plausible or GA4) | Complete |
+| Full pre-handoff checklist per 17-handoff.md | Complete |
 
 ---
 
