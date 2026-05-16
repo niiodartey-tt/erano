@@ -31,12 +31,18 @@ export default async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
+  const pathname          = request.nextUrl.pathname;
   const isSetPasswordPath = pathname === "/portal/set-password";
+  const isAdminLoginPath  = pathname === "/admin/login";
 
-  // RULE 1 — Unauthenticated user accessing /portal/* or /admin/*
-  if (!user && (pathname.startsWith("/portal") || pathname.startsWith("/admin")) && !isSetPasswordPath) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // RULE 1 — Unauthenticated user accessing protected routes
+  if (!user && !isSetPasswordPath && !isAdminLoginPath) {
+    if (pathname.startsWith("/portal")) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
   }
 
   // RULE 2 — Authenticated user accessing /portal/*
@@ -54,8 +60,8 @@ export default async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // RULE 3 — Authenticated user accessing /admin/*
-  if (user && pathname.startsWith("/admin")) {
+  // RULE 3 — Authenticated user accessing /admin/* (not /admin/login)
+  if (user && pathname.startsWith("/admin") && !isAdminLoginPath) {
     const { data } = await supabase
       .from("users")
       .select("role")
@@ -69,7 +75,12 @@ export default async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // RULE 4 — Authenticated user accessing /login
+  // RULE 4 — Authenticated user at /admin/login → already logged in, skip to admin
+  if (user && isAdminLoginPath) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
+  // RULE 5 — Authenticated user accessing /login
   if (user && pathname === "/login") {
     const { data } = await supabase
       .from("users")
@@ -84,7 +95,7 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/portal/dashboard", request.url));
   }
 
-  // RULE 5 — All other routes
+  // RULE 6 — All other routes
   return supabaseResponse;
 }
 

@@ -46,11 +46,11 @@ export function ClientProfileHeader({
   const joined = new Date(createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
   return (
-    <div className="bg-white rounded-xl border border-line p-5 md:p-6">
+    <div className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="space-y-2">
-          <h1 className="text-xl font-bold text-navy">{contactName}</h1>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-body">
+          <h1 className="text-xl font-bold text-white">{contactName}</h1>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/60">
             <span className="flex items-center gap-1.5">
               <Building2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               {legalName}
@@ -74,7 +74,7 @@ export function ClientProfileHeader({
             <button
               onClick={onGenerateInvoice}
               disabled={generatingInvoice}
-              className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-40"
+              className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {generatingInvoice ? "Generating…" : "Generate Invoice"}
             </button>
@@ -84,7 +84,7 @@ export function ClientProfileHeader({
               <button
                 onClick={onConfirmPayment}
                 disabled={!pendingProofId}
-                className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-40"
+                className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:opacity-90 transition-opacity disabled:opacity-40"
               >
                 Confirm Payment
               </button>
@@ -100,7 +100,7 @@ export function ClientProfileHeader({
           {accountState === "active" && onInitiateUpgrade && (
             <button
               onClick={onInitiateUpgrade}
-              className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors"
+              className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:opacity-90 transition-opacity"
             >
               Initiate Package Upgrade
             </button>
@@ -109,7 +109,7 @@ export function ClientProfileHeader({
             <button
               onClick={onReactivate}
               disabled={reactivating}
-              className="px-4 py-2 text-sm font-medium border border-navy text-navy rounded-lg hover:bg-navy hover:text-white transition-colors disabled:opacity-40"
+              className="px-4 py-2 text-sm font-medium border border-gold text-gold rounded-lg hover:bg-gold hover:text-navy transition-colors disabled:opacity-40"
             >
               {reactivating ? "Reactivating…" : "Reactivate"}
             </button>

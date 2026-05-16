@@ -42,30 +42,30 @@ export default function InvoicesPage() {
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-navy">Invoice Manager</h1>
-        <p className="text-sm text-body mt-1">All generated client invoices</p>
+        <h1 className="text-2xl font-bold text-white">Invoice Manager</h1>
+        <p className="text-sm text-white/60 mt-1">All generated client invoices</p>
       </div>
 
       {loading && (
         <div className="space-y-2">
-          {[1,2,3,4].map(i => <div key={i} className="h-14 rounded-xl bg-white border border-line animate-pulse" />)}
+          {[1,2,3,4].map(i => <div key={i} className="h-14 rounded-xl bg-navy border border-white/10 animate-pulse" />)}
         </div>
       )}
 
       {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
 
       {!loading && !error && invoices.length === 0 && (
-        <div className="bg-white rounded-xl border border-line p-10 text-center">
-          <p className="text-sm text-body">No invoices yet.</p>
+        <div className="bg-navy rounded-xl border border-white/10 p-10 text-center">
+          <p className="text-sm text-white/60">No invoices yet.</p>
         </div>
       )}
 
       {!loading && !error && invoices.length > 0 && (
-        <div className="bg-white rounded-xl border border-line overflow-hidden">
+        <div className="bg-navy rounded-xl border border-white/10 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-line bg-off text-left text-xs font-semibold text-body uppercase tracking-wide">
+                <tr className="border-b border-white/10 bg-white/5 text-left text-xs font-semibold text-white/60 uppercase tracking-wide">
                   <th className="px-4 py-3">Invoice</th>
                   <th className="px-4 py-3 hidden md:table-cell">Client</th>
                   <th className="px-4 py-3 hidden lg:table-cell">Package</th>
@@ -75,18 +75,18 @@ export default function InvoicesPage() {
                   <th className="px-4 py-3 sr-only">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="divide-y divide-white/10">
                 {invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-off/50 transition-colors">
-                    <td className="px-4 py-3 font-mono font-medium text-navy">{inv.invoice_number}</td>
-                    <td className="px-4 py-3 hidden md:table-cell text-body truncate max-w-[200px]">
+                  <tr key={inv.id} className="hover:bg-white/[0.03] transition-colors">
+                    <td className="px-4 py-3 font-mono font-medium text-white">{inv.invoice_number}</td>
+                    <td className="px-4 py-3 hidden md:table-cell text-white/60 truncate max-w-[200px]">
                       {(inv.client as unknown as { email: string } | null)?.email ?? "—"}
                     </td>
-                    <td className="px-4 py-3 hidden lg:table-cell text-body">
+                    <td className="px-4 py-3 hidden lg:table-cell text-white/60">
                       {(inv.package as unknown as { name: string } | null)?.name ?? "—"}
                     </td>
-                    <td className="px-4 py-3 font-medium text-navy">{fmtCurrency(inv.final_price_ghs)}</td>
-                    <td className="px-4 py-3 hidden sm:table-cell text-body">
+                    <td className="px-4 py-3 font-medium text-white">{fmtCurrency(inv.final_price_ghs)}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell text-white/60">
                       {new Date(inv.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
                     <td className="px-4 py-3">

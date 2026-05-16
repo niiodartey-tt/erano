@@ -25,7 +25,7 @@ export default function AdminSidebar({ pendingCount }: { pendingCount: number })
 
   async function handleSignOut() {
     await fetch("/api/auth/signout", { method: "POST" });
-    window.location.href = "/login";
+    window.location.href = "/admin/login";
   }
 
   return (

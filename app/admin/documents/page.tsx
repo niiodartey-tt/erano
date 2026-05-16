@@ -40,14 +40,14 @@ export default function DocumentsPage() {
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-navy">Document Manager</h1>
-        <p className="mt-1 text-sm text-body">All document requests across all clients</p>
+        <h1 className="text-2xl font-bold text-white">Document Manager</h1>
+        <p className="mt-1 text-sm text-white/60">All document requests across all clients</p>
       </div>
 
       {loading && (
         <div className="space-y-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-14 animate-pulse rounded-xl border border-line bg-white" />
+            <div key={i} className="h-14 animate-pulse rounded-xl border border-white/10 bg-navy" />
           ))}
         </div>
       )}
@@ -55,17 +55,17 @@ export default function DocumentsPage() {
       {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
 
       {!loading && !error && requests.length === 0 && (
-        <div className="rounded-xl border border-line bg-white p-10 text-center">
-          <p className="text-sm text-body">No document requests yet.</p>
+        <div className="rounded-xl border border-white/10 bg-navy p-10 text-center">
+          <p className="text-sm text-white/60">No document requests yet.</p>
         </div>
       )}
 
       {!loading && !error && requests.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-line bg-white">
+        <div className="overflow-hidden rounded-xl border border-white/10 bg-navy">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-line bg-off text-left text-xs font-semibold uppercase tracking-wide text-body">
+                <tr className="border-b border-white/10 bg-white/5 text-left text-xs font-semibold uppercase tracking-wide text-white/60">
                   <th className="px-4 py-3">Client</th>
                   <th className="hidden px-4 py-3 md:table-cell">Business</th>
                   <th className="px-4 py-3">Title</th>
@@ -76,22 +76,22 @@ export default function DocumentsPage() {
                   <th className="px-4 py-3 sr-only">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="divide-y divide-white/10">
                 {requests.map((req) => (
-                  <tr key={req.id} className="transition-colors hover:bg-off/50">
-                    <td className="px-4 py-3 font-medium text-navy">{req.contact_name ?? "—"}</td>
-                    <td className="hidden px-4 py-3 text-body md:table-cell">{req.legal_name ?? "—"}</td>
-                    <td className="max-w-[200px] truncate px-4 py-3 text-body">{req.title}</td>
-                    <td className="hidden px-4 py-3 text-body sm:table-cell">{req.category}</td>
+                  <tr key={req.id} className="transition-colors hover:bg-white/[0.03]">
+                    <td className="px-4 py-3 font-medium text-white">{req.contact_name ?? "—"}</td>
+                    <td className="hidden px-4 py-3 text-white/60 md:table-cell">{req.legal_name ?? "—"}</td>
+                    <td className="max-w-[200px] truncate px-4 py-3 text-white/60">{req.title}</td>
+                    <td className="hidden px-4 py-3 text-white/60 sm:table-cell">{req.category}</td>
                     <td className="px-4 py-3">
                       <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize", STATUS_CLASSES[req.status] ?? "bg-gray-100 text-gray-800")}>
                         {req.status}
                       </span>
                     </td>
-                    <td className="hidden px-4 py-3 text-body lg:table-cell">
+                    <td className="hidden px-4 py-3 text-white/60 lg:table-cell">
                       {new Date(req.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
-                    <td className="hidden px-4 py-3 text-body sm:table-cell">{req.upload_count}</td>
+                    <td className="hidden px-4 py-3 text-white/60 sm:table-cell">{req.upload_count}</td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/clients/${req.client_id}`}

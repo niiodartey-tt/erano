@@ -92,8 +92,8 @@ export default function ClientProfilePage() {
     window.open((await res.json() as { url: string }).url, "_blank");
   }
 
-  if (loading) return <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-white border border-line animate-pulse" />)}</div>;
-  if (error || !data) return <div className="mx-auto max-w-6xl p-4 md:p-6"><p className="text-sm text-red-600" role="alert">{error ?? "Client not found."}</p></div>;
+  if (loading) return <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-navy border border-white/10 animate-pulse" />)}</div>;
+  if (error || !data) return <div className="mx-auto max-w-6xl p-4 md:p-6"><p className="text-sm text-red-400" role="alert">{error ?? "Client not found."}</p></div>;
 
   const pendingProof   = data.proofs.find(p => p.status === "pending") ?? null;
   const profile        = data.profile;
@@ -101,7 +101,7 @@ export default function ClientProfilePage() {
 
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">
-      <Link href="/admin/clients" className="inline-flex items-center gap-1 text-sm text-body hover:text-navy transition-colors mb-2">
+      <Link href="/admin/clients" className="inline-flex items-center gap-1 text-sm text-white/60 hover:text-white transition-colors mb-2">
         <ChevronLeft className="h-4 w-4" aria-hidden="true" /> All clients
       </Link>
       <ClientProfileHeader
@@ -118,18 +118,18 @@ export default function ClientProfilePage() {
         reactivating={reactivating}
       />
       {data.user.account_state === "pending" && isCustom && (
-        <div className="bg-white rounded-xl border border-line p-5 md:p-6">
-          <label className="ec-label" htmlFor="custom-price">Custom package price (GH₵)</label>
-          <input id="custom-price" type="number" min="1" className="ec-input mt-1" placeholder="0.00" value={customPrice} onChange={e => setCustomPrice(e.target.value)} />
+        <div className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
+          <label className="block text-xs font-medium text-white/60 mb-1" htmlFor="custom-price">Custom package price (GH₵)</label>
+          <input id="custom-price" type="number" min="1" className="mt-1 w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10" placeholder="0.00" value={customPrice} onChange={e => setCustomPrice(e.target.value)} />
         </div>
       )}
       {(invoiceNum || generateErr) && (
-        <div className={`rounded-xl border p-4 space-y-1 ${invoiceNum ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
+        <div className={`rounded-xl border p-4 space-y-1 ${invoiceNum ? "border-green-800 bg-green-900/30" : "border-red-800 bg-red-900/30"}`}>
           {invoiceNum ? (<>
-            <p className="text-sm font-semibold text-green-800">Invoice generated successfully — {invoiceNum}</p>
-            <p className="text-sm text-green-700">The client has been notified by email.</p>
+            <p className="text-sm font-semibold text-green-300">Invoice generated successfully — {invoiceNum}</p>
+            <p className="text-sm text-green-400">The client has been notified by email.</p>
             <Link href="/admin/invoices" className="text-xs font-medium text-gold hover:text-gold-dark">View invoice manager</Link>
-          </>) : <p className="text-sm text-red-700" role="alert">{generateErr}</p>}
+          </>) : <p className="text-sm text-red-400" role="alert">{generateErr}</p>}
         </div>
       )}
       <ClientInfoSections profile={profile} pkg={data.package} invoice={data.invoice} agreement={data.agreement} />
@@ -140,7 +140,7 @@ export default function ClientProfilePage() {
         onDownload={handleDownload}
       />
       {downloadError && (
-        <p className="text-sm text-red-600 rounded-lg border border-red-200 bg-red-50 px-4 py-2" role="alert">
+        <p className="text-sm text-red-400 rounded-lg border border-red-800 bg-red-900/30 px-4 py-2" role="alert">
           {downloadError}
         </p>
       )}

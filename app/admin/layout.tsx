@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { AdminProvider } from "@/context/AdminContext";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
 import AdminHeader from "@/components/admin/layout/AdminHeader";
+import { IdleTimeout } from "@/components/ui/IdleTimeout";
 
 export default async function AdminLayout({
   children,
@@ -33,7 +34,7 @@ export default async function AdminLayout({
   );
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/admin/login");
 
   const service = createServiceClient();
   const { data: userRow } = await service
@@ -42,7 +43,7 @@ export default async function AdminLayout({
     .eq("id", user.id)
     .single();
 
-  if (!userRow) redirect("/login");
+  if (!userRow) redirect("/admin/login");
   if (userRow.role !== "admin") redirect("/portal/dashboard");
 
   const adminName = user.user_metadata?.full_name as string | undefined
@@ -57,7 +58,7 @@ export default async function AdminLayout({
 
   return (
     <AdminProvider adminId={user.id} adminName={adminName}>
-      <div className="flex min-h-screen bg-off">
+      <div className="flex min-h-screen bg-ink">
         <AdminSidebar pendingCount={pendingCount ?? 0} />
         <div className="flex flex-1 flex-col min-w-0">
           <AdminHeader />
@@ -66,6 +67,7 @@ export default async function AdminLayout({
           </main>
         </div>
       </div>
+      <IdleTimeout loginUrl="/admin/login" />
     </AdminProvider>
   );
 }

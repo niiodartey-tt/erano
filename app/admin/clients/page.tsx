@@ -75,21 +75,21 @@ export default function ClientsPage() {
     <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-body/50" aria-hidden="true" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" aria-hidden="true" />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or business..."
             aria-label="Search clients"
-            className="w-full pl-9 pr-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy placeholder:text-body/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px]"
+            className="w-full pl-9 pr-3 py-2.5 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 min-h-[44px]"
           />
         </div>
         <select
           value={stateFilter}
           onChange={(e) => handleStateChange(e.target.value)}
           aria-label="Filter by account state"
-          className="admin-select px-3 py-2.5 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 min-h-[44px]"
+          className="px-3 py-2.5 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 min-h-[44px] appearance-none"
         >
           {STATE_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
@@ -97,7 +97,7 @@ export default function ClientsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl border border-line overflow-hidden">
+      <div className="bg-navy rounded-xl border border-white/10 overflow-hidden">
         <ClientsTable clients={clients} loading={loading} />
         <PaginationBar
           page={page}

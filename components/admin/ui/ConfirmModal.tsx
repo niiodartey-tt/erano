@@ -53,26 +53,26 @@ export function ConfirmModal({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div ref={containerRef} className="w-full max-w-md bg-white rounded-xl shadow-xl p-6">
+      <div ref={containerRef} className="w-full max-w-md bg-navy rounded-xl border border-white/10 shadow-xl p-6">
         <div className="flex items-start justify-between gap-3 mb-4">
-          <h2 id="modal-title" className="text-base font-semibold text-navy">{title}</h2>
+          <h2 id="modal-title" className="text-base font-semibold text-white">{title}</h2>
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="text-body/50 hover:text-body transition-colors shrink-0"
+            className="text-white/40 hover:text-white/60 transition-colors shrink-0"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="text-sm text-body mb-4">{body}</div>
+        <div className="text-sm text-white/60 mb-4">{body}</div>
 
         {withReason && (
           <textarea
             ref={reasonRef}
             placeholder="Reason for rejection..."
             rows={3}
-            className="w-full px-3 py-2 text-sm border border-line rounded-lg text-navy placeholder:text-body/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 mb-4 resize-none"
+            className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 mb-4 resize-none"
           />
         )}
 
@@ -80,7 +80,7 @@ export function ConfirmModal({
           <button
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 text-sm font-medium text-body border border-line rounded-lg hover:bg-off transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-white/60 border border-white/10 rounded-lg hover:bg-white/5 transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
@@ -90,7 +90,7 @@ export function ConfirmModal({
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
               destructive
                 ? "bg-red-600 text-white hover:bg-red-700"
-                : "bg-navy text-white hover:bg-navy/90"
+                : "bg-gold text-navy hover:opacity-90"
             }`}
           >
             {loading ? "Processing..." : confirmLabel}

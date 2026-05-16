@@ -44,27 +44,27 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
   }
 
   return (
-    <form onSubmit={(e) => void handleSubmit(e)} className="mt-4 p-4 border border-line rounded-xl bg-off space-y-3">
-      <h4 className="text-sm font-semibold text-navy">New Document Request</h4>
+    <form onSubmit={(e) => void handleSubmit(e)} className="mt-4 p-4 border border-white/10 rounded-xl bg-white/5 space-y-3">
+      <h4 className="text-sm font-semibold text-white">New Document Request</h4>
 
       <div>
-        <label htmlFor="req-title" className="block text-xs font-medium text-body mb-1">Title</label>
+        <label htmlFor="req-title" className="block text-xs font-medium text-white/60 mb-1">Title</label>
         <input
           id="req-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Audited financial statements 2023"
-          className="w-full px-3 py-2 text-sm border border-line rounded-lg bg-white text-navy placeholder:text-body/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20"
+          className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10"
         />
       </div>
 
       <div>
-        <label htmlFor="req-category" className="block text-xs font-medium text-body mb-1">Category</label>
+        <label htmlFor="req-category" className="block text-xs font-medium text-white/60 mb-1">Category</label>
         <select
           id="req-category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="admin-select w-full px-3 py-2 text-sm border border-line rounded-lg bg-white text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20"
+          className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none"
         >
           <option value="">Select category</option>
           {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -72,24 +72,24 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
       </div>
 
       <div>
-        <label htmlFor="req-description" className="block text-xs font-medium text-body mb-1">Instructions</label>
+        <label htmlFor="req-description" className="block text-xs font-medium text-white/60 mb-1">Instructions</label>
         <textarea
           id="req-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="What exactly is needed and in what format..."
-          className="w-full px-3 py-2 text-sm border border-line rounded-lg bg-white text-navy placeholder:text-body/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/20 resize-none"
+          className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 resize-none"
         />
       </div>
 
       {error && <p className="text-xs text-red-600" role="alert">{error}</p>}
 
       <div className="flex gap-2 justify-end pt-1">
-        <button type="button" onClick={onCancel} disabled={loading} className="px-3 py-1.5 text-sm text-body border border-line rounded-lg hover:bg-white transition-colors disabled:opacity-50">
+        <button type="button" onClick={onCancel} disabled={loading} className="px-3 py-1.5 text-sm text-white/60 border border-white/10 rounded-lg hover:bg-white/5 transition-colors disabled:opacity-50">
           Cancel
         </button>
-        <button type="submit" disabled={loading} className="px-3 py-1.5 text-sm font-medium bg-navy text-white rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-50">
+        <button type="submit" disabled={loading} className="px-3 py-1.5 text-sm font-medium bg-gold text-navy rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50">
           {loading ? "Sending..." : "Send Request"}
         </button>
       </div>

@@ -30,16 +30,16 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
   const isConfirmed = proofs.some(p => p.status === "confirmed");
 
   return (
-    <section className="bg-white rounded-xl border border-line p-5 md:p-6">
-      <h2 className="text-sm font-semibold text-navy mb-4">Payments</h2>
+    <section className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
+      <h2 className="text-sm font-semibold text-white mb-4">Payments</h2>
 
       {isConfirmed && (
-        <div className="mb-4 px-4 py-3 rounded-lg text-sm bg-green-50 text-green-700">
+        <div className="mb-4 px-4 py-3 rounded-lg text-sm border border-green-800 bg-green-900/30 text-green-400">
           Payment completed.
         </div>
       )}
       {timer && !isConfirmed && (
-        <div className={cn("mb-4 px-4 py-3 rounded-lg text-sm", expired ? "bg-red-50 text-red-700" : "bg-blue-50 text-blue-700")}>
+        <div className={cn("mb-4 px-4 py-3 rounded-lg text-sm border", expired ? "border-red-800 bg-red-900/30 text-red-400" : "border-blue-800 bg-blue-900/30 text-blue-400")}>
           {expired
             ? "Payment window expired."
             : `Payment window active — ${daysLeft} day${daysLeft === 1 ? "" : "s"} remaining (expires ${expiresAt!.toLocaleDateString("en-GB")})`}
@@ -47,25 +47,25 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
       )}
 
       {proofs.length === 0 ? (
-        <p className="text-sm text-body/50">No payment proofs submitted yet.</p>
+        <p className="text-sm text-white/40">No payment proofs submitted yet.</p>
       ) : (
         <div className="overflow-x-auto -mx-5 md:-mx-6">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-line">
-                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-body/60">Reference</th>
-                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-body/60">Amount</th>
-                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-body/60 hidden md:table-cell">Uploaded</th>
-                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-body/60">Status</th>
-                <th className="px-5 md:px-6 py-2.5 text-right text-xs font-medium text-body/60">Actions</th>
+              <tr className="border-b border-white/10">
+                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-white/40">Reference</th>
+                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-white/40">Amount</th>
+                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-white/40 hidden md:table-cell">Uploaded</th>
+                <th className="px-5 md:px-6 py-2.5 text-left text-xs font-medium text-white/40">Status</th>
+                <th className="px-5 md:px-6 py-2.5 text-right text-xs font-medium text-white/40">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-white/10">
               {proofs.map((proof) => (
-                <tr key={proof.id} className="hover:bg-off/50 transition-colors">
-                  <td className="px-5 md:px-6 py-3 text-navy font-mono text-xs">{proof.transaction_reference}</td>
-                  <td className="px-5 md:px-6 py-3 text-navy">{proof.currency} {proof.amount_paid.toLocaleString()}</td>
-                  <td className="px-5 md:px-6 py-3 text-body hidden md:table-cell">
+                <tr key={proof.id} className="hover:bg-white/[0.03] transition-colors">
+                  <td className="px-5 md:px-6 py-3 text-white/60 font-mono text-xs">{proof.transaction_reference}</td>
+                  <td className="px-5 md:px-6 py-3 text-white">{proof.currency} {proof.amount_paid.toLocaleString()}</td>
+                  <td className="px-5 md:px-6 py-3 text-white/60 hidden md:table-cell">
                     {new Date(proof.uploaded_at).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-5 md:px-6 py-3">
@@ -76,7 +76,7 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
                   <td className="px-5 md:px-6 py-3">
                     <div className="flex items-center justify-end gap-2">
                       {proof.file_path && (
-                        <button onClick={() => onDownload("payment-proofs", proof.file_path!)} className="text-body/50 hover:text-navy transition-colors" aria-label="Download proof">
+                        <button onClick={() => onDownload("payment-proofs", proof.file_path!)} className="text-white/40 hover:text-white transition-colors" aria-label="Download proof">
                           <Download className="h-4 w-4" aria-hidden="true" />
                         </button>
                       )}

@@ -6,6 +6,7 @@ import type { AccountState } from "@/lib/validateState";
 import { PortalProvider } from "@/context/PortalContext";
 import PortalSidebar from "@/components/portal/layout/PortalSidebar";
 import PortalHeader from "@/components/portal/layout/PortalHeader";
+import { IdleTimeout } from "@/components/ui/IdleTimeout";
 
 export default async function PortalLayout({
   children,
@@ -81,6 +82,7 @@ export default async function PortalLayout({
           </main>
         </div>
       </div>
+      <IdleTimeout loginUrl="/login" />
     </PortalProvider>
   );
 }

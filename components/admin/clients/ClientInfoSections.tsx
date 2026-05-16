@@ -17,8 +17,8 @@ function Row({ label, value }: { label: string; value: string | number | boolean
   const display = value === null || value === undefined || value === "" ? "—" : String(value);
   return (
     <div className="flex flex-col gap-0.5">
-      <dt className="text-xs font-medium text-body/60">{label}</dt>
-      <dd className="text-sm text-navy">{display}</dd>
+      <dt className="text-xs font-medium text-white/40">{label}</dt>
+      <dd className="text-sm text-white">{display}</dd>
     </div>
   );
 }
@@ -31,8 +31,8 @@ export function ClientInfoSections({ profile: p, pkg, invoice, agreement }: Prop
   return (
     <div className="space-y-4">
       {/* Business info */}
-      <section className="bg-white rounded-xl border border-line p-5 md:p-6">
-        <h2 className="text-sm font-semibold text-navy mb-4">Business Information</h2>
+      <section className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
+        <h2 className="text-sm font-semibold text-white mb-4">Business Information</h2>
         <dl className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Row label="Legal Name"      value={p.legal_name as string}   />
           <Row label="Trading Name"    value={p.trading_name as string} />
@@ -50,8 +50,8 @@ export function ClientInfoSections({ profile: p, pkg, invoice, agreement }: Prop
       </section>
 
       {/* Compliance */}
-      <section className="bg-white rounded-xl border border-line p-5 md:p-6">
-        <h2 className="text-sm font-semibold text-navy mb-4">Compliance &amp; Financials</h2>
+      <section className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
+        <h2 className="text-sm font-semibold text-white mb-4">Compliance &amp; Financials</h2>
         <dl className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Row label="GRA Registered"   value={(p.gra_registered as boolean) ? "Yes" : "No"} />
           <Row label="VAT Registered"   value={(p.vat_registered as boolean) ? "Yes" : "No"} />
@@ -62,34 +62,34 @@ export function ClientInfoSections({ profile: p, pkg, invoice, agreement }: Prop
       </section>
 
       {/* Package / Invoice / Agreement */}
-      <section className="bg-white rounded-xl border border-line p-5 md:p-6">
-        <h2 className="text-sm font-semibold text-navy mb-4">Package &amp; Agreements</h2>
+      <section className="bg-navy rounded-xl border border-white/10 p-5 md:p-6">
+        <h2 className="text-sm font-semibold text-white mb-4">Package &amp; Agreements</h2>
         <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-0.5">
-            <dt className="text-xs font-medium text-body/60">Package</dt>
-            <dd className="text-sm text-navy font-medium">{pkg?.name ?? "—"}</dd>
-            {pkg?.price_ghs && <dd className="text-xs text-body">{fmt(pkg.price_ghs)}</dd>}
+            <dt className="text-xs font-medium text-white/40">Package</dt>
+            <dd className="text-sm text-white font-medium">{pkg?.name ?? "—"}</dd>
+            {pkg?.price_ghs && <dd className="text-xs text-white/60">{fmt(pkg.price_ghs)}</dd>}
           </div>
           <div className="space-y-0.5">
-            <dt className="text-xs font-medium text-body/60">Invoice</dt>
+            <dt className="text-xs font-medium text-white/40">Invoice</dt>
             {invoice ? (
               <>
-                <dd className="text-sm text-navy">{invoice.invoice_number}</dd>
-                <dd className="text-xs text-body">{fmt(invoice.final_price_ghs)} · {invoice.status}</dd>
+                <dd className="text-sm text-white">{invoice.invoice_number}</dd>
+                <dd className="text-xs text-white/60">{fmt(invoice.final_price_ghs)} · {invoice.status}</dd>
                 {invoice.signed_url && (
                   <dd><a href={invoice.signed_url} target="_blank" rel="noreferrer" className="text-xs text-gold hover:underline inline-flex items-center gap-1">View <ExternalLink className="h-3 w-3" /></a></dd>
                 )}
               </>
-            ) : <dd className="text-sm text-navy">—</dd>}
+            ) : <dd className="text-sm text-white">—</dd>}
           </div>
           <div className="space-y-0.5">
-            <dt className="text-xs font-medium text-body/60">Agreement</dt>
+            <dt className="text-xs font-medium text-white/40">Agreement</dt>
             {agreement ? (
               <>
-                <dd className="text-sm text-navy">v{agreement.version_number}</dd>
-                <dd className="text-xs text-body">Accepted {new Date(agreement.accepted_at).toLocaleDateString("en-GB")}</dd>
+                <dd className="text-sm text-white">v{agreement.version_number}</dd>
+                <dd className="text-xs text-white/60">Accepted {new Date(agreement.accepted_at).toLocaleDateString("en-GB")}</dd>
               </>
-            ) : <dd className="text-sm text-navy">—</dd>}
+            ) : <dd className="text-sm text-white">—</dd>}
           </div>
         </dl>
       </section>

@@ -53,10 +53,10 @@ export default function AdminDashboard() {
       <div className="mx-auto max-w-6xl p-4 md:p-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-28 rounded-xl bg-white border border-line animate-pulse" />
+            <div key={i} className="h-28 rounded-xl bg-navy border border-white/10 animate-pulse" />
           ))}
         </div>
-        <div className="h-64 rounded-xl bg-white border border-line animate-pulse" />
+        <div className="h-64 rounded-xl bg-navy border border-white/10 animate-pulse" />
       </div>
     );
   }
@@ -80,12 +80,12 @@ export default function AdminDashboard() {
     <div className="mx-auto max-w-6xl p-4 md:p-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {CARDS.map(({ label, value, icon: Icon, gold }) => (
-          <div key={label} className="bg-white rounded-xl border border-line p-4 md:p-5">
+          <div key={label} className="bg-navy rounded-xl border border-white/10 p-4 md:p-5">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-xs font-medium text-body leading-tight">{label}</p>
-              <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", gold ? "text-gold" : "text-body/40")} aria-hidden="true" />
+              <p className="text-xs font-medium text-white/60 leading-tight">{label}</p>
+              <Icon className={cn("h-4 w-4 shrink-0 mt-0.5", gold ? "text-gold" : "text-white/30")} aria-hidden="true" />
             </div>
-            <p className={cn("mt-3 text-2xl md:text-3xl font-bold", gold ? "text-gold" : "text-navy")}>
+            <p className={cn("mt-3 text-2xl md:text-3xl font-bold", gold ? "text-gold" : "text-white")}>
               {value}
             </p>
           </div>

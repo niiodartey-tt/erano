@@ -54,15 +54,15 @@ export function SubmissionsPanel({ submissions, stateCounts }: Props) {
     : submissions.filter((s) => s.account_state === activeTab);
 
   return (
-    <div className="bg-white rounded-xl border border-line overflow-hidden">
-      <div className="px-5 py-4 border-b border-line flex items-center justify-between gap-4">
-        <h2 className="text-sm font-semibold text-navy">Recent Submissions</h2>
+    <div className="bg-navy rounded-xl border border-white/10 overflow-hidden">
+      <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between gap-4">
+        <h2 className="text-sm font-semibold text-white">Recent Submissions</h2>
         <Link href="/admin/clients?state=pending" className="text-xs font-medium text-gold hover:underline shrink-0">
           View all pending
         </Link>
       </div>
 
-      <div className="border-b border-line overflow-x-auto">
+      <div className="border-b border-white/10 overflow-x-auto">
         <div className="flex min-w-max px-5">
           {TABS.map((tab) => (
             <button
@@ -72,14 +72,14 @@ export function SubmissionsPanel({ submissions, stateCounts }: Props) {
                 "flex items-center gap-1.5 px-3 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors",
                 activeTab === tab.key
                   ? "border-gold text-gold"
-                  : "border-transparent text-body hover:text-navy",
+                  : "border-transparent text-white/60 hover:text-white",
               )}
               aria-pressed={activeTab === tab.key}
             >
               {tab.label}
               <span className={cn(
                 "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold",
-                activeTab === tab.key ? "bg-gold/10 text-gold" : "bg-gray-100 text-gray-500",
+                activeTab === tab.key ? "bg-gold/10 text-gold" : "bg-white/10 text-white/40",
               )}>
                 {tabCount(tab.key)}
               </span>
@@ -89,12 +89,12 @@ export function SubmissionsPanel({ submissions, stateCounts }: Props) {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="px-5 py-10 text-sm text-body text-center">No submissions for this filter.</p>
+        <p className="px-5 py-10 text-sm text-white/60 text-center">No submissions for this filter.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-line bg-off text-left text-xs font-semibold text-body uppercase tracking-wide">
+              <tr className="border-b border-white/10 bg-white/5 text-left text-xs font-semibold text-white/60 uppercase tracking-wide">
                 <th className="px-4 py-3">Client</th>
                 <th className="px-4 py-3 hidden md:table-cell">Business</th>
                 <th className="px-4 py-3 hidden lg:table-cell">Industry</th>
@@ -108,19 +108,19 @@ export function SubmissionsPanel({ submissions, stateCounts }: Props) {
               {filtered.map((s) => {
                 const badge = STATE_BADGE[s.account_state] ?? STATE_BADGE["pending"];
                 return (
-                  <tr key={s.id} className="border-b border-line last:border-0 hover:bg-off/50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-navy">{s.client_profiles?.contact_name ?? "—"}</td>
-                    <td className="px-4 py-3 text-body hidden md:table-cell">{s.client_profiles?.legal_name ?? "—"}</td>
-                    <td className="px-4 py-3 text-body hidden lg:table-cell">{s.client_profiles?.industry ?? "—"}</td>
-                    <td className="px-4 py-3 text-body hidden lg:table-cell">{s.client_profiles?.packages?.name ?? "—"}</td>
+                  <tr key={s.id} className="border-b border-white/10 last:border-0 hover:bg-white/[0.03] transition-colors">
+                    <td className="px-4 py-3 font-medium text-white">{s.client_profiles?.contact_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/60 hidden md:table-cell">{s.client_profiles?.legal_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/60 hidden lg:table-cell">{s.client_profiles?.industry ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/60 hidden lg:table-cell">{s.client_profiles?.packages?.name ?? "—"}</td>
                     <td className="px-4 py-3">
                       <span className={cn("inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium", badge.cls)}>
                         {badge.label}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-body hidden md:table-cell">{fmtDate(s.created_at)}</td>
+                    <td className="px-4 py-3 text-white/60 hidden md:table-cell">{fmtDate(s.created_at)}</td>
                     <td className="px-4 py-3">
-                      <Link href={`/admin/clients/${s.id}`} className="text-xs font-medium text-navy underline underline-offset-2 hover:text-gold transition-colors">
+                      <Link href={`/admin/clients/${s.id}`} className="text-xs font-medium text-white/60 underline underline-offset-2 hover:text-gold transition-colors">
                         View
                       </Link>
                     </td>

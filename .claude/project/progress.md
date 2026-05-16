@@ -855,4 +855,53 @@ After re-reviewing the spec, 4 gaps were identified and corrected:
 
 ---
 
+## Sprint 16 — Admin Login + Dark Theme + Session Idle Timeout
+**Status:** In progress — all 5 tasks built, awaiting commit/merge approval
+
+**TASK 1 — Navbar text change**
+- `components/layout/Navbar.tsx` — "Log in" → "Client login" (desktop + mobile drawer; lock SVG + href unchanged)
+
+**TASK 2 — Admin login page**
+- `app/admin/login/page.tsx` (NEW) — Standalone dark admin login: ink bg, navy card, gold border, Playfair "ERANO" wordmark, 5-attempt lockout, role check (signOut + "Access denied" if not admin), gold submit button
+- `app/admin/login/layout.tsx` (NEW) — Metadata: `robots: { index: false, follow: false }`
+
+**TASK 3 — Middleware + layout redirects**
+- `middleware.ts` — Added `isAdminLoginPath` exception; RULE 1 now splits portal→/login and admin→/admin/login; RULE 4 (new): authenticated at /admin/login → /admin
+- `app/admin/layout.tsx` — Redirects changed from `/login` → `/admin/login`; outer div `bg-off` → `bg-ink`
+- `components/admin/layout/AdminSidebar.tsx` — `window.location.href = "/login"` → `"/admin/login"` in handleSignOut
+
+**TASK 4 — Dark theme (15 files)**
+- `components/admin/layout/AdminHeader.tsx` — `bg-white border-line` → `bg-navy border-white/10`; avatar bg → `bg-gold text-navy`; text → white
+- `app/admin/page.tsx` — Metric card skeletons + cards: `bg-white border-line` → `bg-navy border-white/10`; text-navy → text-white
+- `components/admin/inbox/SubmissionsPanel.tsx` — All bg-white/bg-off/border-line/text-navy/text-body → dark equivalents; tabs inactive badges `bg-gray-100` → `bg-white/10`
+- `app/admin/clients/page.tsx` — Search input + state select dark; `admin-select` CSS class removed → direct Tailwind; table container dark
+- `components/admin/clients/ClientsTable.tsx` — Skeleton `bg-line` → `bg-white/10`; thead/rows dark
+- `app/admin/invoices/page.tsx` — Headings, skeletons, empty state, table: full dark
+- `app/admin/documents/page.tsx` — Same as invoices
+- `app/admin/clients/[id]/page.tsx` — Loading skeletons, back link, custom price section (ec-label/ec-input replaced), banners (green/red adapted for dark)
+- `components/admin/clients/ClientProfileHeader.tsx` — Card dark; all `bg-navy text-white` action buttons → `bg-gold text-navy`; reactivate border → border-gold text-gold
+- `components/admin/clients/ClientInfoSections.tsx` — Three sections dark; Row dt `text-body/60` → `text-white/40`; dd `text-navy` → `text-white`
+- `components/admin/clients/ClientPaymentSection.tsx` — Section dark; banners dark (green-900/30, red-900/30, blue-900/30); table dark
+- `components/admin/clients/ClientDocumentsSection.tsx` — Section dark; item cards dark
+- `components/admin/clients/DocumentRequestForm.tsx` — Form bg `bg-off` → `bg-white/5`; inputs/select/textarea dark; `admin-select` removed; submit → `bg-gold text-navy`
+- `components/admin/ui/ConfirmModal.tsx` — `bg-white` → `bg-navy border-white/10`; confirm button → `bg-gold text-navy`
+- `components/admin/clients/PackageUpgradeModal.tsx` — Modal dark; `ec-label`/`ec-select admin-select`/`ec-input` CSS classes replaced with direct dark Tailwind; submit → `bg-gold text-navy`
+
+**TASK 5 — IdleTimeout**
+- `components/ui/IdleTimeout.tsx` (NEW) — 30-min idle, 2-min warning banner (fixed bottom, navy bg, gold "Stay signed in" button); tracks mousemove/mousedown/keydown/touchstart/scroll; POST /api/auth/signout on timeout
+- `app/portal/layout.tsx` — `<IdleTimeout loginUrl="/login" />` added inside PortalProvider
+- `app/admin/layout.tsx` — `<IdleTimeout loginUrl="/admin/login" />` added inside AdminProvider
+
+**Key decisions:**
+- Primary admin action buttons changed from `bg-navy text-white` → `bg-gold text-navy` for visual identity in dark context (navy on navy was invisible)
+- `admin-select` CSS class (light chevron SVG in globals.css) replaced with `appearance-none` direct Tailwind — avoids light-themed CSS variable bleeding into dark UI
+- `ec-label` / `ec-input` / `ec-select` classes not used in any admin dark-themed component — all replaced with direct Tailwind
+- Semantic status badges (green/amber/blue/red) kept as-is — they read well on dark backgrounds as colored chips
+- IdleTimeout wired at layout level (server component rendering client component) — correct Next.js pattern
+
+**TypeScript:** clean (0 errors)
+**Build:** clean — 66 pages, 0 errors
+
+---
+
 *ApexSource Ventures · Accra, Ghana · May 2026*
