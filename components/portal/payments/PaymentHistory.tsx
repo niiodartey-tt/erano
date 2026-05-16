@@ -48,7 +48,7 @@ export default function PaymentHistory() {
   if (proofs.length === 0) return <p className="text-sm text-body">No payment submissions yet.</p>;
 
   return (
-    <div className="rounded-lg border border-line">
+    <div className="overflow-x-auto rounded-lg border border-line">
       <table className="w-full text-sm">
         <thead className="bg-off">
           <tr>

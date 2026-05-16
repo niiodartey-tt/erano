@@ -58,8 +58,10 @@ export default function PortalSidebar({ accountState }: { accountState: AccountS
       )}
       <aside
         className={cn(
-          "fixed md:sticky top-0 left-0 z-40 flex flex-col w-[260px] h-screen bg-navy transition-transform duration-300 ease-in-out",
-          isMobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+          "fixed md:sticky top-0 left-0 flex flex-col w-[260px] h-screen bg-navy transition-transform duration-300 ease-in-out",
+          isMobileNavOpen
+            ? "translate-x-0 z-50"
+            : "-translate-x-full md:translate-x-0 z-40",
         )}
         aria-label="Portal navigation"
       >
@@ -74,7 +76,7 @@ export default function PortalSidebar({ accountState }: { accountState: AccountS
           </span>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4" aria-label="Portal menu">
+        <nav className="flex-1 overflow-y-auto py-4 pb-20 md:pb-4" aria-label="Portal menu">
           <ul role="list" className="flex flex-col gap-0.5 px-3">
             {NAV.filter((item) => item.show(accountState)).map(({ icon: Icon, label, href }) => {
               const active = pathname === href || pathname.startsWith(href + "/");

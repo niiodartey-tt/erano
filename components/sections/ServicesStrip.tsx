@@ -122,7 +122,7 @@ export default function ServicesStrip() {
         {/* Three column grid */}
         <div style={{
           display:             "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
           gap:                 "1.5rem",
         }}>
           {services.map((svc, i) => (

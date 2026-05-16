@@ -25,14 +25,14 @@ const statements = [
 export default function WhyErano() {
   return (
     <section style={{ background: "#ffffff", overflow: "hidden" }}>
-      <div style={{
+      <div className="why-grid" style={{
         display:             "grid",
         gridTemplateColumns: "1fr 1fr",
         minHeight:           "680px",
       }}>
 
         {/* Left — full-bleed image */}
-        <div style={{ position: "relative", overflow: "hidden" }}>
+        <div className="why-image" style={{ position: "relative", overflow: "hidden" }}>
           <Image
             src={IMAGES.HOME_WHYUS_IMAGE}
             alt="Professional business meeting"

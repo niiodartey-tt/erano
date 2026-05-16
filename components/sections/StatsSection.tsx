@@ -20,7 +20,6 @@ function StatItem({
     <div style={{
       flex:          "1 1 200px",
       padding:       "0 2rem",
-      borderRight:   "1px solid rgba(255,255,255,0.08)",
       textAlign:     "center",
     }}>
       <div
@@ -99,15 +98,12 @@ export default function StatsSection() {
             gap:            "0",
           }}
         >
-          {stats.map((stat, i) => (
+          {stats.map((stat) => (
             <div
               key={stat.label}
               style={{
                 flex:        "1 1 200px",
                 padding:     "0 clamp(1rem, 3vw, 2.5rem)",
-                borderRight: i < stats.length - 1
-                  ? "1px solid rgba(255,255,255,0.08)"
-                  : "none",
                 textAlign:   "center",
               }}
             >

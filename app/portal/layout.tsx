@@ -6,7 +6,6 @@ import type { AccountState } from "@/lib/validateState";
 import { PortalProvider } from "@/context/PortalContext";
 import PortalSidebar from "@/components/portal/layout/PortalSidebar";
 import PortalHeader from "@/components/portal/layout/PortalHeader";
-import PortalMobileNav from "@/components/portal/layout/PortalMobileNav";
 
 export default async function PortalLayout({
   children,
@@ -77,11 +76,10 @@ export default async function PortalLayout({
         <PortalSidebar accountState={accountState} />
         <div className="flex flex-1 flex-col min-w-0">
           <PortalHeader />
-          <main id="main-content" className="flex-1 overflow-y-auto pb-16 md:pb-0">
+          <main id="main-content" className="flex-1 overflow-y-auto">
             {children}
           </main>
         </div>
-        <PortalMobileNav />
       </div>
     </PortalProvider>
   );

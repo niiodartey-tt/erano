@@ -18,20 +18,12 @@ export default function Navbar() {
   const pathname                = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler, { passive: true });
     handler();
     return () => window.removeEventListener("scroll", handler);
-  }, []);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 900);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
   }, []);
 
   useEffect(() => { setOpen(false); }, [pathname]);
@@ -100,14 +92,12 @@ export default function Navbar() {
           </Link>
 
           {/* ── Desktop nav ── */}
-          {!isMobile && (
-            <nav style={{
-              display:        "flex",
-              alignItems:     "center",
-              flex:           1,
-              justifyContent: "center",
-              gap:            "0",
-            }}>
+          <nav className="hidden md:flex" style={{
+            alignItems:     "center",
+            flex:           1,
+            justifyContent: "center",
+            gap:            "0",
+          }}>
               {navLinks.map((link) => {
                 const active = pathname === link.href;
                 return (
@@ -156,12 +146,10 @@ export default function Navbar() {
                     />
                   </Link>                );
               })}
-            </nav>
-          )}
+          </nav>
 
           {/* ── Desktop right ── */}
-          {!isMobile && (
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
+          <div className="hidden md:flex" style={{ alignItems: "center", gap: "1rem", flexShrink: 0 }}>
 
               {/* Log in with lock icon */}
               <Link
@@ -229,16 +217,14 @@ export default function Navbar() {
               >
                 Get started
               </Link>
-            </div>
-          )}
+          </div>
 
           {/* ── Mobile button ── */}
-          {isMobile && (
-            <button
-              onClick={() => setOpen(v => !v)}
+          <button
+            className="flex md:hidden"
+            onClick={() => setOpen(v => !v)}
               aria-label={open ? "Close menu" : "Open menu"}
               style={{
-                display:        "flex",
                 alignItems:     "center",
                 justifyContent: "center",
                 width:          "40px",
@@ -252,13 +238,12 @@ export default function Navbar() {
               }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          )}
+          </button>
         </div>
       </header>
 
       {/* ── Mobile drawer ── */}
-      {open && isMobile && (
+      {open && (
         <div style={{ position: "fixed", inset: 0, zIndex: 39 }}>
           <div
             onClick={() => setOpen(false)}
