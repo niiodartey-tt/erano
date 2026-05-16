@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { Upload, CheckCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const GHANA_BANKS = [
   "Absa Bank Ghana","Access Bank Ghana","Agricultural Development Bank","Bank of Africa Ghana","Calbank",
@@ -86,7 +87,7 @@ export default function PaymentUploadForm({ onSuccess }: { onSuccess?: () => voi
           <p className="text-sm text-red-700">{apiError}</p>
         </div>
       )}
-      <div className="mb-4 grid grid-cols-2 gap-4">
+      <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="amount_paid" className={labelCls}>Amount paid</label>
           <input id="amount_paid" type="number" step="0.01" min="0" {...register("amount_paid", { valueAsNumber: true })} className={inputCls} />
@@ -94,9 +95,14 @@ export default function PaymentUploadForm({ onSuccess }: { onSuccess?: () => voi
         </div>
         <div>
           <label htmlFor="currency" className={labelCls}>Currency</label>
-          <select id="currency" {...register("currency")} className={inputCls}>
-            <option value="GHS">GHS — Ghana Cedi</option><option value="USD">USD — US Dollar</option>
-          </select>
+          <div className="relative">
+            <select id="currency" {...register("currency")} className={cn(inputCls, "appearance-none pr-9")}>
+              <option value="GHS">GHS — Ghana Cedi</option><option value="USD">USD — US Dollar</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+              <svg className="h-4 w-4 text-navy/40" fill="none" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
         </div>
       </div>
       <div className="mb-4">
@@ -106,18 +112,28 @@ export default function PaymentUploadForm({ onSuccess }: { onSuccess?: () => voi
       </div>
       <div className="mb-4">
         <label htmlFor="payment_method" className={labelCls}>Payment method</label>
-        <select id="payment_method" {...register("payment_method")} className={inputCls}>
-          <option value="">Select method</option>
-          <option value="Bank Transfer">Bank Transfer</option><option value="Cheque">Cheque</option><option value="Cash">Cash</option>
-        </select>
+        <div className="relative">
+          <select id="payment_method" {...register("payment_method")} className={cn(inputCls, "appearance-none pr-9")}>
+            <option value="">Select method</option>
+            <option value="Bank Transfer">Bank Transfer</option><option value="Cheque">Cheque</option><option value="Cash">Cash</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+            <svg className="h-4 w-4 text-navy/40" fill="none" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </div>
+        </div>
         {errors.payment_method && <p role="alert" className={errCls}>{errors.payment_method.message}</p>}
       </div>
       <div className="mb-4">
         <label htmlFor="bank_name" className={labelCls}>Bank name</label>
-        <select id="bank_name" {...register("bank_name")} className={inputCls}>
-          <option value="">Select bank</option>
-          {GHANA_BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
-        </select>
+        <div className="relative">
+          <select id="bank_name" {...register("bank_name")} className={cn(inputCls, "appearance-none pr-9")}>
+            <option value="">Select bank</option>
+            {GHANA_BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+            <svg className="h-4 w-4 text-navy/40" fill="none" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </div>
+        </div>
         {watch("bank_name") === "Other (please specify)" && (
           <input className={`${inputCls} mt-2`} value={otherBank} onChange={e => setOtherBank(e.target.value)} placeholder="Specify bank name" aria-label="Other bank name" />
         )}

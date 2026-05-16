@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
 const PAGE_TITLES: Record<string, string> = {
@@ -13,7 +13,7 @@ const PAGE_TITLES: Record<string, string> = {
 
 export default function AdminHeader() {
   const pathname = usePathname();
-  const { adminName } = useAdmin();
+  const { adminName, toggleMobileNav } = useAdmin();
 
   const pageTitle = PAGE_TITLES[pathname] ?? PAGE_TITLES[Object.keys(PAGE_TITLES).find((k) => k !== "/admin" && pathname.startsWith(k)) ?? ""] ?? "Admin";
 
@@ -26,7 +26,16 @@ export default function AdminHeader() {
 
   return (
     <header className="flex items-center justify-between h-16 px-4 md:px-6 bg-navy border-b border-white/10 shrink-0">
-      <h1 className="text-base md:text-lg font-semibold text-white">{pageTitle}</h1>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggleMobileNav}
+          className="flex md:hidden items-center justify-center w-10 h-10 rounded-lg text-white/60 hover:bg-white/10 transition-colors"
+          aria-label="Toggle navigation menu"
+        >
+          <Menu className="h-5 w-5" aria-hidden="true" />
+        </button>
+        <h1 className="text-base md:text-lg font-semibold text-white">{pageTitle}</h1>
+      </div>
 
       <div className="flex items-center gap-2 md:gap-3">
         <span className="hidden sm:block w-px h-6 bg-white/10" aria-hidden="true" />

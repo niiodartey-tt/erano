@@ -39,7 +39,7 @@ export default function AuthCallbackPage() {
         console.log("[AUTH-CALLBACK] setSession user id:", session?.user?.id ?? null);
 
         if (session) {
-          await doRedirect(supabase, session.user.id);
+          await doRedirect(supabase, session.user.id, type);
           return;
         }
         console.log("[AUTH-CALLBACK] setSession produced no session, falling through");
@@ -58,7 +58,7 @@ export default function AuthCallbackPage() {
         console.log("[AUTH-CALLBACK] exchangeCode user id:", session?.user?.id ?? null);
 
         if (session) {
-          await doRedirect(supabase, session.user.id);
+          await doRedirect(supabase, session.user.id, null);
           return;
         }
         console.log("[AUTH-CALLBACK] exchangeCode produced no session, falling through");
@@ -72,7 +72,7 @@ export default function AuthCallbackPage() {
       console.log("[AUTH-CALLBACK] getSession user id:", session?.user?.id ?? null);
 
       if (session) {
-        await doRedirect(supabase, session.user.id);
+        await doRedirect(supabase, session.user.id, null);
         return;
       }
 
@@ -83,7 +83,13 @@ export default function AuthCallbackPage() {
     async function doRedirect(
       supabase: ReturnType<typeof createBrowserClient>,
       userId: string,
+      type: string | null,
     ) {
+      if (type === "recovery") {
+        console.log("[AUTH-CALLBACK] doRedirect — type=recovery → /reset-password/confirm");
+        window.location.href = "/reset-password/confirm";
+        return;
+      }
       console.log("[AUTH-CALLBACK] doRedirect — querying users table for id:", userId);
       const { data: userData, error: dbError } = await supabase
         .from("users")

@@ -341,6 +341,39 @@ Completed and approved in Sprint 15. Do not modify.
 
 ---
 
+## Locked — Sprint 16 Admin Login + Dark Theme + Session Idle Timeout
+
+Completed and approved in Sprint 16. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `app/(admin-auth)/admin-login/page.tsx` | Standalone admin login — dark theme, 5-attempt lockout, role check via API route, noindex | Breaks admin login entirely |
+| `app/(admin-auth)/admin-login/layout.tsx` | Admin login layout — noindex robots metadata | Breaks admin login SEO gating |
+| `app/api/admin/auth/check-role/route.ts` | Role check API — uses service role to bypass RLS on users table; returns 401/403/200 | Admin login always fails role check |
+| `components/ui/IdleTimeout.tsx` | Idle session timeout — 30-min idle, 2-min warning banner, signs out and redirects | Breaks idle timeout for both portal and admin |
+| `middleware.ts` | RBAC — public paths early-return; unauthenticated /admin → /admin-login; client at /admin → /portal/dashboard | Breaks auth gating site-wide |
+| `app/admin/layout.tsx` | Admin layout — auth guard, role check, AdminProvider, bg-ink dark theme | Breaks admin auth and layout for all admin pages |
+| `components/layout/Navbar.tsx` | Updated Sprint 16 — "Client login" label, lock icon, /login href | Breaks public site navigation |
+| `components/admin/layout/AdminSidebar.tsx` | Sign out → /admin-login; dark theme nav | Breaks admin navigation and sign-out |
+| `components/admin/layout/AdminHeader.tsx` | Dark theme — bg-navy, gold avatar | Breaks admin header styling |
+| `app/admin/page.tsx` | Dark theme — metric card skeletons, bg-navy cards | Breaks admin dashboard styling |
+| `components/admin/inbox/SubmissionsPanel.tsx` | Dark theme + dark badge variants | Breaks admin inbox styling |
+| `app/admin/clients/page.tsx` | Dark theme + custom select arrow SVG + dark error text | Breaks admin client list styling |
+| `components/admin/clients/ClientsTable.tsx` | Dark theme + dark badge variants | Breaks client table styling |
+| `app/admin/invoices/page.tsx` | Dark theme + dark status badge variants + fixed hover class | Breaks admin invoice list styling |
+| `app/admin/documents/page.tsx` | Dark theme + dark status badge variants | Breaks admin document list styling |
+| `app/admin/clients/[id]/page.tsx` | Dark theme — banners, back link, custom price input | Breaks admin client profile styling |
+| `components/admin/clients/ClientProfileHeader.tsx` | Dark theme + dark state badge variants | Breaks client profile header styling |
+| `components/admin/clients/ClientInfoSections.tsx` | Dark theme — three sections, Row dt/dd colours | Breaks client profile info sections |
+| `components/admin/clients/ClientPaymentSection.tsx` | Dark theme + dark proof badge variants + fixed Confirm/Reject button contrast | Breaks payment section styling |
+| `components/admin/clients/ClientDocumentsSection.tsx` | Dark theme | Breaks documents section styling |
+| `components/admin/clients/DocumentRequestForm.tsx` | Dark theme + custom select arrow SVG + dark error text | Breaks document request form styling |
+| `components/admin/ui/ConfirmModal.tsx` | Dark theme — bg-navy, bg-gold confirm button | Breaks all admin confirmation dialogs |
+| `components/admin/clients/PackageUpgradeModal.tsx` | Dark theme + custom select arrow SVG | Breaks package upgrade modal styling |
+| `supabase/migrations/003_enable_realtime_notifications.sql` | Realtime migration — adds notifications table to supabase_realtime publication | Realtime notifications stop working if reverted |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
