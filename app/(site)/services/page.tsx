@@ -153,7 +153,7 @@ function QuotesPanel() {
         transition: "opacity 0.4s ease, transform 0.4s ease",
       }}>
         <p style={{
-          fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
           fontSize:     "1.125rem",
           fontStyle:    "italic",
           lineHeight:   1.7,
@@ -162,7 +162,7 @@ function QuotesPanel() {
           margin:       "0 auto 1.25rem",
         }}>{q.quote}</p>
         <p style={{
-          fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
           fontSize:      "0.8125rem",
           fontWeight:    600,
           letterSpacing: "0.08em",
@@ -224,7 +224,7 @@ export default function ServicesPage() {
         >
           <motion.span variants={fadeUp} style={{
             display: "inline-flex", alignItems: "center", gap: "0.75rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
             textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
           }}>
@@ -233,7 +233,6 @@ export default function ServicesPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
             lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
             marginBottom: "1.5rem", maxWidth: "640px",
@@ -243,7 +242,7 @@ export default function ServicesPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "1.125rem", lineHeight: 1.8,
             color: "rgba(255,255,255,0.6)", maxWidth: "520px", marginBottom: "2.5rem",
           }}>
@@ -258,7 +257,7 @@ export default function ServicesPage() {
                 key={s.id}
                 href={`#${s.id}`}
                 style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize: "0.8125rem", fontWeight: 600,
                   color: "rgba(255,255,255,0.7)",
                   border: "1px solid rgba(255,255,255,0.15)",
@@ -310,26 +309,25 @@ export default function ServicesPage() {
               >
                 <motion.span variants={fadeUp} style={{
                   display: "inline-block",
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
                   textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1rem",
                 }}>{svc.number} — Service</motion.span>
 
                 <motion.h2 variants={fadeUp} style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
                   fontSize: "clamp(2rem, 3.5vw, 2.75rem)", fontWeight: 700,
                   lineHeight: 1.1, letterSpacing: "-0.025em",
                   color: "#0d1b2e", marginBottom: "0.875rem",
                 }}>{svc.title}</motion.h2>
 
                 <motion.p variants={fadeUp} style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize: "1rem", fontStyle: "italic", lineHeight: 1.7,
                   color: "#6b7280", marginBottom: "1.25rem",
                 }}>{svc.tagline}</motion.p>
 
                 <motion.p variants={fadeUp} style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize: "0.9375rem", lineHeight: 1.8,
                   color: "#4a5568", marginBottom: "2rem",
                 }}>{svc.body}</motion.p>
@@ -338,7 +336,7 @@ export default function ServicesPage() {
                   {svc.features.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.625rem" }}>
                       <CheckCircle2 size={16} style={{ color: "#c4973a", flexShrink: 0, marginTop: "3px" }} />
-                      <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.9375rem", color: "#4a5568" }}>{f}</span>
+                      <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.9375rem", color: "#4a5568" }}>{f}</span>
                     </li>
                   ))}
                 </motion.ul>
@@ -347,7 +345,7 @@ export default function ServicesPage() {
                   <Link href="/contact" style={{
                     display: "inline-flex", alignItems: "center", gap: "0.5rem",
                     background: "#c4973a", color: "#ffffff",
-                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize: "0.9375rem", fontWeight: 600,
                     padding: "0.875rem 2rem", borderRadius: "4px", textDecoration: "none",
                   }}>
@@ -391,12 +389,11 @@ export default function ServicesPage() {
           >
             <motion.span variants={fadeUp} style={{
               display: "inline-block",
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
               textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1rem",
             }}>Pricing</motion.span>
             <motion.h2 variants={fadeUp} style={{
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 700,
               lineHeight: 1.1, letterSpacing: "-0.025em", color: "#ffffff",
             }}>
@@ -427,7 +424,7 @@ export default function ServicesPage() {
                     position:      "absolute",
                     top:           "1.25rem",
                     right:         "1.25rem",
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:      "0.625rem",
                     fontWeight:    700,
                     letterSpacing: "0.1em",
@@ -440,21 +437,21 @@ export default function ServicesPage() {
                 )}
 
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "0.875rem", fontWeight: 600,
                   color:        "rgba(255,255,255,0.6)", marginBottom: "0.75rem",
                 }}>{plan.name}</div>
 
                 <div style={{ marginBottom: "1.5rem" }}>
                   <span style={{
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:      plan.price === "Get a quote" ? "1.5rem" : "2rem",
                     fontWeight:    800,
                     letterSpacing: "-0.03em",
                     color:         plan.featured ? "#c4973a" : "#ffffff",
                   }}>{plan.price}</span>
                   {plan.period && (
-                    <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", color: "rgba(255,255,255,0.4)", marginLeft: "0.25rem" }}>{plan.period}</span>
+                    <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.875rem", color: "rgba(255,255,255,0.4)", marginLeft: "0.25rem" }}>{plan.period}</span>
                   )}
                 </div>
 
@@ -463,7 +460,7 @@ export default function ServicesPage() {
                   {plan.features.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                       <CheckCircle2 size={14} style={{ color: "#c4973a", flexShrink: 0, marginTop: "3px" }} />
-                      <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{f}</span>
+                      <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -472,7 +469,7 @@ export default function ServicesPage() {
                 <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }} style={{ marginTop: "auto" }}>
                   <Link href="/contact" style={{
                     display: "block", textAlign: "center" as const,
-                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize: "0.875rem", fontWeight: 600,
                     padding: "0.75rem",
                     borderRadius: "4px",
@@ -500,7 +497,6 @@ export default function ServicesPage() {
           style={{ maxWidth: "1440px", margin: "0 auto", paddingInline: "clamp(1.5rem, 5.5vw, 5rem)", textAlign: "center" }}
         >
           <motion.h2 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 700,
             lineHeight: 1.1, letterSpacing: "-0.025em",
             color: "#0d1b2e", maxWidth: "560px", margin: "0 auto 1.25rem",
@@ -509,7 +505,7 @@ export default function ServicesPage() {
           </motion.h2>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "1.0625rem", lineHeight: 1.75, color: "#4a5568",
             maxWidth: "400px", margin: "0 auto 2.5rem",
           }}>
@@ -520,7 +516,7 @@ export default function ServicesPage() {
             <Link href="/contact" style={{
               display: "inline-flex", alignItems: "center", gap: "0.5rem",
               background: "#c4973a", color: "#ffffff",
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize: "0.9375rem", fontWeight: 600,
               padding: "1rem 2.25rem", borderRadius: "4px", textDecoration: "none",
             }}>

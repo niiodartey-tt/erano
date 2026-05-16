@@ -55,7 +55,7 @@ export default function WhyErano() {
           <span
             style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -69,7 +69,6 @@ export default function WhyErano() {
 
           <h2
             style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(1.875rem, 3vw, 2.625rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -92,7 +91,7 @@ export default function WhyErano() {
                 }}
               >
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "0.9375rem",
                   fontWeight:   600,
                   color:        "#ffffff",
@@ -101,7 +100,7 @@ export default function WhyErano() {
                   {s.title}
                 </div>
                 <div style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:   "0.875rem",
                   lineHeight: 1.75,
                   color:      "rgba(255,255,255,0.55)",

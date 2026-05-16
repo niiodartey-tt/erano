@@ -26,7 +26,7 @@ function StatItem({
       <div
         ref={ref as React.RefObject<HTMLDivElement>}
         style={{
-          fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
           fontSize:      "clamp(2.75rem, 5vw, 4.5rem)",
           fontWeight:    800,
           letterSpacing: "-0.04em",
@@ -38,7 +38,7 @@ function StatItem({
         {prefix}{decimals > 0 ? count.toFixed(decimals) : Math.round(count)}{suffix}
       </div>
       <div style={{
-        fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+        fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
         fontSize:      "0.875rem",
         fontWeight:    500,
         letterSpacing: "0.04em",
@@ -79,7 +79,7 @@ export default function StatsSection() {
         {/* Label */}
         <div style={{ textAlign: "center", marginBottom: "4rem" }}>
           <span style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "0.6875rem",
             fontWeight:    600,
             letterSpacing: "0.2em",
@@ -128,7 +128,7 @@ export default function StatsSection() {
         {/* Supporting line */}
         <p
           style={{
-            fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:  'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:    "0.9375rem",
             lineHeight:  1.7,
             color:       "rgba(255,255,255,0.4)",

@@ -129,10 +129,10 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
   if (!article) {
     return (
       <div style={{ maxWidth: "720px", margin: "10rem auto", padding: "0 2rem", textAlign: "center" }}>
-        <h1 style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "2rem", fontWeight: 700, color: "#0d1b2e", marginBottom: "1rem" }}>
+        <h1 style={{ fontSize: "2rem", fontWeight: 700, color: "#0d1b2e", marginBottom: "1rem" }}>
           Article not found
         </h1>
-        <Link href="/resources" style={{ color: "#c4973a", fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif' }}>
+        <Link href="/resources" style={{ color: "#c4973a", fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif' }}>
           Back to resources
         </Link>
       </div>
@@ -148,7 +148,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         <div style={{ maxWidth: "1440px", margin: "0 auto", paddingInline: "clamp(1.5rem, 5.5vw, 5rem)" }}>
           <Link href="/resources" style={{
             display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.875rem", fontWeight: 600, color: "rgba(255,255,255,0.5)",
             textDecoration: "none", marginBottom: "2rem", transition: "color 0.15s ease",
           }}
@@ -160,25 +160,24 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
             <span style={{
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.12em",
               textTransform: "uppercase" as const, color: "#c4973a",
               border: "1px solid rgba(196,151,58,0.3)", borderRadius: "2px", padding: "0.25rem 0.625rem",
             }}>{article.category}</span>
-            <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "rgba(255,255,255,0.4)" }}>
+            <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", color: "rgba(255,255,255,0.4)" }}>
               {article.readTime}
             </span>
           </div>
 
           <h1 style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2rem, 4.5vw, 3.5rem)", fontWeight: 800,
             lineHeight: 1.1, letterSpacing: "-0.025em", color: "#ffffff",
             maxWidth: "720px", marginBottom: "1.5rem",
           }}>{article.title}</h1>
 
           <div style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.875rem", color: "rgba(255,255,255,0.45)",
           }}>
             By {article.author} · {article.date}
@@ -204,7 +203,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             if (para.startsWith("**") && para.endsWith("**")) {
               return (
                 <h2 key={i} style={{
-                  fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                   fontSize:      "1.375rem",
                   fontWeight:    700,
                   letterSpacing: "-0.015em",
@@ -218,7 +216,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             }
             return (
               <p key={i} style={{
-                fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:     "1.0625rem",
                 lineHeight:   1.85,
                 color:        "#374151",
@@ -236,14 +234,14 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             borderRadius: "0 8px 8px 0",
           }}>
             <div style={{
-              fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:     "1rem",
               fontWeight:   700,
               color:        "#0d1b2e",
               marginBottom: "0.5rem",
             }}>Need professional advice?</div>
             <p style={{
-              fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:     "0.9375rem",
               lineHeight:   1.7,
               color:        "#4a5568",
@@ -258,7 +256,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
               gap:            "0.5rem",
               background:     "#c4973a",
               color:          "#ffffff",
-              fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:       "0.875rem",
               fontWeight:     600,
               padding:        "0.75rem 1.5rem",

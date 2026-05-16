@@ -55,12 +55,12 @@ function ResultRow({ label, value, large }: { label: string; value: string; larg
       borderBottom:   "1px solid #e8eaed",
     }}>
       <span style={{
-        fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+        fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
         fontSize:   "0.875rem",
         color:      "#6b7280",
       }}>{label}</span>
       <span style={{
-        fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+        fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
         fontSize:      large ? "1.5rem" : "0.9375rem",
         fontWeight:    large ? 800 : 600,
         color:         large ? "#c4973a" : "#0d1b2e",
@@ -79,7 +79,7 @@ function InputField({ label, value, onChange, type = "number", children }: {
     <div style={{ marginBottom: "1.25rem" }}>
       <label style={{
         display:      "block",
-        fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+        fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
         fontSize:     "0.8125rem",
         fontWeight:   600,
         color:        "#0d1b2e",
@@ -96,7 +96,7 @@ function InputField({ label, value, onChange, type = "number", children }: {
             border:       "1.5px solid #e8eaed",
             borderRadius: "4px",
             padding:      "0 1rem",
-            fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:     "0.9375rem",
             color:        "#0d1b2e",
             background:   "#ffffff",
@@ -128,7 +128,7 @@ function VATCalc() {
               width: "100%", height: "48px",
               border: "1.5px solid #e8eaed", borderRadius: "4px",
               padding: "0 2.5rem 0 1rem",
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize: "0.9375rem", color: "#0d1b2e",
               background: "#ffffff", outline: "none", appearance: "none" as const, cursor: "pointer",
             }}
@@ -169,7 +169,7 @@ function PAYECalc() {
       </div>
       <details style={{ marginTop: "1.25rem" }}>
         <summary style={{
-          fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+          fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
           fontSize: "0.8125rem", fontWeight: 600, color: "#c4973a", cursor: "pointer",
         }}>View GRA tax bands 2025</summary>
         <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column" as const, gap: "0.375rem" }}>
@@ -203,7 +203,7 @@ function CorporateCalc() {
               width: "100%", height: "48px",
               border: "1.5px solid #e8eaed", borderRadius: "4px",
               padding: "0 2.5rem 0 1rem",
-              fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize: "0.9375rem", color: "#0d1b2e",
               background: "#ffffff", outline: "none", appearance: "none" as const, cursor: "pointer",
             }}
@@ -280,7 +280,7 @@ export default function ToolsPage() {
         >
           <motion.span variants={fadeUp} style={{
             display: "inline-flex", alignItems: "center", gap: "0.75rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
             textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
           }}>
@@ -289,7 +289,6 @@ export default function ToolsPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
             lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
             marginBottom: "1.25rem", maxWidth: "600px",
@@ -299,7 +298,7 @@ export default function ToolsPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "1.125rem", lineHeight: 1.8,
             color: "rgba(255,255,255,0.6)", maxWidth: "480px",
           }}>
@@ -320,7 +319,7 @@ export default function ToolsPage() {
                 key={tab.id}
                 onClick={() => setActive(tab.id)}
                 style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "0.875rem",
                   fontWeight:   600,
                   padding:      "0.625rem 1.375rem",
@@ -346,7 +345,6 @@ export default function ToolsPage() {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             >
               <h2 style={{
-                fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                 fontSize:      "1.5rem",
                 fontWeight:    700,
                 letterSpacing: "-0.02em",
@@ -368,14 +366,14 @@ export default function ToolsPage() {
                 marginBottom: "2rem",
               }}>
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "0.875rem",
                   fontWeight:   600,
                   color:        "#0d1b2e",
                   marginBottom: "0.5rem",
                 }}>Disclaimer</div>
                 <p style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:   "0.875rem",
                   lineHeight: 1.7,
                   color:      "#6b7280",
@@ -388,7 +386,7 @@ export default function ToolsPage() {
               </div>
 
               <div style={{
-                fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:     "0.9375rem",
                 lineHeight:   1.7,
                 color:        "#4a5568",
@@ -402,7 +400,7 @@ export default function ToolsPage() {
                 <Link href="/contact" style={{
                   display: "inline-flex", alignItems: "center", gap: "0.5rem",
                   background: "#c4973a", color: "#ffffff",
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize: "0.9375rem", fontWeight: 600,
                   padding: "0.875rem 1.75rem", borderRadius: "4px", textDecoration: "none",
                 }}>

@@ -16,8 +16,8 @@ export const IMAGES = {
   // Professional meeting — raw, no overlay
 
   HOME_STATS_BG:
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&q=80&auto=format&fit=crop",
-  // Modern office interior — used behind stats section
+    "https://images.unsplash.com/photo-1554224154-22dec7ec8818?w=1920&q=80",
+  // Financial documents, charts, calculator on desk — accounting themed
 
   // ── About page ────────────────────────────────────
   ABOUT_HERO_PHOTO:
@@ -29,7 +29,7 @@ export const IMAGES = {
     "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&q=80&auto=format&fit=crop",
 
   ABOUT_VALUES_BG:
-    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1600&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920&q=80",
 
   TEAM_NANA:
     "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80&auto=format&fit=crop",
@@ -72,8 +72,8 @@ export const IMAGES = {
 
   // ── Industries page ───────────────────────────────
   INDUSTRIES_HERO_BG:
-    "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1800&q=80&auto=format&fit=crop",
-  // City skyline — wide, diverse
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1920&q=80",
+  // Professional business meeting with documents and laptops — corporate finance setting
 
   // ── Resources page ────────────────────────────────
   RESOURCES_HERO_BG:

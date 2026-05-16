@@ -57,7 +57,6 @@ export default function HomeCTA() {
         {/* Heading */}
         <h2
           style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2.25rem, 4.5vw, 3.75rem)",
             fontWeight:    700,
             lineHeight:    1.1,
@@ -73,7 +72,7 @@ export default function HomeCTA() {
         {/* Subline */}
         <p
           style={{
-            fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:  'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:    "1.0625rem",
             lineHeight:  1.75,
             color:       "rgba(255,255,255,0.5)",
@@ -95,7 +94,7 @@ export default function HomeCTA() {
               gap:            "0.625rem",
               background:     "#c4973a",
               color:          "#ffffff",
-              fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:       "0.9375rem",
               fontWeight:     600,
               padding:        "1.125rem 2.5rem",
@@ -119,7 +118,7 @@ export default function HomeCTA() {
         {/* Trust note */}
         <p
           style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "0.8125rem",
             color:         "rgba(255,255,255,0.25)",
             marginTop:     "1.5rem",

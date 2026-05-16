@@ -127,7 +127,7 @@ export default function IndustriesPage() {
         >
           <motion.span variants={fadeUp} style={{
             display: "inline-flex", alignItems: "center", gap: "0.75rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
             textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
           }}>
@@ -136,7 +136,6 @@ export default function IndustriesPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
             lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
             marginBottom: "1.25rem", maxWidth: "640px",
@@ -146,7 +145,7 @@ export default function IndustriesPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "1.125rem", lineHeight: 1.8,
             color: "rgba(255,255,255,0.6)", maxWidth: "520px",
           }}>
@@ -209,7 +208,7 @@ export default function IndustriesPage() {
 
                 {/* Name */}
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "1.125rem",
                   fontWeight:   700,
                   color:        "#0d1b2e",
@@ -219,7 +218,7 @@ export default function IndustriesPage() {
                 {/* Pain points */}
                 <div style={{ marginBottom: "1.25rem" }}>
                   <div style={{
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:      "0.6875rem",
                     fontWeight:    600,
                     letterSpacing: "0.12em",
@@ -231,7 +230,7 @@ export default function IndustriesPage() {
                     {ind.pain.map((p) => (
                       <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                         <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#c4973a", flexShrink: 0, marginTop: "7px" }} />
-                        <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", lineHeight: 1.6, color: "#4a5568" }}>{p}</span>
+                        <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.875rem", lineHeight: 1.6, color: "#4a5568" }}>{p}</span>
                       </li>
                     ))}
                   </ul>
@@ -243,7 +242,7 @@ export default function IndustriesPage() {
                   borderTop:    "1px solid #e8eaed",
                 }}>
                   <div style={{
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:      "0.6875rem",
                     fontWeight:    600,
                     letterSpacing: "0.12em",
@@ -252,7 +251,7 @@ export default function IndustriesPage() {
                     marginBottom:  "0.5rem",
                   }}>Our approach</div>
                   <p style={{
-                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:   "0.875rem",
                     lineHeight: 1.7,
                     color:      "#4a5568",
@@ -287,7 +286,6 @@ export default function IndustriesPage() {
           }} />
 
           <motion.h2 variants={fadeUp} style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2rem, 4vw, 3.25rem)",
             fontWeight:    700,
             letterSpacing: "-0.025em",
@@ -299,7 +297,7 @@ export default function IndustriesPage() {
           </motion.h2>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:  'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:    "1.0625rem",
             lineHeight:  1.75,
             color:       "rgba(255,255,255,0.55)",
@@ -317,7 +315,7 @@ export default function IndustriesPage() {
               gap:            "0.5rem",
               background:     "#c4973a",
               color:          "#ffffff",
-              fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:       "0.9375rem",
               fontWeight:     600,
               padding:        "1rem 2.25rem",

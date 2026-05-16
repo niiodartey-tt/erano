@@ -85,7 +85,7 @@ export default function Hero() {
               display:       "inline-flex",
               alignItems:    "center",
               gap:           "0.75rem",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -108,7 +108,6 @@ export default function Hero() {
             variants={fadeUp}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(3rem, 6.5vw, 5.25rem)",
               fontWeight:    800,
               lineHeight:    1.0,
@@ -127,7 +126,7 @@ export default function Hero() {
             variants={fadeUp}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{
-              fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:     "1.125rem",
               lineHeight:   1.8,
               color:        "rgba(255,255,255,0.6)",
@@ -160,7 +159,7 @@ export default function Hero() {
                   gap:            "0.5rem",
                   background:     "#c4973a",
                   color:          "#ffffff",
-                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:       "0.9375rem",
                   fontWeight:     600,
                   padding:        "1rem 2.25rem",
@@ -181,7 +180,7 @@ export default function Hero() {
                   gap:            "0.5rem",
                   background:     "transparent",
                   color:          "#ffffff",
-                  fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:       "0.9375rem",
                   fontWeight:     600,
                   padding:        "1rem 2.25rem",
@@ -208,7 +207,7 @@ export default function Hero() {
                   display:       "inline-flex",
                   alignItems:    "center",
                   gap:           "0.5rem",
-                  fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:      "0.75rem",
                   fontWeight:    500,
                   color:         "rgba(255,255,255,0.5)",

@@ -67,7 +67,7 @@ export default function Testimonial() {
         <div style={{ marginBottom: "4rem" }}>
           <span style={{
             display:       "inline-block",
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "0.6875rem",
             fontWeight:    600,
             letterSpacing: "0.2em",
@@ -78,7 +78,6 @@ export default function Testimonial() {
             Client testimonials
           </span>
           <h2 style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2rem, 3.5vw, 3rem)",
             fontWeight:    700,
             lineHeight:    1.1,
@@ -114,7 +113,7 @@ export default function Testimonial() {
 
           {/* Quote */}
           <blockquote style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "clamp(1.25rem, 2.5vw, 1.75rem)",
             fontWeight:    400,
             lineHeight:    1.65,
@@ -139,7 +138,7 @@ export default function Testimonial() {
               flexShrink:     0,
             }}>
               <span style={{
-                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:   "0.875rem",
                 fontWeight: 700,
                 color:      "#ffffff",
@@ -149,7 +148,7 @@ export default function Testimonial() {
             </div>
             <div>
               <div style={{
-                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:   "0.9375rem",
                 fontWeight: 600,
                 color:      "#0d1b2e",
@@ -157,7 +156,7 @@ export default function Testimonial() {
                 {t.author}
               </div>
               <div style={{
-                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:   "0.875rem",
                 color:      "#4a5568",
               }}>
@@ -166,7 +165,7 @@ export default function Testimonial() {
             </div>
             <span style={{
               marginLeft:    "auto",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.12em",

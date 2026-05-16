@@ -110,7 +110,7 @@ export default function SectorsGrid() {
           <div>
             <span style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -121,7 +121,6 @@ export default function SectorsGrid() {
               Industries served
             </span>
             <h2 style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(2rem, 3.5vw, 3rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -137,7 +136,7 @@ export default function SectorsGrid() {
               display:        "inline-flex",
               alignItems:     "center",
               gap:            "0.5rem",
-              fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:       "0.9375rem",
               fontWeight:     600,
               color:          "#c4973a",
@@ -230,7 +229,7 @@ export default function SectorsGrid() {
               <div
                 className="sector-name"
                 style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "1rem",
                   fontWeight:   700,
                   color:        "#0d1b2e",
@@ -243,7 +242,7 @@ export default function SectorsGrid() {
 
               {/* Desc */}
               <div style={{
-                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:   "0.875rem",
                 lineHeight: 1.65,
                 color:      "#4a5568",

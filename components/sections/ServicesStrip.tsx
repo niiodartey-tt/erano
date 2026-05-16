@@ -79,7 +79,7 @@ export default function ServicesStrip() {
           <div>
             <span style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -88,7 +88,6 @@ export default function ServicesStrip() {
               marginBottom:  "1rem",
             }}>What we offer</span>
             <h2 style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(2rem, 3.5vw, 3rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -105,7 +104,7 @@ export default function ServicesStrip() {
               display:        "inline-flex",
               alignItems:     "center",
               gap:            "0.5rem",
-              fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:       "0.9375rem",
               fontWeight:     600,
               color:          "#c4973a",
@@ -212,7 +211,7 @@ export default function ServicesStrip() {
                     position:      "absolute",
                     top:           "1.25rem",
                     left:          "1.25rem",
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:      "3.5rem",
                     fontWeight:    800,
                     letterSpacing: "-0.04em",
@@ -243,7 +242,7 @@ export default function ServicesStrip() {
                   }} />
 
                   <div style={{
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:     "1.125rem",
                     fontWeight:   700,
                     color:        "#ffffff",
@@ -252,7 +251,7 @@ export default function ServicesStrip() {
                   }}>{svc.title}</div>
 
                   <p style={{
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:     "0.875rem",
                     lineHeight:   1.7,
                     color:        "rgba(255,255,255,0.55)",
@@ -264,7 +263,7 @@ export default function ServicesStrip() {
                   <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.375rem", marginBottom: "1.25rem" }}>
                     {svc.features.map(f => (
                       <span key={f} style={{
-                        fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                        fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                         fontSize:      "0.6875rem",
                         fontWeight:    600,
                         letterSpacing: "0.06em",
@@ -279,7 +278,7 @@ export default function ServicesStrip() {
                   {/* Arrow link */}
                   <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
                     <span style={{
-                      fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                      fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                       fontSize:   "0.875rem",
                       fontWeight: 600,
                       color:      "#c4973a",

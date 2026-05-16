@@ -85,7 +85,7 @@ export default function ResourcesPage() {
         >
           <motion.span variants={fadeUp} style={{
             display: "inline-flex", alignItems: "center", gap: "0.75rem",
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.2em",
             textTransform: "uppercase" as const, color: "#c4973a", marginBottom: "1.5rem",
           }}>
@@ -94,7 +94,6 @@ export default function ResourcesPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800,
             lineHeight: 1.05, letterSpacing: "-0.03em", color: "#ffffff",
             marginBottom: "1.25rem", maxWidth: "640px",
@@ -104,7 +103,7 @@ export default function ResourcesPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize: "1.125rem", lineHeight: 1.8,
             color: "rgba(255,255,255,0.6)", maxWidth: "480px",
           }}>
@@ -125,7 +124,7 @@ export default function ResourcesPage() {
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "0.875rem",
                   fontWeight:   600,
                   padding:      "0.5rem 1.25rem",
@@ -186,7 +185,7 @@ export default function ResourcesPage() {
                 <div style={{ padding: "3rem", display: "flex", flexDirection: "column" as const, justifyContent: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     <span style={{
-                      fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                      fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                       fontSize:      "0.6875rem",
                       fontWeight:    700,
                       letterSpacing: "0.12em",
@@ -196,11 +195,10 @@ export default function ResourcesPage() {
                       borderRadius:  "2px",
                       padding:       "0.25rem 0.625rem",
                     }}>{featured.category}</span>
-                    <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "#9ca3af" }}>{featured.readTime}</span>
+                    <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", color: "#9ca3af" }}>{featured.readTime}</span>
                   </div>
 
                   <h2 style={{
-                    fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                     fontSize:      "clamp(1.5rem, 2.5vw, 2rem)",
                     fontWeight:    700,
                     letterSpacing: "-0.02em",
@@ -210,7 +208,7 @@ export default function ResourcesPage() {
                   }}>{featured.title}</h2>
 
                   <p style={{
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:     "0.9375rem",
                     lineHeight:   1.75,
                     color:        "#4a5568",
@@ -218,10 +216,10 @@ export default function ResourcesPage() {
                   }}>{featured.excerpt}</p>
 
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "#6b7280" }}>
+                    <div style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", color: "#6b7280" }}>
                       {featured.author} · {featured.date}
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#c4973a" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.375rem", fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#c4973a" }}>
                       Read article <ArrowRight size={15} />
                     </div>
                   </div>
@@ -276,7 +274,7 @@ export default function ResourcesPage() {
                   <div style={{ padding: "1.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.875rem" }}>
                       <span style={{
-                        fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                        fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                         fontSize:      "0.6875rem",
                         fontWeight:    700,
                         letterSpacing: "0.12em",
@@ -286,11 +284,10 @@ export default function ResourcesPage() {
                         borderRadius:  "2px",
                         padding:       "0.25rem 0.625rem",
                       }}>{article.category}</span>
-                      <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.75rem", color: "#9ca3af" }}>{article.readTime}</span>
+                      <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.75rem", color: "#9ca3af" }}>{article.readTime}</span>
                     </div>
 
                     <h3 style={{
-                      fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
                       fontSize:      "1.125rem",
                       fontWeight:    700,
                       letterSpacing: "-0.015em",
@@ -300,7 +297,7 @@ export default function ResourcesPage() {
                     }}>{article.title}</h3>
 
                     <p style={{
-                      fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                      fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                       fontSize:     "0.875rem",
                       lineHeight:   1.7,
                       color:        "#4a5568",
@@ -314,10 +311,10 @@ export default function ResourcesPage() {
                       paddingTop:     "1rem",
                       borderTop:      "1px solid #e8eaed",
                     }}>
-                      <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.75rem", color: "#9ca3af" }}>
+                      <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.75rem", color: "#9ca3af" }}>
                         {article.author} · {article.date}
                       </span>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", fontWeight: 600, color: "#c4973a" }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.375rem", fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", fontWeight: 600, color: "#c4973a" }}>
                         Read <ArrowRight size={14} />
                       </span>
                     </div>

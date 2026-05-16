@@ -112,7 +112,7 @@ export default function AboutPage() {
             display:       "inline-flex",
             alignItems:    "center",
             gap:           "0.75rem",
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "0.6875rem",
             fontWeight:    600,
             letterSpacing: "0.2em",
@@ -125,7 +125,6 @@ export default function AboutPage() {
           </motion.span>
 
           <motion.h1 variants={fadeUp} style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2.75rem, 5.5vw, 4.5rem)",
             fontWeight:    800,
             lineHeight:    1.05,
@@ -139,7 +138,7 @@ export default function AboutPage() {
           </motion.h1>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:  'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:    "1.125rem",
             lineHeight:  1.8,
             color:       "rgba(255,255,255,0.6)",
@@ -161,7 +160,7 @@ export default function AboutPage() {
             maxWidth:     "520px",
           }}>
             <p style={{
-              fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:     "0.9375rem",
               fontStyle:    "italic",
               lineHeight:   1.75,
@@ -182,11 +181,11 @@ export default function AboutPage() {
                 justifyContent: "center",
                 flexShrink:     0,
               }}>
-                <span style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.6875rem", fontWeight: 700, color: "#ffffff" }}>NA</span>
+                <span style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.6875rem", fontWeight: 700, color: "#ffffff" }}>NA</span>
               </div>
               <div>
-                <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#ffffff" }}>Nana Afua Sarpong</div>
-                <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.75rem", color: "rgba(255,255,255,0.45)" }}>Founder & Lead Consultant</div>
+                <div style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.875rem", fontWeight: 600, color: "#ffffff" }}>Nana Afua Sarpong</div>
+                <div style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.75rem", color: "rgba(255,255,255,0.45)" }}>Founder & Lead Consultant</div>
               </div>
             </div>
           </motion.div>
@@ -206,7 +205,7 @@ export default function AboutPage() {
           >
             <motion.span variants={fadeUp} style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -215,7 +214,6 @@ export default function AboutPage() {
               marginBottom:  "1rem",
             }}>Our team</motion.span>
             <motion.h2 variants={fadeUp} style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(2rem, 3.5vw, 3rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -259,15 +257,15 @@ export default function AboutPage() {
                     background: "linear-gradient(to top, rgba(8,12,20,0.75) 0%, transparent 60%)",
                   }} />
                   <div style={{ position: "absolute", bottom: "1rem", left: "1.25rem", right: "1.25rem" }}>
-                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "1.0625rem", fontWeight: 700, color: "#ffffff" }}>{member.name}</div>
-                    <div style={{ fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "#c4973a", marginTop: "2px" }}>{member.role}</div>
+                    <div style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "1.0625rem", fontWeight: 700, color: "#ffffff" }}>{member.name}</div>
+                    <div style={{ fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif', fontSize: "0.8125rem", color: "#c4973a", marginTop: "2px" }}>{member.role}</div>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div style={{ padding: "1.5rem" }}>
                   <p style={{
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:     "0.875rem",
                     lineHeight:   1.75,
                     color:        "#4a5568",
@@ -276,7 +274,7 @@ export default function AboutPage() {
                   <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.375rem" }}>
                     {member.certs.map((cert) => (
                       <span key={cert} style={{
-                        fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                        fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                         fontSize:      "0.6875rem",
                         fontWeight:    600,
                         letterSpacing: "0.08em",
@@ -318,7 +316,7 @@ export default function AboutPage() {
           >
             <motion.span variants={fadeUp} style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -327,7 +325,6 @@ export default function AboutPage() {
               marginBottom:  "1rem",
             }}>Our values</motion.span>
             <motion.h2 variants={fadeUp} style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(2rem, 3.5vw, 3rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -352,7 +349,7 @@ export default function AboutPage() {
                 }}
               >
                 <div style={{
-                  fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:      "3rem",
                   fontWeight:    800,
                   letterSpacing: "-0.04em",
@@ -361,14 +358,14 @@ export default function AboutPage() {
                   marginBottom:  "1rem",
                 }}>{v.number}</div>
                 <div style={{
-                  fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:     "1rem",
                   fontWeight:   600,
                   color:        "#ffffff",
                   marginBottom: "0.625rem",
                 }}>{v.title}</div>
                 <div style={{
-                  fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:   "0.875rem",
                   lineHeight: 1.75,
                   color:      "rgba(255,255,255,0.5)",
@@ -392,7 +389,7 @@ export default function AboutPage() {
           >
             <motion.span variants={fadeUp} style={{
               display:       "inline-block",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.6875rem",
               fontWeight:    600,
               letterSpacing: "0.2em",
@@ -401,7 +398,6 @@ export default function AboutPage() {
               marginBottom:  "1rem",
             }}>Credentials</motion.span>
             <motion.h2 variants={fadeUp} style={{
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
               fontSize:      "clamp(2rem, 3.5vw, 3rem)",
               fontWeight:    700,
               lineHeight:    1.1,
@@ -431,7 +427,7 @@ export default function AboutPage() {
                 }}
               >
                 <div style={{
-                  fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+                  fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
                   fontSize:      "0.75rem",
                   fontWeight:    700,
                   letterSpacing: "0.12em",
@@ -441,14 +437,14 @@ export default function AboutPage() {
                 }}>{cred.code}</div>
                 <div>
                   <div style={{
-                    fontFamily:   '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily:   'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:     "1rem",
                     fontWeight:   600,
                     color:        "#0d1b2e",
                     marginBottom: "0.375rem",
                   }}>{cred.title}</div>
                   <div style={{
-                    fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+                    fontFamily: 'var(--font-inter), "Inter", system-ui, sans-serif',
                     fontSize:   "0.9375rem",
                     lineHeight: 1.7,
                     color:      "#4a5568",
@@ -477,7 +473,7 @@ export default function AboutPage() {
         >
           <motion.span variants={fadeUp} style={{
             display:       "inline-block",
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:      "0.6875rem",
             fontWeight:    600,
             letterSpacing: "0.2em",
@@ -487,7 +483,6 @@ export default function AboutPage() {
           }}>Work with us</motion.span>
 
           <motion.h2 variants={fadeUp} style={{
-            fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
             fontSize:      "clamp(2rem, 3.5vw, 3rem)",
             fontWeight:    700,
             lineHeight:    1.1,
@@ -500,7 +495,7 @@ export default function AboutPage() {
           </motion.h2>
 
           <motion.p variants={fadeUp} style={{
-            fontFamily:  '"Plus Jakarta Sans", system-ui, sans-serif',
+            fontFamily:  'var(--font-inter), "Inter", system-ui, sans-serif',
             fontSize:    "1.0625rem",
             lineHeight:  1.75,
             color:       "#4a5568",
@@ -519,7 +514,7 @@ export default function AboutPage() {
                 gap:            "0.5rem",
                 background:     "#c4973a",
                 color:          "#ffffff",
-                fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+                fontFamily:     'var(--font-inter), "Inter", system-ui, sans-serif',
                 fontSize:       "0.9375rem",
                 fontWeight:     600,
                 padding:        "1rem 2.25rem",

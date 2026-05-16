@@ -32,7 +32,7 @@ export default function TickerStrip() {
               display:       "inline-flex",
               alignItems:    "center",
               gap:           "1.5rem",
-              fontFamily:    '"Plus Jakarta Sans", system-ui, sans-serif',
+              fontFamily:    'var(--font-inter), "Inter", system-ui, sans-serif',
               fontSize:      "0.75rem",
               fontWeight:    600,
               letterSpacing: "0.12em",
