@@ -21,13 +21,6 @@ const STATUS_CLASSES: Record<PaymentProof["status"], string> = {
   rejected:  "bg-red-100 text-red-800",
 };
 
-async function openReceipt(filePath: string) {
-  const res = await fetch(`/api/portal/payments/proof-url?path=${encodeURIComponent(filePath)}`);
-  if (!res.ok) return;
-  const { url } = await res.json() as { url: string };
-  window.open(url, "_blank", "noopener,noreferrer");
-}
-
 export default function PaymentHistory() {
   const [proofs, setProofs] = useState<PaymentProof[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,14 +76,15 @@ export default function PaymentHistory() {
                 </span>
               </td>
               <td className="whitespace-nowrap px-4 py-3">
-                <button
-                  type="button"
-                  onClick={() => openReceipt(proof.file_path)}
+                <a
+                  href={`/api/portal/payments/proof-url?path=${encodeURIComponent(proof.file_path)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1 text-sm text-navy underline underline-offset-2 hover:text-body"
                 >
                   <Download className="h-3.5 w-3.5" aria-hidden="true" />
                   Download
-                </button>
+                </a>
               </td>
             </tr>
           ))}

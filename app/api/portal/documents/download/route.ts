@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const signedUrl = await getDocumentUploadUrl(upload.file_path);
-    return NextResponse.json({ signedUrl });
+    return NextResponse.redirect(signedUrl, 302);
   } catch (err) {
     console.error("documents/download signed URL:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Failed to generate download link." }, { status: 500 });

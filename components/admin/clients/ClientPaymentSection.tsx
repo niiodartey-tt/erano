@@ -17,10 +17,9 @@ interface Props {
   proofs:             Proof[];
   onConfirmPayment:   (proofId: string) => void;
   onRejectPayment:    (proofId: string) => void;
-  onDownload:         (bucket: string, path: string) => void;
 }
 
-export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onRejectPayment, onDownload }: Props) {
+export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onRejectPayment }: Props) {
   const now = new Date();
   const expiresAt = timer ? new Date(timer.expires_at) : null;
   const expired = expiresAt ? expiresAt < now : false;
@@ -76,9 +75,15 @@ export function ClientPaymentSection({ timer, proofs, onConfirmPayment, onReject
                   <td className="px-5 md:px-6 py-3">
                     <div className="flex items-center justify-end gap-2">
                       {proof.file_path && (
-                        <button onClick={() => onDownload("payment-proofs", proof.file_path!)} className="text-white/40 hover:text-white transition-colors" aria-label="Download proof">
+                        <a
+                          href={`/api/admin/signed-url?bucket=payment-proofs&path=${encodeURIComponent(proof.file_path)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/40 hover:text-white transition-colors"
+                          aria-label="Download proof"
+                        >
                           <Download className="h-4 w-4" aria-hidden="true" />
-                        </button>
+                        </a>
                       )}
                       {proof.status === "pending" && (
                         <>

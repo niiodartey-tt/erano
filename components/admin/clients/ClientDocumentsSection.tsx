@@ -18,10 +18,9 @@ interface Props {
   clientId:      string;
   docRequests:   DocRequest[];
   onRequestCreated: () => void;
-  onDownload:    (bucket: string, path: string) => void;
 }
 
-export function ClientDocumentsSection({ clientId, docRequests, onRequestCreated, onDownload }: Props) {
+export function ClientDocumentsSection({ clientId, docRequests, onRequestCreated }: Props) {
   const [showForm, setShowForm] = useState(false);
 
   function handleSuccess() {
@@ -63,14 +62,16 @@ export function ClientDocumentsSection({ clientId, docRequests, onRequestCreated
               {req.document_uploads.length > 0 && (
                 <div className="mt-2 space-y-1">
                   {req.document_uploads.map((upload) => (
-                    <button
+                    <a
                       key={upload.id}
-                      onClick={() => onDownload("document-uploads", upload.file_path)}
+                      href={`/api/admin/signed-url?bucket=document-uploads&path=${encodeURIComponent(upload.file_path)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-xs text-gold hover:underline"
                     >
                       <Download className="h-3 w-3" aria-hidden="true" />
                       {req.title} &mdash; {new Date(upload.uploaded_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                    </button>
+                    </a>
                   ))}
                 </div>
               )}

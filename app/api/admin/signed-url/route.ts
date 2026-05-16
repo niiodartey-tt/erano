@@ -55,5 +55,5 @@ export async function GET(req: NextRequest) {
     console.error("audit_log insert (file_accessed):", auditErr instanceof Error ? auditErr.message : auditErr);
   }
 
-  return NextResponse.json({ url });
+  return NextResponse.redirect(url, 302);
 }

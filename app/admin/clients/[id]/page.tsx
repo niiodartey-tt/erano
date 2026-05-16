@@ -33,7 +33,6 @@ export default function ClientProfilePage() {
   const [customPrice,  setCustomPrice]  = useState("");
   const [upgradeModal,  setUpgradeModal]  = useState(false);
   const [reactivating,  setReactivating]  = useState(false);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [invoiceNum,   setInvoiceNum]   = useState<string | null>(null);
   const [generateErr,  setGenerateErr]  = useState<string | null>(null);
 
@@ -85,16 +84,6 @@ export default function ClientProfilePage() {
     void fetchData();
   }
 
-  async function handleDownload(bucket: string, path: string) {
-    setDownloadError(null);
-    const res = await fetch(`/api/admin/signed-url?bucket=${encodeURIComponent(bucket)}&path=${encodeURIComponent(path)}`);
-    if (!res.ok) { setDownloadError("Download failed — could not generate a secure link. Please try again."); return; }
-    const { url } = await res.json() as { url: string };
-    const a = document.createElement("a");
-    a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  }
-
   if (loading) return <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-navy border border-white/10 animate-pulse" />)}</div>;
   if (error || !data) return <div className="mx-auto max-w-6xl p-4 md:p-6"><p className="text-sm text-red-400" role="alert">{error ?? "Client not found."}</p></div>;
 
@@ -140,16 +129,10 @@ export default function ClientProfilePage() {
         timer={data.timer} proofs={data.proofs}
         onConfirmPayment={(proofId) => setModal({ type: "confirm", proofId })}
         onRejectPayment={(proofId) => setModal({ type: "reject", proofId })}
-        onDownload={handleDownload}
       />
-      {downloadError && (
-        <p className="text-sm text-red-400 rounded-lg border border-red-800 bg-red-900/30 px-4 py-2" role="alert">
-          {downloadError}
-        </p>
-      )}
       <ClientDocumentsSection
         clientId={data.user.id} docRequests={data.doc_requests}
-        onRequestCreated={fetchData} onDownload={handleDownload}
+        onRequestCreated={fetchData}
       />
       {upgradeModal && (
         <PackageUpgradeModal

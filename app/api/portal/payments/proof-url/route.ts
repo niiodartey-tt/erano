@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const url = await getPaymentProofUrl(path);
-    return NextResponse.json({ url });
+    return NextResponse.redirect(url, 302);
   } catch {
     return NextResponse.json({ error: "Failed to generate download URL." }, { status: 500 });
   }
