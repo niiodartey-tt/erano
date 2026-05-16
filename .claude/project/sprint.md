@@ -8,30 +8,35 @@
 
 ## Current Sprint
 
-**Sprint:** Sprint 15 — Mobile QA + Pre-Launch
-**Status:** Complete
-**Branch:** `sprint-15`
-**Vercel preview:** TBD
-
-### Completed Tasks
-
-| Task | Status |
-|---|---|
-| Full screenshot review at 375px and 430px | Complete |
-| Services page alternating grid — mobile stack fix | Complete |
-| Contact form grid — mobile stack fix | Complete |
-| Pricing grid — mobile stack or horizontal scroll | Complete |
-| Tools calculator grid — mobile stack fix | Complete |
-| About team grid — mobile stack fix | Complete |
-| OG image — branded 1200×630 | Complete |
-| Real team photos from client (replace Unsplash) | Complete |
-| Real company logo SVG | Complete |
-| Analytics setup (Plausible or GA4) | Complete |
-| Full pre-handoff checklist per 17-handoff.md | Complete |
+No active sprint. Sprint 15 merged to main — awaiting next sprint brief from Naa.
 
 ---
 
 ## Sprint History
+
+### ✅ Sprint 15 — Mobile QA + Pre-Launch
+**Completed:** May 2026
+**Branch:** `sprint-15`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] Navbar hamburger — CSS-only (hidden md:flex / flex md:hidden), removed isMobile useState SSR mismatch
+- [x] ServicesStrip — repeat(3,1fr) → repeat(auto-fit, minmax(min(100%,320px),1fr))
+- [x] WhyErano — activated dead .why-grid / .why-image media query by adding missing classNames
+- [x] StatsSection — removed borderRight from stat items (artifact on mobile stacked layout)
+- [x] Portal sidebar — conditional z-50 when open, pb-20 md:pb-4 nav padding
+- [x] Portal mobile nav — PortalMobileNav.tsx deleted, sidebar hamburger replaces it
+- [x] PaymentHistory — overflow-x-auto restored on table wrapper
+- [x] ScrollToTop — new component (components/ui/ScrollToTop.tsx), bottom-32 right-6, site layout only
+- [x] Pure CSS grid fix — services, contact, tools, resources pages (isMobile useState removed, auto-fit minmax)
+- [x] Footer email — overflowWrap: break-word fix
+- [x] SERVICES_BUSINESS image — updated to business team photo
+- [x] Font cache-bust comment in globals.css
+- [x] Coming soon page — card layout (rgba(255,255,255,0.04)), two-line contact format
+- [x] Vercel Analytics — @vercel/analytics installed, <Analytics /> in root layout
+
+---
 
 ### ✅ Sprint 14 — Account Reactivation + Cron + Hardening
 **Completed:** May 2026

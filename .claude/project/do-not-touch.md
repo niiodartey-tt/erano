@@ -184,7 +184,6 @@ Completed and approved in Sprint 9. Do not modify.
 | `app/api/portal/auth/clear-password-flag/route.ts` | Clears must_change_password — used after set-password and change-password | Breaks post-password-change flow |
 | `components/portal/layout/PortalSidebar.tsx` | Nav sidebar — desktop sticky + mobile slide-in, state badge, sign out | Breaks portal navigation |
 | `components/portal/layout/PortalHeader.tsx` | Portal header — page title, hamburger, notification bell, user avatar | Breaks portal header on all pages |
-| `components/portal/layout/PortalMobileNav.tsx` | Mobile bottom nav — 5 items, state-gated visibility | Breaks mobile portal navigation |
 | `components/portal/dashboard/StatusTimeline.tsx` | 4-step onboarding timeline — shared by pending/agreement/confirmation views | Breaks timeline in 3 dashboard views |
 | `components/portal/dashboard/PendingView.tsx` | Dashboard view for pending state | Breaks pending dashboard |
 | `components/portal/dashboard/AgreementView.tsx` | Dashboard view for awaiting_agreement state | Breaks agreement dashboard |
@@ -327,6 +326,18 @@ Completed and approved in Sprint 14. Do not modify.
 | `emails/ServiceExpiryReminderEmail.tsx` | Service expiry reminder email template — packageName, expiresOn, daysRemaining, WhatsApp CTA | Breaks service expiry email send |
 | `components/admin/clients/ClientDocumentsSection.tsx` | Document requests list — correct status badge colours, title+date download labels | Breaks document section on admin client profile |
 | `components/portal/documents/DocumentRequestCard.tsx` | Document request card — status-specific download error messages (401/404/500/other) | Breaks document download error feedback for clients |
+
+---
+
+## Locked — Sprint 15 Mobile QA + Pre-Launch
+
+Completed and approved in Sprint 15. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `components/ui/ScrollToTop.tsx` | Scroll-to-top button — fixed bottom-32 right-6, public site only, appears after 400px scroll | Breaks scroll-to-top UX |
+| `app/coming-soon/page.tsx` | Coming soon page — card layout, animated pulse dot, two-line contact format | Breaks coming soon page |
+| `app/coming-soon/layout.tsx` | Coming soon page metadata | Breaks coming soon SEO |
 
 ---
 
