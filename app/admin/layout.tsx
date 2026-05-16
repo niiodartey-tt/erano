@@ -1,6 +1,6 @@
 import { createServerClient as createSsrClient } from "@supabase/ssr";
 import { createServerClient as createServiceClient } from "@/lib/supabase-server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AdminProvider } from "@/context/AdminContext";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
@@ -12,6 +12,10 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  if (pathname === "/admin/login") return <>{children}</>;
+
   const cookieStore = cookies();
 
   const supabase = createSsrClient(
