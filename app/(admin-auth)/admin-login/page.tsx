@@ -63,18 +63,16 @@ export default function AdminLoginPage() {
         return;
       }
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setServerError("Invalid credentials."); return; }
+      const res = await fetch("/api/admin/auth/check-role");
 
-      const { data: profile } = await supabase
-        .from("users")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      if (profile?.role !== "admin") {
+      if (res.status === 403) {
         await supabase.auth.signOut();
         setServerError("Access denied. This portal is for administrators only.");
+        return;
+      }
+
+      if (res.status === 401) {
+        setServerError("Authentication failed. Please try again.");
         return;
       }
 
