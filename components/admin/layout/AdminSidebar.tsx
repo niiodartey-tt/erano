@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import { LayoutDashboard, Users, FileText, FolderOpen, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAdmin } from "@/context/AdminContext";
 
 interface NavItem {
   icon: LucideIcon;
@@ -22,6 +23,7 @@ const NAV: NavItem[] = [
 
 export default function AdminSidebar({ pendingCount }: { pendingCount: number }) {
   const pathname = usePathname();
+  const { isMobileNavOpen, toggleMobileNav } = useAdmin();
 
   async function handleSignOut() {
     await fetch("/api/auth/signout", { method: "POST" });
@@ -29,10 +31,21 @@ export default function AdminSidebar({ pendingCount }: { pendingCount: number })
   }
 
   return (
-    <aside
-      className="hidden md:flex flex-col w-[260px] shrink-0 h-screen sticky top-0 bg-navy"
-      aria-label="Admin navigation"
-    >
+    <>
+      {isMobileNavOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={toggleMobileNav}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={cn(
+          "fixed md:sticky top-0 left-0 flex flex-col w-[260px] h-screen bg-navy shrink-0 transition-transform duration-300 ease-in-out",
+          isMobileNavOpen ? "translate-x-0 z-50" : "-translate-x-full md:translate-x-0 z-40",
+        )}
+        aria-label="Admin navigation"
+      >
       <div className="px-5 py-6 border-b border-white/10">
         <p className="text-xl font-extrabold tracking-tight text-white">ERANO</p>
         <p className="text-[0.6rem] font-semibold tracking-[0.2em] uppercase text-gold mt-0.5">
@@ -49,6 +62,7 @@ export default function AdminSidebar({ pendingCount }: { pendingCount: number })
               <li key={href}>
                 <Link
                   href={href}
+                  onClick={() => { if (isMobileNavOpen) toggleMobileNav(); }}
                   className={cn(
                     "flex items-center gap-3 px-3 py-3 rounded-lg text-sm min-h-[44px] transition-colors border-l-2",
                     active
@@ -81,5 +95,6 @@ export default function AdminSidebar({ pendingCount }: { pendingCount: number })
         </button>
       </div>
     </aside>
+    </>
   );
 }

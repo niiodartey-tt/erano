@@ -89,7 +89,10 @@ export default function ClientProfilePage() {
     setDownloadError(null);
     const res = await fetch(`/api/admin/signed-url?bucket=${encodeURIComponent(bucket)}&path=${encodeURIComponent(path)}`);
     if (!res.ok) { setDownloadError("Download failed — could not generate a secure link. Please try again."); return; }
-    window.open((await res.json() as { url: string }).url, "_blank");
+    const { url } = await res.json() as { url: string };
+    const a = document.createElement("a");
+    a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
   }
 
   if (loading) return <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 rounded-xl bg-navy border border-white/10 animate-pulse" />)}</div>;
