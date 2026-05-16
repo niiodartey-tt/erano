@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  const publicPaths = ["/login", "/admin/login", "/reset-password", "/auth/callback", "/onboarding", "/coming-soon"];
+  const publicPaths = ["/login", "/admin-login", "/reset-password", "/auth/callback", "/onboarding", "/coming-soon"];
   const isPublicPath = publicPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
   if (isPublicPath) {
     return NextResponse.next();
@@ -47,7 +47,7 @@ export default async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
     if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+      return NextResponse.redirect(new URL("/admin-login", request.url));
     }
   }
 

@@ -1,6 +1,6 @@
 import { createServerClient as createSsrClient } from "@supabase/ssr";
 import { createServerClient as createServiceClient } from "@/lib/supabase-server";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AdminProvider } from "@/context/AdminContext";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
@@ -12,10 +12,6 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = headers();
-  const pathname = headersList.get("x-pathname") ?? "";
-  if (pathname === "/admin/login") return <>{children}</>;
-
   const cookieStore = cookies();
 
   const supabase = createSsrClient(
@@ -38,7 +34,7 @@ export default async function AdminLayout({
   );
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/admin/login");
+  if (!user) redirect("/admin-login");
 
   const service = createServiceClient();
   const { data: userRow } = await service
@@ -47,7 +43,7 @@ export default async function AdminLayout({
     .eq("id", user.id)
     .single();
 
-  if (!userRow) redirect("/admin/login");
+  if (!userRow) redirect("/admin-login");
   if (userRow.role !== "admin") redirect("/portal/dashboard");
 
   const adminName = user.user_metadata?.full_name as string | undefined
@@ -71,7 +67,7 @@ export default async function AdminLayout({
           </main>
         </div>
       </div>
-      <IdleTimeout loginUrl="/admin/login" />
+      <IdleTimeout loginUrl="/admin-login" />
     </AdminProvider>
   );
 }
