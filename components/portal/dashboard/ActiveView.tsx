@@ -118,7 +118,7 @@ export default function ActiveView() {
           </h3>
           <ul className="space-y-3" role="list">
             {data.recentNotifs.map((notif) => (
-              <li key={notif.id} className="flex items-start justify-between gap-4">
+              <li key={notif.id} className="flex items-start justify-between gap-4 border-b border-line last:border-b-0 pb-3 last:pb-0">
                 <span className="text-sm text-navy">{notif.message}</span>
                 <span className="text-xs text-body/60 shrink-0">{timeAgo(notif.created_at)}</span>
               </li>
