@@ -64,7 +64,7 @@ export default function AdminDashboard() {
   if (error || !metrics) {
     return (
       <div className="mx-auto max-w-6xl p-4 md:p-6">
-        <p className="text-sm text-red-600" role="alert">{error ?? "Something went wrong."}</p>
+        <p className="text-sm text-red-400" role="alert">{error ?? "Something went wrong."}</p>
       </div>
     );
   }

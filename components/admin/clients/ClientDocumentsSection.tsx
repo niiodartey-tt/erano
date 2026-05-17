@@ -9,9 +9,9 @@ interface DocUpload  { id: string; file_path: string; uploaded_at: string }
 interface DocRequest { id: string; title: string; description: string; category: string; status: string; created_at: string; document_uploads: DocUpload[] }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending:  "bg-amber-100 text-amber-800",
-  uploaded: "bg-blue-100 text-blue-800",
-  reviewed: "bg-green-100 text-green-800",
+  pending:  "bg-amber-900/30 text-amber-400",
+  uploaded: "bg-blue-900/30 text-blue-400",
+  reviewed: "bg-green-900/30 text-green-400",
 };
 
 interface Props {
@@ -54,7 +54,7 @@ export function ClientDocumentsSection({ clientId, docRequests, onRequestCreated
                   <p className="text-sm font-medium text-white">{req.title}</p>
                   <p className="text-xs text-white/60 mt-0.5">{req.category} · {new Date(req.created_at).toLocaleDateString("en-GB")}</p>
                 </div>
-                <span className={cn("shrink-0 px-2 py-0.5 rounded-full text-xs font-medium capitalize", STATUS_COLORS[req.status] ?? "bg-gray-100 text-gray-800")}>
+                <span className={cn("shrink-0 px-2 py-0.5 rounded-full text-xs font-medium capitalize", STATUS_COLORS[req.status] ?? "bg-white/10 text-white/50")}>
                   {req.status}
                 </span>
               </div>

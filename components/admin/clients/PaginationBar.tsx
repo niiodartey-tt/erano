@@ -18,8 +18,8 @@ export function PaginationBar({ page, total, pageSize, onPrev, onNext }: Props) 
   const hasNext = to < total;
 
   return (
-    <div className="flex items-center justify-between px-5 py-3 border-t border-line">
-      <p className="text-xs text-body">
+    <div className="flex items-center justify-between px-5 py-3 border-t border-white/10">
+      <p className="text-xs text-white/40">
         {total === 0
           ? "No results"
           : `Showing ${from}–${to} of ${total} client${total === 1 ? "" : "s"}`}
@@ -31,8 +31,8 @@ export function PaginationBar({ page, total, pageSize, onPrev, onNext }: Props) 
           className={cn(
             "flex items-center justify-center w-8 h-8 rounded-lg border text-xs transition-colors",
             hasPrev
-              ? "border-line text-navy hover:bg-off"
-              : "border-line text-body/30 cursor-not-allowed",
+              ? "border-white/10 text-white hover:bg-white/10"
+              : "border-white/10 text-white/20 cursor-not-allowed",
           )}
           aria-label="Previous page"
         >
@@ -44,8 +44,8 @@ export function PaginationBar({ page, total, pageSize, onPrev, onNext }: Props) 
           className={cn(
             "flex items-center justify-center w-8 h-8 rounded-lg border text-xs transition-colors",
             hasNext
-              ? "border-line text-navy hover:bg-off"
-              : "border-line text-body/30 cursor-not-allowed",
+              ? "border-white/10 text-white hover:bg-white/10"
+              : "border-white/10 text-white/20 cursor-not-allowed",
           )}
           aria-label="Next page"
         >
