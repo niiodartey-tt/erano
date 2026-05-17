@@ -8,16 +8,21 @@ export function verifyCsrfOrigin(request: Request): void {
 
   if (!origin) {
     const referer = request.headers.get("referer") ?? "";
-    if (referer && !referer.startsWith(siteUrl)) {
+    const allowedPrefixes = [siteUrl, "https://erano.vercel.app"].filter(Boolean);
+    if (referer && !allowedPrefixes.some((prefix) => referer.startsWith(prefix))) {
       throw new Error("CSRF_ORIGIN_MISMATCH");
     }
     return;
   }
 
-  const normalizedSite   = siteUrl.replace(/\/$/, "");
   const normalizedOrigin = origin.replace(/\/$/, "");
 
-  if (normalizedOrigin !== normalizedSite) {
+  const allowedOrigins = [
+    siteUrl.replace(/\/$/, ""),
+    "https://erano.vercel.app",
+  ].filter(Boolean);
+
+  if (!allowedOrigins.includes(normalizedOrigin)) {
     throw new Error("CSRF_ORIGIN_MISMATCH");
   }
 }
