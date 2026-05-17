@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Playfair_Display, Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
@@ -16,6 +16,13 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-nunito",
   display: "swap",
 });
 
@@ -68,8 +75,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GH" className={`${playfairDisplay.variable} ${inter.variable}`}>
-      <body style={{ margin: 0, padding: 0, background: "#ffffff" }} className={`${playfairDisplay.variable} ${inter.variable}`}>
+    <html lang="en-GH" className={`${playfairDisplay.variable} ${inter.variable} ${nunito.variable}`}>
+      <body style={{ margin: 0, padding: 0, background: "#ffffff" }} className={`${playfairDisplay.variable} ${inter.variable} ${nunito.variable}`}>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-white focus:text-navy focus:font-semibold focus:rounded focus:shadow-lg"

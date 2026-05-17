@@ -94,7 +94,7 @@ export default function Footer() {
             {/* Wordmark */}
             <div style={{ marginBottom: "1.25rem" }}>
               <div style={{
-                fontFamily:    "var(--font-playfair), serif",
+                fontFamily:    "var(--font-nunito), sans-serif",
                 fontSize:      "1.25rem",
                 fontWeight:    800,
                 letterSpacing: "-0.025em",

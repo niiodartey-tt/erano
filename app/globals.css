@@ -31,11 +31,11 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+    font-family: var(--font-nunito), "Nunito", system-ui, sans-serif;
   }
 
   body {
-    font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+    font-family: var(--font-nunito), "Nunito", system-ui, sans-serif;
     font-size: 1rem;
     font-weight: 400;
     color: var(--body);
@@ -45,13 +45,13 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     color: var(--heading);
     line-height: 1.1;
     letter-spacing: -0.02em;
   }
 
-  nav { font-family: var(--font-inter), "Inter", system-ui, sans-serif; }
+  nav { font-family: var(--font-nunito), "Nunito", system-ui, sans-serif; }
 
   p { line-height: 1.8; }
   a { color: inherit; text-decoration: none; }
@@ -114,7 +114,7 @@
 
   /* Headings */
   .ec-h1 {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: clamp(3.25rem, 6.5vw, 5.5rem);
     font-weight: 800;
     line-height: 1.0;
@@ -123,7 +123,7 @@
   }
 
   .ec-h2 {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: clamp(2.25rem, 4vw, 3.25rem);
     font-weight: 700;
     line-height: 1.1;
@@ -132,7 +132,7 @@
   }
 
   .ec-h2-white {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: clamp(2.25rem, 4vw, 3.25rem);
     font-weight: 700;
     line-height: 1.1;
@@ -141,7 +141,7 @@
   }
 
   .ec-h3 {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: clamp(1.375rem, 2.5vw, 1.875rem);
     font-weight: 600;
     line-height: 1.2;
@@ -150,7 +150,7 @@
   }
 
   .ec-h3-white {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
     font-size: clamp(1.375rem, 2.5vw, 1.875rem);
     font-weight: 600;
     line-height: 1.2;
@@ -159,11 +159,11 @@
   }
 
   .font-display {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
   }
 
   .ec-heading {
-    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-family: var(--font-nunito), "Nunito", sans-serif;
   }
 
   /* Body text variants */
