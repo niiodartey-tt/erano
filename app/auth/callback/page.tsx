@@ -16,6 +16,38 @@ export default function AuthCallbackPage() {
       console.log("[AUTH-CALLBACK] search:", window.location.search);
       console.log("[AUTH-CALLBACK] hash length:", window.location.hash.length);
 
+      // ── PATH D: token_hash flow (password reset + magic link via email template) ──
+      const searchParams = new URLSearchParams(window.location.search);
+      const tokenHash    = searchParams.get("token_hash");
+      const typeParam    = searchParams.get("type") as "recovery" | "magiclink" | null;
+
+      console.log("[AUTH-CALLBACK] PATH D — token_hash present:", !!tokenHash, "type:", typeParam);
+
+      if (tokenHash && typeParam) {
+        const { error: otpError } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type:       typeParam,
+        });
+        console.log("[AUTH-CALLBACK] PATH D — verifyOtp error:", otpError?.message ?? null);
+
+        if (otpError) {
+          window.location.href = "/login?error=invalid_token";
+          return;
+        }
+        if (typeParam === "recovery") {
+          console.log("[AUTH-CALLBACK] PATH D — recovery → /reset-password/confirm");
+          window.location.href = "/reset-password/confirm";
+          return;
+        }
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await doRedirect(supabase, user.id, typeParam);
+        } else {
+          window.location.href = "/login";
+        }
+        return;
+      }
+
       // ── PATH A: implicit flow — tokens in hash ────────────────────────────
       const hash       = window.location.hash.substring(1);
       const hashParams = new URLSearchParams(hash);
@@ -46,8 +78,7 @@ export default function AuthCallbackPage() {
       }
 
       // ── PATH B: PKCE flow — code in query string ──────────────────────────
-      const searchParams = new URLSearchParams(window.location.search);
-      const code         = searchParams.get("code");
+      const code = searchParams.get("code");
       console.log("[AUTH-CALLBACK] PATH B — PKCE code present:", !!code);
 
       if (code) {
