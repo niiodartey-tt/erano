@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const COMING_SOON_MODE = true;
+
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
@@ -9,6 +11,11 @@ export default async function middleware(request: NextRequest) {
   const isPublicPath = publicPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
   if (isPublicPath) {
     return NextResponse.next();
+  }
+
+  // Coming soon redirect — set COMING_SOON_MODE = false to go live
+  if (COMING_SOON_MODE && pathname !== "/coming-soon") {
+    return NextResponse.redirect(new URL("/coming-soon", request.url));
   }
 
   const requestHeaders = new Headers(request.headers);
@@ -86,5 +93,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*", "/admin/:path*", "/login"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

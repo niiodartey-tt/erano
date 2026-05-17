@@ -35,7 +35,7 @@ export default function ComingSoonPage() {
           {/* Wordmark */}
           <div style={{ marginBottom: "2rem" }}>
             <div style={{
-              fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
+              fontFamily:    "var(--font-nunito), sans-serif",
               fontSize:      "clamp(2.25rem, 7vw, 4rem)",
               fontWeight:    700,
               color:         "#ffffff",
@@ -45,7 +45,7 @@ export default function ComingSoonPage() {
               ERANO
             </div>
             <div style={{
-              fontFamily:    "var(--font-inter), 'Inter', system-ui, sans-serif",
+              fontFamily:    "var(--font-nunito), sans-serif",
               fontSize:      "0.625rem",
               fontWeight:    600,
               letterSpacing: "0.4em",
@@ -83,7 +83,7 @@ export default function ComingSoonPage() {
 
           {/* Heading */}
           <h1 style={{
-            fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
+            fontFamily:    "var(--font-nunito), sans-serif",
             fontSize:      "clamp(1.75rem, 4vw, 3rem)",
             fontWeight:    700,
             color:         "#ffffff",
@@ -96,7 +96,7 @@ export default function ComingSoonPage() {
 
           {/* Subheading */}
           <p style={{
-            fontFamily: "var(--font-inter), 'Inter', system-ui, sans-serif",
+            fontFamily: "var(--font-nunito), sans-serif",
             fontSize:   "clamp(0.9375rem, 2vw, 1.0625rem)",
             lineHeight: 1.8,
             color:      "rgba(255,255,255,0.55)",
@@ -107,7 +107,7 @@ export default function ComingSoonPage() {
 
           {/* Contact line — two lines */}
           <div style={{
-            fontFamily: "var(--font-inter), 'Inter', system-ui, sans-serif",
+            fontFamily: "var(--font-nunito), sans-serif",
             fontSize:   "0.875rem",
             color:      "rgba(255,255,255,0.4)",
           }}>
