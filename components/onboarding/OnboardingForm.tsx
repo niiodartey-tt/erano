@@ -101,7 +101,7 @@ export function OnboardingForm() {
               />
             </div>
 
-            <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto px-4 md:px-10 py-10">
+            <div className="flex-1 flex flex-col max-w-4xl w-full mx-auto px-4 md:px-10 py-10">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep}
