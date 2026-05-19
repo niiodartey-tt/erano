@@ -1,4 +1,4 @@
-export const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://erano.vercel.app";
+export const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eranoconsulting.com";
 
 export const styles = {
   body:       { backgroundColor: "#f5f6f8", fontFamily: "Arial, sans-serif", margin: "0", padding: "0" },

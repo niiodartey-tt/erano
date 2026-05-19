@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
       const clientName  = prof?.contact_name ?? "Client";
       const businessName = prof?.legal_name ?? "";
       const amountStr   = `${currency} ${amount_paid.toFixed(2)}`;
-      const adminUrl    = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://erano.vercel.app"}/admin/payments`;
+      const adminUrl    = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://eranoconsulting.com"}/admin/payments`;
       const html = await render(PaymentProofReceivedEmail({ clientName, businessName, transactionReference: transaction_reference, amountPaid: amountStr, adminUrl }));
       await sendEmail({ to: adminEmail, subject: emailSubjectFn(businessName), html });
     }

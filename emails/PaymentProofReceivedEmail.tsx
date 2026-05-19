@@ -53,7 +53,7 @@ export function PaymentProofReceivedEmail({
           <Section style={styles.footer}>
             <Text style={styles.footerText}>© 2026 Erano Consulting · Accra, Ghana</Text>
             <Text style={styles.footerText}>
-              <Link href="https://erano.vercel.app/legal/privacy" style={styles.footerLink}>Privacy Policy</Link>
+              <Link href="https://eranoconsulting.com/legal/privacy" style={styles.footerLink}>Privacy Policy</Link>
             </Text>
           </Section>
         </Container>

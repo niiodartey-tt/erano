@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
     if (adminEmail) {
       const clientName   = prof?.contact_name ?? "Client";
       const businessName = prof?.legal_name ?? "";
-      const adminUrl     = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://erano.vercel.app"}/admin/clients`;
+      const adminUrl     = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://eranoconsulting.com"}/admin/clients`;
       const html = await render(DocumentUploadedEmail({ clientName, businessName, documentTitle: docRequest.title, adminUrl }));
       await sendEmail({ to: adminEmail, subject: emailSubjectFn(businessName), html });
     }

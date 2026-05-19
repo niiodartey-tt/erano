@@ -3,7 +3,7 @@ import { createServerClient } from "@/lib/supabase-server";
 
 // Always use production callback URL — must match Supabase redirect allowlist.
 // Do not use NEXT_PUBLIC_SITE_URL here as preview URLs are not in the allowlist.
-const CALLBACK_URL = "https://erano.vercel.app/auth/callback";
+const CALLBACK_URL = "https://eranoconsulting.com/auth/callback";
 
 export async function generateMagicLink(email: string): Promise<string> {
   const supabase = createServerClient();

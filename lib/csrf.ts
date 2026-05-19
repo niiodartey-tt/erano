@@ -8,7 +8,7 @@ export function verifyCsrfOrigin(request: Request): void {
 
   if (!origin) {
     const referer = request.headers.get("referer") ?? "";
-    const allowedPrefixes = [siteUrl, "https://erano.vercel.app"].filter(Boolean);
+    const allowedPrefixes = [siteUrl, "https://eranoconsulting.com"].filter(Boolean);
     if (referer && !allowedPrefixes.some((prefix) => referer.startsWith(prefix))) {
       throw new Error("CSRF_ORIGIN_MISMATCH");
     }
@@ -19,7 +19,7 @@ export function verifyCsrfOrigin(request: Request): void {
 
   const allowedOrigins = [
     siteUrl.replace(/\/$/, ""),
-    "https://erano.vercel.app",
+    "https://eranoconsulting.com",
   ].filter(Boolean);
 
   if (!allowedOrigins.includes(normalizedOrigin)) {
