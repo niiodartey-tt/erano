@@ -8,11 +8,34 @@
 
 ## Current Sprint
 
-> No active sprint. Sprint 16 complete and merged. Awaiting Sprint 17 brief from Naa.
+> No active sprint. Sprint 17 complete and merged. Awaiting Sprint 18 brief from Naa.
 
 ---
 
 ## Sprint History
+
+### ✅ Sprint 17 — Package Cards, Privacy/Terms, URL Migration
+**Completed:** May 2026
+**Branch:** `sprint-17`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
+
+- [x] TASK 1 — Step6Package.tsx: tiered feature cards with FEATURES map, "Everything in X" inheritance labels, highlighted Growth Booster (bg-navy), badges (Most Popular / Premium / Bespoke); grid layout `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
+- [x] TASK 2 — Footer.tsx: `/legal/privacy` → `/privacy`, `/legal/terms` → `/terms`
+- [x] TASK 3 — next.config.mjs: `redirects()` for `/legal/privacy` → `/privacy` and `/legal/terms` → `/terms` (permanent 308)
+- [x] TASK 4 — All 14 email templates: `/legal/privacy` → `/privacy` in footer Privacy Policy links
+- [x] TASK 5 — app/(site)/privacy/page.tsx and app/(site)/terms/page.tsx: real legal content (8 sections / 10 sections, Ghana law, ICAG credentials, Act 843, GRA 7-year retention)
+- [x] Fix — OnboardingForm.tsx: `max-w-2xl` → `max-w-4xl` so package cards render at ~264px in 3-column grid
+- [x] Fix — OnboardingSidebar.tsx: `/legal/privacy` → `/privacy`
+
+**Pre-merge checklist:**
+- [x] `npm run lint` — warnings only (pre-existing)
+- [x] `npx tsc --noEmit` — 0 errors
+- [x] `npm run build` — clean
+- [x] `npm audit` — 7 vulnerabilities (pre-existing in Next.js 14.x; fix requires breaking upgrade to Next.js 16)
+
+---
 
 ### ✅ Sprint 16 — Admin Login + Dark Theme + Session Idle Timeout
 **Completed:** May 2026

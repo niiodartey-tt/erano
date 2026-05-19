@@ -374,6 +374,26 @@ Completed and approved in Sprint 16. Do not modify.
 
 ---
 
+## Locked — Sprint 17 Package Cards, Privacy/Terms, URL Migration
+
+Completed and approved in Sprint 17. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `app/(site)/privacy/page.tsx` | Real legal content — 8 sections, ICAG credentials, Act 843, GRA retention. Never edit without Naa + client approval | Legal liability |
+| `app/(site)/privacy/layout.tsx` | Privacy page SEO metadata | Breaks privacy page SEO |
+| `app/(site)/terms/page.tsx` | Real legal content — 10 sections, Ghana governing law, payment terms, IP. Never edit without Naa + client approval | Legal liability |
+| `app/(site)/terms/layout.tsx` | Terms page SEO metadata | Breaks terms page SEO |
+| `components/onboarding/steps/Step6Package.tsx` | Rewritten Sprint 17 — FEATURES map, tiered cards, grid layout | Breaks package selection step |
+| `components/onboarding/OnboardingForm.tsx` | Updated Sprint 17 — max-w-4xl container, correct footer links | Breaks onboarding layout and links |
+| `components/onboarding/OnboardingSidebar.tsx` | Updated Sprint 17 — /privacy link corrected | Breaks sidebar privacy link |
+| `components/layout/Footer.tsx` | Updated Sprint 17 — /privacy and /terms links corrected | Breaks footer legal links |
+| `next.config.mjs` | Updated Sprint 17 — permanent redirects for /legal/privacy and /legal/terms | Breaks SEO redirect chain for legacy URLs |
+
+Note: All 14 email templates were updated in Sprint 17 (Privacy Policy footer links). They are already listed under Sprint 8 above.
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
