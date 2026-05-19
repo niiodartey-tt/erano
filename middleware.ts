@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const COMING_SOON_MODE = true;
+const COMING_SOON_MODE = false;
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
