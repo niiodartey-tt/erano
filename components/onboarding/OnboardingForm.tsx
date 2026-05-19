@@ -147,8 +147,8 @@ export function OnboardingForm() {
             <footer className="border-t border-line px-4 md:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 bg-white">
               <p className="text-xs text-body">© 2026 Erano Consulting</p>
               <div className="flex gap-5">
-                <a href="/legal/privacy" className="text-xs text-body hover:text-navy transition-colors">Privacy Policy</a>
-                <a href="/legal/terms" className="text-xs text-body hover:text-navy transition-colors">Terms</a>
+                <a href="/privacy" className="text-xs text-body hover:text-navy transition-colors">Privacy Policy</a>
+                <a href="/terms" className="text-xs text-body hover:text-navy transition-colors">Terms</a>
               </div>
             </footer>
           </main>

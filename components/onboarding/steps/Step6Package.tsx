@@ -123,7 +123,7 @@ export function Step6Package({ packages, packagesLoading }: Step6Props) {
           control={control}
           name="packageId"
           render={({ field }) => (
-            <div className="flex gap-4 overflow-x-auto pb-4 -mx-1 px-1" role="radiogroup" aria-label="Package options">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" role="radiogroup" aria-label="Package options">
               {packages.map((pkg) => {
                 const selected = field.value === pkg.id;
                 const meta    = FEATURES[pkg.name] ?? { features: [], highlight: false, badge: null };
@@ -132,10 +132,10 @@ export function Step6Package({ packages, packagesLoading }: Step6Props) {
                   <label
                     key={pkg.id}
                     className={cn(
-                      "relative flex flex-col flex-shrink-0 w-[272px] rounded-lg cursor-pointer transition-all duration-200 p-5",
+                      "relative flex flex-col rounded-lg cursor-pointer transition-all duration-200 p-5",
                       meta.highlight ? "bg-navy text-white" : "bg-white border border-line",
                       selected
-                        ? "ring-2 ring-gold scale-[1.02] shadow-gold"
+                        ? "ring-2 ring-gold shadow-gold"
                         : meta.highlight ? "hover:opacity-90" : "hover:border-gold/40 hover:shadow-subtle",
                     )}
                   >
