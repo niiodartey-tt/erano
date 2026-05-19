@@ -10,6 +10,12 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      { source: "/legal/privacy", destination: "/privacy", permanent: true },
+      { source: "/legal/terms",   destination: "/terms",   permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -34,7 +34,7 @@ export function WelcomeEmail({ contactName, magicLinkUrl }: WelcomeEmailProps) {
           <Section style={styles.footer}>
             <Text style={styles.footerText}>© 2026 Erano Consulting · Accra, Ghana</Text>
             <Text style={styles.footerText}>
-              <Link href={`${baseUrl}/legal/privacy`} style={styles.footerLink}>Privacy Policy</Link>
+              <Link href={`${baseUrl}/privacy`} style={styles.footerLink}>Privacy Policy</Link>
             </Text>
           </Section>
         </Container>

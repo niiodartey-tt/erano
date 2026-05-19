@@ -70,7 +70,7 @@ export function ContactFormEmail({ fullName, email, phone, company, industry, se
           <Section style={styles.footer}>
             <Text style={styles.footerText}>© 2026 Erano Consulting · Accra, Ghana</Text>
             <Text style={styles.footerText}>
-              <Link href="https://eranoconsulting.com/legal/privacy" style={styles.footerLink}>Privacy Policy</Link>
+              <Link href="https://eranoconsulting.com/privacy" style={styles.footerLink}>Privacy Policy</Link>
             </Text>
           </Section>
         </Container>
