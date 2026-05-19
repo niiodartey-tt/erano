@@ -67,7 +67,7 @@ export function OnboardingSidebar({ currentStep }: OnboardingSidebarProps) {
         <p className="text-xs text-white/30">
           Your data is secure.{" "}
           <Link
-            href="/legal/privacy"
+            href="/privacy"
             className="text-white/50 underline hover:text-white transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-white rounded"
           >
             Privacy Policy
