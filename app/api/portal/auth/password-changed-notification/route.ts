@@ -9,14 +9,13 @@ import { sendEmail } from "@/lib/email";
 export async function POST() {
   const cookieStore = cookies();
 
-  // Verify the authenticated user via session cookie
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() { return cookieStore.getAll(); },
-        setAll() { /* no-op — read-only verification */ },
+        setAll() { /* read-only verification */ },
       },
     },
   );
@@ -26,38 +25,20 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Service role client for privileged DB writes
   const supabase = createServerClient();
 
-  const { error: updateError } = await supabase
-    .from("users")
-    .update({ must_change_password: false })
-    .eq("id", user.id);
-
-  if (updateError) {
-    console.error("clear-password-flag update error:", updateError);
-    return NextResponse.json({ error: "Failed to update account" }, { status: 500 });
-  }
-
-  await supabase.from("audit_log").insert({
-    actor_id:    user.id,
-    actor_role:  "client",
-    action:      "password_changed_on_first_login",
-    target_type: "user",
-    target_id:   user.id,
-  });
+  const { data: profile } = await supabase
+    .from("client_profiles")
+    .select("contact_name")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  const contactName = profile?.contact_name ?? "there";
 
   try {
-    const { data: profile } = await supabase
-      .from("client_profiles")
-      .select("contact_name")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    const contactName = profile?.contact_name ?? "there";
     const emailHtml = await render(PasswordChangedEmail({ contactName }));
     await sendEmail({ to: user.email!, subject: passwordChangedSubject, html: emailHtml });
   } catch (emailErr) {
-    console.error("[clear-password-flag] Password changed email failed:", emailErr instanceof Error ? emailErr.message : emailErr);
+    console.error("[password-changed-notification] Email failed:", emailErr instanceof Error ? emailErr.message : emailErr);
   }
 
   return NextResponse.json({ success: true });

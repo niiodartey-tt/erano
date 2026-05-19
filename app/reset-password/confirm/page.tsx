@@ -67,6 +67,7 @@ export default function ConfirmPage() {
       setLoading(false);
       return;
     }
+    await fetch("/api/portal/auth/password-changed-notification", { method: "POST" }).catch(() => {});
     await supabase.auth.signOut({ scope: "global" });
     router.push("/login?reset=success");
   }
