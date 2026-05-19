@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Payments — Erano Consulting",
+  title: "Payments — Erano Client Portal",
   description: "Submit payment proof and view your payment history.",
 };
 

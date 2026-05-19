@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default:  "Erano Consulting — Tax, Audit & Business Advisory Ghana",
+    default:  "Erano Consulting — Tax Advisory · Audit · Accounting · Ghana",
     template: "%s | Erano Consulting",
   },
   description:

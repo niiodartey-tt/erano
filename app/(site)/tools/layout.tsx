@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:       "Free Ghana Tax Calculators — VAT, PAYE, Corporate Tax & SSNIT",
+  title:       "Financial Tools — Erano Consulting",
   description: "Free online tax calculators for Ghana businesses. Estimate VAT, PAYE, corporate income tax and SSNIT contributions using current GRA rates.",
   openGraph: {
     title:       "Free Ghana Tax Calculators — Erano Consulting",

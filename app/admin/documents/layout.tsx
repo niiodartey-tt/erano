@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Document Manager — Erano Admin",
+  title: "Documents — Erano Admin",
 };
 
 export default function DocumentsLayout({ children }: { children: ReactNode }) {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createServerClient as createSsrClient } from "@supabase/ssr";
 import { createServerClient as createServiceClient } from "@/lib/supabase-server";
 import { cookies, headers } from "next/headers";
@@ -7,6 +8,8 @@ import { PortalProvider } from "@/context/PortalContext";
 import PortalSidebar from "@/components/portal/layout/PortalSidebar";
 import PortalHeader from "@/components/portal/layout/PortalHeader";
 import { IdleTimeout } from "@/components/ui/IdleTimeout";
+
+export const metadata: Metadata = { title: "Erano Client Portal" };
 
 export default async function PortalLayout({
   children,

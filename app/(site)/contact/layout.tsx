@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:       "Contact Us — Erano Consulting Ghana",
+  title:       "Contact Us — Erano Consulting",
   description: "Get in touch with Erano Consulting. Free initial consultation for all new clients. We respond within one business day.",
   openGraph: {
     title:       "Contact Erano Consulting — Free Initial Consultation",

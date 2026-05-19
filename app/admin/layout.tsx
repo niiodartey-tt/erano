@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createServerClient as createSsrClient } from "@supabase/ssr";
 import { createServerClient as createServiceClient } from "@/lib/supabase-server";
 import { cookies } from "next/headers";
@@ -6,6 +7,8 @@ import { AdminProvider } from "@/context/AdminContext";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
 import AdminHeader from "@/components/admin/layout/AdminHeader";
 import { IdleTimeout } from "@/components/ui/IdleTimeout";
+
+export const metadata: Metadata = { title: "Erano Admin" };
 
 export default async function AdminLayout({
   children,
