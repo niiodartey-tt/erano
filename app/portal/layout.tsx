@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { createServerClient as createSsrClient } from "@supabase/ssr";
 import { createServerClient as createServiceClient } from "@/lib/supabase-server";
 import { cookies, headers } from "next/headers";
@@ -83,6 +84,15 @@ export default async function PortalLayout({
           <main id="main-content" className="flex-1 overflow-y-auto">
             {children}
           </main>
+          <footer className="border-t border-line bg-white px-4 py-3 md:px-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span className="text-xs text-body">© 2026 Erano Consulting</span>
+              <div className="flex items-center gap-4">
+                <Link href="/privacy" className="text-xs text-navy hover:text-gold transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="text-xs text-navy hover:text-gold transition-colors">Terms of Service</Link>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
       <IdleTimeout loginUrl="/login" />

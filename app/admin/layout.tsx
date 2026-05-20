@@ -68,6 +68,12 @@ export default async function AdminLayout({
           <main id="main-content" className="flex-1 overflow-y-auto">
             {children}
           </main>
+          <footer className="border-t border-white/10 bg-navy px-4 py-3 md:px-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span className="text-xs text-white/40">© 2026 Erano Consulting</span>
+              <span className="text-xs text-white/40">Admin Portal</span>
+            </div>
+          </footer>
         </div>
       </div>
       <IdleTimeout loginUrl="/admin-login" />
