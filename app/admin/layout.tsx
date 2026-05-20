@@ -65,7 +65,7 @@ export default async function AdminLayout({
         <AdminSidebar />
         <div className="flex flex-1 flex-col min-w-0">
           <AdminHeader />
-          <main id="main-content" className="flex-1 overflow-y-auto">
+          <main id="main-content" className="flex-1 min-h-0 overflow-y-auto">
             {children}
           </main>
           <footer className="sticky bottom-0 z-10 border-t border-white/10 bg-navy px-4 py-3 md:px-6">
