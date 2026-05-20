@@ -11,7 +11,7 @@ const VALID_STATES = new Set([
 ]);
 
 async function getAuthUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

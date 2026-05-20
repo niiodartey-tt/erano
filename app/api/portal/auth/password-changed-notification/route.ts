@@ -7,7 +7,7 @@ import { PasswordChangedEmail, subject as passwordChangedSubject } from "@/email
 import { sendEmail } from "@/lib/email";
 
 export async function POST() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -14,7 +14,7 @@ const updateSchema = z.object({
 });
 
 export async function PATCH(request: Request) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

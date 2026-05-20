@@ -16,8 +16,8 @@ export default async function PortalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const headersList = headers();
+  const cookieStore = await cookies();
+  const headersList = await headers();
   const invokePath = headersList.get("x-pathname") ?? "";
   const isSetPasswordPath = invokePath.includes("set-password");
 

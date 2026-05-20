@@ -5,7 +5,7 @@ import { createServerClient } from "@/lib/supabase-server";
 import { getInvoiceUrl } from "@/lib/storage";
 
 async function getAuthUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const c = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -14,7 +14,7 @@ async function getAuthUser() {
   return c.auth.getUser();
 }
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { data: { user }, error: authError } = await getAuthUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -22,7 +22,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   const { data: adminRow } = await service.from("users").select("role").eq("id", user.id).single();
   if (!adminRow || adminRow.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const clientId = params.id;
+  const clientId = (await params).id;
 
   const { data: clientRow, error: clientErr } = await service
     .from("users")

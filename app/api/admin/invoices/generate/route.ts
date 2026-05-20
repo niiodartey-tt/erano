@@ -18,7 +18,7 @@ const schema = z.object({
 });
 
 async function getAuthUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const c = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

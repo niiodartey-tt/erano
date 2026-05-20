@@ -7,9 +7,6 @@ const nextConfig = {
       { protocol: "https", hostname: "videos.pexels.com"   },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   async redirects() {
     return [
       { source: "/legal/privacy", destination: "/privacy", permanent: true },

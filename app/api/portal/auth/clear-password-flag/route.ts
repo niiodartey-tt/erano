@@ -7,7 +7,7 @@ import { PasswordChangedEmail, subject as passwordChangedSubject } from "@/email
 import { sendEmail } from "@/lib/email";
 
 export async function POST() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   // Verify the authenticated user via session cookie
   const authClient = createSSRClient(

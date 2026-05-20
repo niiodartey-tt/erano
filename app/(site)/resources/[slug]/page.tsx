@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { IMAGES } from "@/lib/images";
@@ -123,8 +124,9 @@ Erano Consulting handles all of these registrations on behalf of clients. Our bu
   },
 };
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = articles[params.slug];
+export default function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const article = articles[slug];
 
   if (!article) {
     return (

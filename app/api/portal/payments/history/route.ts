@@ -4,7 +4,7 @@ import { createServerClient as createSSRClient } from "@supabase/ssr";
 import { createServerClient } from "@/lib/supabase-server";
 
 export async function GET() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

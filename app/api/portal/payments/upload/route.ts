@@ -30,7 +30,7 @@ const uploadSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

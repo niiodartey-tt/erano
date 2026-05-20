@@ -7,7 +7,7 @@ import { z } from "zod";
 const patchSchema = z.object({ id: z.string().uuid() });
 
 async function getAuthUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

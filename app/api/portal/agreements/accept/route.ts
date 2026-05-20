@@ -13,7 +13,7 @@ import { verifyCsrfOrigin } from "@/lib/csrf";
 const SEED_CONTENT = "Erano Consulting Service Agreement v1 — PLACEHOLDER: client to supply final text.";
 
 export async function POST(request: NextRequest) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

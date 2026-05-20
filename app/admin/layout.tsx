@@ -15,7 +15,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createSsrClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

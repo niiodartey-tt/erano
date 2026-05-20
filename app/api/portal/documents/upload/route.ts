@@ -17,7 +17,7 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const requestIdSchema = z.string().uuid("Invalid request ID");
 
 export async function POST(request: NextRequest) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

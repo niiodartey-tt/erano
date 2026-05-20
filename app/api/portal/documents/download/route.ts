@@ -5,7 +5,7 @@ import { createServerClient } from "@/lib/supabase-server";
 import { getDocumentUploadUrl } from "@/lib/storage";
 
 export async function GET(request: NextRequest) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const authClient = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

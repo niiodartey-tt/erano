@@ -10,7 +10,7 @@ const VALID_STATES = new Set([
 ]);
 
 async function getAuthUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const c = createSSRClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -19,7 +19,7 @@ async function getAuthUser() {
   return c.auth.getUser();
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { data: { user }, error: authError } = await getAuthUser();
   if (authError || !user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -33,7 +33,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const clientId = params.id;
+  const clientId = (await params).id;
 
   let body: { state?: string };
   try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
