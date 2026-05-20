@@ -45,12 +45,17 @@ export function Step1Business() {
         </div>
 
         <Field label="Business type *" id="bizType" error={errors.bizType?.message}>
-          <select id="bizType" {...register("bizType")}
-            className={selectCls(!!errors.bizType)} aria-invalid={!!errors.bizType}
-            aria-describedby={errors.bizType ? "bizType-err" : undefined}>
-            <option value="">Select type</option>
-            {BIZ_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
+          <div className="relative">
+            <select id="bizType" {...register("bizType")}
+              className={selectCls(!!errors.bizType)} aria-invalid={!!errors.bizType}
+              aria-describedby={errors.bizType ? "bizType-err" : undefined}>
+              <option value="">Select type</option>
+              {BIZ_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+              <svg className="h-4 w-4 text-navy/40" fill="none" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
         </Field>
 
         <Field label="Country *" id="country" error={errors.country?.message}>
@@ -60,12 +65,17 @@ export function Step1Business() {
         </Field>
 
         <Field label="Industry *" id="industry" error={errors.industry?.message}>
-          <select id="industry" {...register("industry")}
-            className={selectCls(!!errors.industry)} aria-invalid={!!errors.industry}
-            aria-describedby={errors.industry ? "industry-err" : undefined}>
-            <option value="">Select industry</option>
-            {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
-          </select>
+          <div className="relative">
+            <select id="industry" {...register("industry")}
+              className={selectCls(!!errors.industry)} aria-invalid={!!errors.industry}
+              aria-describedby={errors.industry ? "industry-err" : undefined}>
+              <option value="">Select industry</option>
+              {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+              <svg className="h-4 w-4 text-navy/40" fill="none" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
         </Field>
       </div>
     </div>
