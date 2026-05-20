@@ -93,6 +93,76 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to record agreement." }, { status: 500 });
   }
 
+  // Fetch most recent invoice to determine if free package
+  const { data: invoice } = await supabase
+    .from("invoices")
+    .select("final_price_ghs, id")
+    .eq("client_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const isFree = (invoice?.final_price_ghs ?? -1) === 0;
+
+  if (isFree) {
+    const serviceStart = new Date();
+    const serviceEnd   = new Date(serviceStart);
+    serviceEnd.setFullYear(serviceEnd.getFullYear() + 1);
+
+    if (invoice?.id) {
+      await supabase
+        .from("invoices")
+        .update({
+          status:             "paid",
+          service_start_date: serviceStart.toISOString().split("T")[0],
+          service_end_date:   serviceEnd.toISOString().split("T")[0],
+        })
+        .eq("id", invoice.id);
+    }
+
+    const { error: stateErrFree } = await supabase
+      .from("users")
+      .update({ account_state: "active" })
+      .eq("id", user.id);
+    if (stateErrFree) {
+      return NextResponse.json({ error: "Failed to update account state." }, { status: 500 });
+    }
+
+    await supabase.from("notifications").insert({
+      user_id: user.id,
+      type:    "agreement_accepted",
+      message: "Your account is now active. Welcome to Erano Consulting.",
+      link:    "/portal/dashboard",
+    });
+
+    await supabase.from("audit_log").insert({
+      actor_id:    user.id,
+      actor_role:  "client",
+      action:      "agreement_accepted_free",
+      target_type: "agreement",
+      metadata:    { version_number: version.version_number, ip_address: ipAddress },
+    });
+
+    try {
+      const { data: prof } = await supabase
+        .from("client_profiles")
+        .select("contact_name, packages(name)")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      const contactName = prof?.contact_name ?? "Client";
+      const packageName = (prof?.packages as { name: string }[] | null)?.[0]?.name ?? "Service";
+
+      const html = await render(AgreementAcceptedEmail({ contactName, packageName, expiresAt: null }));
+      await sendEmail({ to: user.email!, subject: emailSubject, html });
+    } catch (emailErr) {
+      console.error("free agreement email:", emailErr instanceof Error ? emailErr.message : emailErr);
+    }
+
+    return NextResponse.json({ success: true, free: true });
+  }
+
+  // Paid path — existing logic unchanged
   const now = new Date();
   const expiresAt = calculatePaymentDeadline(now);
 
