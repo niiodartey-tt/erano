@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 
-const CATEGORIES = ["Financial", "Legal", "Compliance", "Tax", "Other"] as const;
+import { AdminSelect } from "@/components/admin/ui/AdminSelect";
+
+const CATEGORY_OPTIONS = [
+  { value: "",            label: "Select category" },
+  { value: "Financial",  label: "Financial" },
+  { value: "Legal",      label: "Legal" },
+  { value: "Compliance", label: "Compliance" },
+  { value: "Tax",        label: "Tax" },
+  { value: "Other",      label: "Other" },
+];
 
 interface Props {
   clientId: string;
@@ -59,23 +68,12 @@ export function DocumentRequestForm({ clientId, onSuccess, onCancel }: Props) {
       </div>
 
       <div>
-        <label htmlFor="req-category" className="block text-xs font-medium text-white/60 mb-1">Category</label>
-        <div className="relative">
-          <select
-            id="req-category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 pr-9 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 appearance-none"
-          >
-            <option value="">Select category</option>
-            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-            <svg className="h-4 w-4 text-white/40" fill="none" viewBox="0 0 12 12">
-              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
+        <label className="block text-xs font-medium text-white/60 mb-1">Category</label>
+        <AdminSelect
+          value={category}
+          onChange={setCategory}
+          options={CATEGORY_OPTIONS}
+        />
       </div>
 
       <div>

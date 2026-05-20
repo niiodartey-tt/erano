@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { ClientsTable, type Client } from "@/components/admin/clients/ClientsTable";
 import { PaginationBar } from "@/components/admin/clients/PaginationBar";
+import { AdminSelect } from "@/components/admin/ui/AdminSelect";
 
 const PAGE_SIZE = 20;
 
@@ -85,23 +86,12 @@ export default function ClientsPage() {
             className="w-full pl-9 pr-3 py-2.5 text-sm border border-white/10 rounded-lg bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 min-h-[44px]"
           />
         </div>
-        <div className="relative">
-          <select
-            value={stateFilter}
-            onChange={(e) => handleStateChange(e.target.value)}
-            aria-label="Filter by account state"
-            className="px-3 py-2.5 pr-9 text-sm border border-white/10 rounded-lg bg-white/5 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/10 min-h-[44px] appearance-none w-full"
-          >
-            {STATE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-            <svg className="h-4 w-4 text-white/40" fill="none" viewBox="0 0 12 12">
-              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
+        <AdminSelect
+          value={stateFilter}
+          onChange={handleStateChange}
+          options={STATE_OPTIONS}
+          className="w-48"
+        />
       </div>
 
       <div className="bg-navy rounded-xl border border-white/10 overflow-hidden">
