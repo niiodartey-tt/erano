@@ -81,7 +81,7 @@ export default async function PortalLayout({
         <PortalSidebar accountState={accountState} />
         <div className="flex flex-1 flex-col min-w-0">
           <PortalHeader />
-          <main id="main-content" className="flex-1 min-h-0 overflow-y-auto">
+          <main id="main-content" data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto">
             {children}
           </main>
           <footer className="sticky bottom-0 z-10 border-t border-line bg-white px-4 py-3 md:px-6">
