@@ -79,13 +79,11 @@ export default function ChangePasswordForm({ email }: { email: string }) {
   }
 
   return (
-    <section aria-labelledby="password-heading">
+    <section aria-labelledby="password-heading" className="bg-white rounded-xl border border-line p-6 mt-6">
       <h2 id="password-heading" className="text-base font-semibold text-navy">
         Change password
       </h2>
-      <p className="text-sm text-body mt-1 mb-5">
-        Choose a strong password with at least 8 characters.
-      </p>
+      <div className="w-8 h-0.5 bg-gold mt-1 mb-4" aria-hidden="true" />
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <div className="flex flex-col gap-1.5">
@@ -126,7 +124,7 @@ export default function ChangePasswordForm({ email }: { email: string }) {
           )}
           <ul id="newPassword-reqs" className="mt-0.5 flex flex-col gap-1" aria-label="Password requirements">
             {checks.map(({ label, pass }) => (
-              <li key={label} className={cn("flex items-center gap-1.5 text-xs", pass ? "text-green-600" : "text-body")}>
+              <li key={label} className={cn("flex items-center gap-1.5 text-sm", pass ? "text-gold" : "text-body/60")}>
                 {pass
                   ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   : <Circle       className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -172,7 +170,7 @@ export default function ChangePasswordForm({ email }: { email: string }) {
           type="submit"
           disabled={loading}
           className={cn(
-            "px-6 py-2.5 rounded-lg text-sm font-semibold bg-navy text-gold min-h-[44px]",
+            "w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-semibold bg-navy text-gold min-h-[44px]",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2",
             loading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 transition-opacity",
           )}

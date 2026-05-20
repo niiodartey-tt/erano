@@ -32,7 +32,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-2xl p-4 md:p-6 space-y-4 animate-pulse" aria-busy="true" aria-label="Loading profile">
-        <div className="h-7 w-36 rounded bg-line" />
+        <div className="h-24 rounded-xl bg-line" />
         <div className="h-72 rounded-xl bg-line" />
         <div className="h-72 rounded-xl bg-line" />
       </div>
@@ -47,9 +47,27 @@ export default function ProfilePage() {
     );
   }
 
+  const nameParts = profile.contact_name.trim().split(/\s+/);
+  const initials = (
+    nameParts.length >= 2
+      ? nameParts[0][0] + nameParts[nameParts.length - 1][0]
+      : profile.contact_name.slice(0, 2)
+  ).toUpperCase();
+
   return (
     <div className="mx-auto max-w-2xl p-4 md:p-6">
-      <h1 className="text-lg font-semibold text-navy mb-6">My profile</h1>
+      <div className="bg-white rounded-xl border border-line p-6 mb-6 flex items-center gap-4">
+        <div
+          className="flex items-center justify-center w-16 h-16 rounded-full bg-navy text-white text-xl font-bold shrink-0"
+          aria-hidden="true"
+        >
+          {initials}
+        </div>
+        <div className="min-w-0">
+          <p className="text-lg font-semibold text-navy leading-snug truncate">{profile.contact_name}</p>
+          <p className="text-sm text-body truncate">{profile.email}</p>
+        </div>
+      </div>
 
       <ContactDetailsForm
         defaultValues={{
@@ -61,8 +79,6 @@ export default function ProfilePage() {
         email={profile.email}
         legalName={profile.legal_name}
       />
-
-      <div className="my-8 border-t border-line" role="separator" aria-hidden="true" />
 
       <ChangePasswordForm email={profile.email} />
     </div>

@@ -54,11 +54,11 @@ export default function ContactDetailsForm({ defaultValues, email, legalName }: 
   }
 
   return (
-    <section aria-labelledby="contact-heading">
+    <section aria-labelledby="contact-heading" className="bg-white rounded-xl border border-line p-6">
       <h2 id="contact-heading" className="text-base font-semibold text-navy">
         Contact details
       </h2>
-      <p className="text-sm text-body mt-1 mb-5">Update your contact information below.</p>
+      <div className="w-8 h-0.5 bg-gold mt-1 mb-4" aria-hidden="true" />
 
       <div className="space-y-4 mb-5">
         <ReadOnlyField label="Business name" value={legalName} note="cannot be changed" />
@@ -120,7 +120,7 @@ export default function ContactDetailsForm({ defaultValues, email, legalName }: 
           type="submit"
           disabled={loading}
           className={cn(
-            "px-6 py-2.5 rounded-lg text-sm font-semibold bg-navy text-gold min-h-[44px]",
+            "w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-semibold bg-navy text-gold min-h-[44px]",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2",
             loading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 transition-opacity",
           )}
@@ -153,13 +153,11 @@ function Field({
 
 function ReadOnlyField({ label, value, note }: { label: string; value: string; note: string }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-navy">
-        {label} <span className="font-normal text-body">({note})</span>
-      </span>
-      <div className="px-4 py-3 text-sm rounded-lg bg-off text-body min-h-[44px] flex items-center">
-        {value}
-      </div>
+    <div className="bg-off rounded-lg px-3 py-2.5 border border-line">
+      <p className="text-xs text-body uppercase tracking-wide mb-1">
+        {label} <span className="text-body/60 normal-case tracking-normal">({note})</span>
+      </p>
+      <p className="text-navy text-sm font-medium">{value}</p>
     </div>
   );
 }
