@@ -8,7 +8,7 @@
 
 ## Current Sprint
 
-> No active sprint. Sprint 18 complete — awaiting Naa approval on Vercel preview before merge to main.
+> No active sprint. Sprint 18 complete and merged. Awaiting Sprint 19 brief from Naa.
 
 ---
 
@@ -17,9 +17,9 @@
 ### ✅ Sprint 18 — Free Package Bypass, Admin Realtime, Custom Dropdowns, Next.js 16
 **Completed:** May 2026
 **Branch:** `sprint-18`
-**Approved by Naa:** [ ]
-**Merged to main:** [ ]
-**Merged date:** —
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** May 2026
 
 - [x] T1 — Free package payment flow bypass: `final_price_ghs = 0` skips payment timer, marks invoice paid, sets `account_state → active` on agreement accept; sends AgreementAcceptedEmail with `expiresAt: null`; logs `agreement_accepted_free` to audit_log
 - [x] T2 — Admin realtime dashboard: `AdminContext` extended with `pendingCount`, `setPendingCount`, `triggerDashboardRefresh`, `dashboardRefreshKey`; pending count seeded from server via `initialPendingCount` prop; Supabase Realtime subscription on `users` table (INSERT + UPDATE) in `app/admin/page.tsx`; dashboard data refetch keyed on `dashboardRefreshKey`

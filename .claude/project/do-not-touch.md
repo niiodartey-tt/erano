@@ -39,7 +39,7 @@ These files wrap every public page. A bug here breaks the entire site.
 |---|---|---|
 | `app/layout.tsx` | Root layout — viewport meta, SmoothScroll wrapper, font loading | Breaks every page on the site |
 | `app/(site)/layout.tsx` | Navbar + PageTransition + Footer + WhatsAppFloat wrapper | Breaks navigation and layout on all public pages |
-| `next.config.mjs` | Image domains, eslint.ignoreDuringBuilds — do not alter without reason | Build failures, broken images |
+| `next.config.mjs` | Image domains, security headers, permanent redirects — do not alter without reason | Build failures, broken images, broken redirects |
 | `next-sitemap.config.js` | SEO sitemap and robots.txt config | Breaks search engine indexing |
 
 ---
@@ -123,7 +123,7 @@ Completed and approved in Sprint 8. Do not modify.
 
 | File | Why locked | Risk if changed |
 |---|---|---|
-| `middleware.ts` | RBAC — protects all portal and admin routes | Breaks auth gating site-wide |
+| `proxy.ts` | RBAC — protects all portal and admin routes (renamed from middleware.ts in Sprint 18) | Breaks auth gating site-wide |
 | `lib/email.ts` | Resend integration — used by all email sends | Breaks all transactional email |
 | `lib/storage.ts` | Supabase Storage helpers — signed URL generation | Breaks all file access |
 | `lib/supabase-server.ts` | Server-side Supabase client factory | Breaks all server-side DB access |
@@ -351,7 +351,7 @@ Completed and approved in Sprint 16. Do not modify.
 | `app/(admin-auth)/admin-login/layout.tsx` | Admin login layout — noindex robots metadata | Breaks admin login SEO gating |
 | `app/api/admin/auth/check-role/route.ts` | Role check API — uses service role to bypass RLS on users table; returns 401/403/200 | Admin login always fails role check |
 | `components/ui/IdleTimeout.tsx` | Idle session timeout — 30-min idle, 2-min warning banner, signs out and redirects | Breaks idle timeout for both portal and admin |
-| `middleware.ts` | RBAC — public paths early-return; unauthenticated /admin → /admin-login; client at /admin → /portal/dashboard | Breaks auth gating site-wide |
+| `proxy.ts` | RBAC — public paths early-return; unauthenticated /admin → /admin-login; client at /admin → /portal/dashboard (renamed from middleware.ts in Sprint 18) | Breaks auth gating site-wide |
 | `app/admin/layout.tsx` | Admin layout — auth guard, role check, AdminProvider, bg-ink dark theme | Breaks admin auth and layout for all admin pages |
 | `components/layout/Navbar.tsx` | Updated Sprint 16 — "Client login" label, lock icon, /login href | Breaks public site navigation |
 | `components/admin/layout/AdminSidebar.tsx` | Sign out → /admin-login; dark theme nav | Breaks admin navigation and sign-out |
@@ -391,6 +391,21 @@ Completed and approved in Sprint 17. Do not modify.
 | `next.config.mjs` | Updated Sprint 17 — permanent redirects for /legal/privacy and /legal/terms | Breaks SEO redirect chain for legacy URLs |
 
 Note: All 14 email templates were updated in Sprint 17 (Privacy Policy footer links). They are already listed under Sprint 8 above.
+
+---
+
+## Locked — Sprint 18 Free Package Bypass, Admin Realtime, Custom Dropdowns, Next.js 16
+
+Completed and approved in Sprint 18. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `proxy.ts` | RBAC proxy — renamed from middleware.ts; contains COMING_SOON_MODE flag | Breaks auth gating and coming soon redirect site-wide |
+| `app/api/portal/agreements/accept/route.ts` | Agreement accept API — updated Sprint 18 with free package bypass (isFree branch, invoice paid, state→active, audit log) | Breaks T&Cs acceptance flow for both free and paid packages |
+| `emails/AgreementAcceptedEmail.tsx` | Agreement email — updated Sprint 18 with optional expiresAt (null for free packages) | Breaks agreement accepted email for free package clients |
+| `context/AdminContext.tsx` | Admin context — updated Sprint 18 with pendingCount, setPendingCount, dashboardRefreshKey, triggerDashboardRefresh | Breaks admin realtime dashboard and pending count badge |
+| `app/admin/page.tsx` | Admin dashboard — updated Sprint 18 with Supabase Realtime subscription on users table, dashboardRefreshKey data refetch | Breaks realtime pending count updates on admin dashboard |
+| `components/admin/ui/AdminSelect.tsx` | Custom dropdown — new Sprint 18; role="combobox", aria-controls, useId(), keyboard dismiss; used in 3 admin components | Breaks all admin dropdown selects |
 
 ---
 
