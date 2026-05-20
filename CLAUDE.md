@@ -53,7 +53,7 @@ These are in addition to the critical rules above. They are absolute for this pr
 - **No plain text passwords in any email** — magic link only for first login.
 - **File uploads validated by MIME type server-side** — never by extension.
 - **Invoice file paths include a random UUID** — never predictable.
-- **`eslint.ignoreDuringBuilds: true`** is set in `next.config.mjs` — do not remove.
+- **ESLint does not run during `next build`** — Next.js 16 removed this. Lint runs via `npm run lint` (`eslint . --ext .ts,.tsx`). Do not add `eslint.ignoreDuringBuilds` back to `next.config.mjs`.
 - **Navbar uses JS `isMobile` state** — not Tailwind breakpoints — for mobile menu.
 - **Hero + TickerStrip in `calc(100vh - 72px)` wrapper** in `app/(site)/page.tsx` — do not break this.
 - **Cloudinary for public site only.** Portal files use Supabase Storage exclusively.

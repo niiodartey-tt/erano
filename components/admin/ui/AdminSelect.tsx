@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +23,7 @@ export function AdminSelect({
 }: AdminSelectProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const listboxId = useId();
 
   const selectedLabel = options.find((o) => o.value === value)?.label ?? placeholder ?? "";
 
@@ -55,6 +56,7 @@ export function AdminSelect({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls={listboxId}
         className={cn(
           "flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-lg border bg-white/5 min-h-[44px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:border-gold/40",
           open ? "ring-2 ring-gold/40 border-gold/40" : "border-white/10",
@@ -73,9 +75,10 @@ export function AdminSelect({
         />
       </button>
 
-      {open && (
-        <ul
+      <ul
+          id={listboxId}
           role="listbox"
+          hidden={!open}
           className="absolute z-50 mt-1 w-full bg-[#0d1b2e] border border-white/10 rounded-lg shadow-lg overflow-hidden"
         >
           {options.map((opt) => (
@@ -93,7 +96,6 @@ export function AdminSelect({
             </li>
           ))}
         </ul>
-      )}
     </div>
   );
 }

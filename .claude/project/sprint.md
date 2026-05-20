@@ -8,7 +8,32 @@
 
 ## Current Sprint
 
-> No active sprint. Sprint 17 complete and merged. Awaiting Sprint 18 brief from Naa.
+> No active sprint. Sprint 18 complete — awaiting Naa approval on Vercel preview before merge to main.
+
+---
+
+## Sprint History
+
+### ✅ Sprint 18 — Free Package Bypass, Admin Realtime, Custom Dropdowns, Next.js 16
+**Completed:** May 2026
+**Branch:** `sprint-18`
+**Approved by Naa:** [ ]
+**Merged to main:** [ ]
+**Merged date:** —
+
+- [x] T1 — Free package payment flow bypass: `final_price_ghs = 0` skips payment timer, marks invoice paid, sets `account_state → active` on agreement accept; sends AgreementAcceptedEmail with `expiresAt: null`; logs `agreement_accepted_free` to audit_log
+- [x] T2 — Admin realtime dashboard: `AdminContext` extended with `pendingCount`, `setPendingCount`, `triggerDashboardRefresh`, `dashboardRefreshKey`; pending count seeded from server via `initialPendingCount` prop; Supabase Realtime subscription on `users` table (INSERT + UPDATE) in `app/admin/page.tsx`; dashboard data refetch keyed on `dashboardRefreshKey`
+- [x] T3 — Custom `AdminSelect` dropdown (`components/admin/ui/AdminSelect.tsx`): `role="combobox"`, `aria-expanded`, `aria-controls`, `aria-haspopup="listbox"`, keyboard (Escape) + outside-click dismiss, `role="listbox"` + `role="option"` panel; replaces all native `<select>` in `app/admin/clients/page.tsx`, `DocumentRequestForm.tsx`, `PackageUpgradeModal.tsx`
+- [x] T4 — Next.js 14 → 16.2.6 upgrade: `await cookies()` / `await headers()` in 35 API files + 2 layouts; async `params` (Promise) in 3 dynamic route files; `middleware.ts` renamed to `proxy.ts` (Next.js 16 convention); `eslint.ignoreDuringBuilds` removed from `next.config.mjs` (Next.js 16 no longer runs ESLint during build); lint script updated from `next lint` (removed in Next.js 16) to `eslint . --ext .ts,.tsx`
+- [x] Fix — `AdminSelect`: added `aria-controls` + `useId()` to satisfy `role="combobox"` ARIA spec; listbox always rendered with `hidden` prop
+
+**Pre-merge checklist:**
+- [x] `npm run lint` — 3 warnings only (pre-existing `<img>` in Sprint 6 locked resources pages), 0 errors
+- [x] `npx tsc --noEmit` — 0 errors
+- [x] `npm run build` — clean, 69 pages, 0 warnings
+- [x] `npm audit` — 7 vulnerabilities (4 moderate, 3 high); details below
+
+**Audit note:** The `postcss` vulnerability requires downgrading Next.js to 9.3.3 — skip. The `glob` vulnerability is fixed by updating `eslint-config-next` from 14.2.35 → 16.2.6 (run `npm install eslint-config-next@16.2.6 --save-dev` — not a breaking change now that we're on Next.js 16). The `brace-expansion` and `ws` vulnerabilities are fixable via `npm audit fix` without breaking changes. Await Naa's instruction before running fixes.
 
 ---
 
@@ -230,7 +255,7 @@
 
 - [x] `tailwind.config.ts` — design tokens locked
 - [x] `globals.css` — v3 complete + mobile CSS classes
-- [x] `next.config.mjs` — image domains, eslint.ignoreDuringBuilds: true
+- [x] `next.config.mjs` — image domains (eslint.ignoreDuringBuilds removed in Sprint 18 — Next.js 16 no longer supports it)
 - [x] `lib/images.ts` — all Cloudinary image + video keys
 - [x] `hooks/useScrollReveal.ts` — no-op (Framer Motion handles reveals)
 - [x] `hooks/useCountUp.ts`
