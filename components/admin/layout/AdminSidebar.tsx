@@ -21,9 +21,9 @@ const NAV: NavItem[] = [
   { icon: FolderOpen,      label: "Document Manager", href: "/admin/documents" },
 ];
 
-export default function AdminSidebar({ pendingCount }: { pendingCount: number }) {
+export default function AdminSidebar() {
   const pathname = usePathname();
-  const { isMobileNavOpen, toggleMobileNav } = useAdmin();
+  const { isMobileNavOpen, toggleMobileNav, pendingCount } = useAdmin();
 
   async function handleSignOut() {
     await fetch("/api/auth/signout", { method: "POST" });

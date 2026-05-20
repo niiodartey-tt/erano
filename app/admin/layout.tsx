@@ -60,9 +60,9 @@ export default async function AdminLayout({
     .eq("account_state", "pending");
 
   return (
-    <AdminProvider adminId={user.id} adminName={adminName}>
+    <AdminProvider adminId={user.id} adminName={adminName} initialPendingCount={pendingCount ?? 0}>
       <div className="flex min-h-screen bg-ink">
-        <AdminSidebar pendingCount={pendingCount ?? 0} />
+        <AdminSidebar />
         <div className="flex flex-1 flex-col min-w-0">
           <AdminHeader />
           <main id="main-content" className="flex-1 overflow-y-auto">

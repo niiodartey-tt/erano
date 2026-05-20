@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { Users, Clock, CreditCard, CheckCircle } from "lucide-react";
+import { createBrowserClient } from "@supabase/ssr";
 import { cn } from "@/lib/utils";
 import { SubmissionsPanel } from "@/components/admin/inbox/SubmissionsPanel";
+import { useAdmin } from "@/context/AdminContext";
 
 interface Metrics {
   total_clients: number;
@@ -25,6 +27,8 @@ interface Submission {
 }
 
 export default function AdminDashboard() {
+  const { dashboardRefreshKey, triggerDashboardRefresh, setPendingCount } = useAdmin();
+
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState<string | null>(null);
   const [metrics, setMetrics]         = useState<Metrics | null>(null);
@@ -43,9 +47,38 @@ export default function AdminDashboard() {
       setMetrics(json.metrics);
       setStateCounts(json.state_counts);
       setSubmissions(json.submissions);
+      setPendingCount(json.metrics.pending_submissions);
       setLoading(false);
     }
     void load();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dashboardRefreshKey]);
+
+  useEffect(() => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+
+    const channel = supabase
+      .channel("admin-dashboard-realtime")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "users" },
+        () => {
+          triggerDashboardRefresh();
+          setPendingCount((prev) => prev + 1);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "users" },
+        () => { triggerDashboardRefresh(); },
+      )
+      .subscribe();
+
+    return () => { void supabase.removeChannel(channel); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
