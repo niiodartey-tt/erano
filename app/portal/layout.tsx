@@ -77,14 +77,14 @@ export default async function PortalLayout({
 
   return (
     <PortalProvider accountState={accountState} userName={userName} userId={user.id}>
-      <div className="flex min-h-screen bg-off">
+      <div className="flex h-screen bg-off">
         <PortalSidebar accountState={accountState} />
         <div className="flex flex-1 flex-col min-w-0">
           <PortalHeader />
           <main id="main-content" className="flex-1 overflow-y-auto">
             {children}
           </main>
-          <footer className="border-t border-line bg-white px-4 py-3 md:px-6">
+          <footer className="sticky bottom-0 z-10 border-t border-line bg-white px-4 py-3 md:px-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
               <span className="text-xs text-body">© 2026 Erano Consulting</span>
               <div className="flex items-center gap-4">

@@ -61,14 +61,14 @@ export default async function AdminLayout({
 
   return (
     <AdminProvider adminId={user.id} adminName={adminName} initialPendingCount={pendingCount ?? 0}>
-      <div className="flex min-h-screen bg-ink">
+      <div className="flex h-screen bg-ink">
         <AdminSidebar />
         <div className="flex flex-1 flex-col min-w-0">
           <AdminHeader />
           <main id="main-content" className="flex-1 overflow-y-auto">
             {children}
           </main>
-          <footer className="border-t border-white/10 bg-navy px-4 py-3 md:px-6">
+          <footer className="sticky bottom-0 z-10 border-t border-white/10 bg-navy px-4 py-3 md:px-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
               <span className="text-xs text-white/40">© 2026 Erano Consulting</span>
               <span className="text-xs text-white/40">Admin Portal</span>
