@@ -103,9 +103,8 @@ export async function POST(request: Request) {
       await uploadFile("invoices", storagePath, Buffer.from(pdfBytes), "application/pdf");
       console.log("[invoice:generate] PDF uploaded");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error("[invoice:generate] pdf_or_upload_failed:", msg);
-      return NextResponse.json({ error: `Invoice preparation failed: ${msg}` }, { status: 500 });
+      console.error("[invoice:generate] pdf_or_upload_failed:", err);
+      return NextResponse.json({ error: "Invoice generation failed. Please try again or contact support." }, { status: 500 });
     }
 
     const { data: inserted, error: insertErr } = await service
@@ -141,8 +140,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, invoice_number: invoiceNumber }, { status: 201 });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Unknown error";
-    console.error("[invoice:generate] unhandled:", msg);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[invoice:generate] unhandled:", err);
+    return NextResponse.json({ error: "Invoice generation failed. Please try again or contact support." }, { status: 500 });
   }
 }
