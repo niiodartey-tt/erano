@@ -8,7 +8,33 @@
 
 ## Current Sprint
 
-> No active sprint. Sprint 18 complete and merged. Awaiting Sprint 19 brief from Naa.
+> No active sprint. Sprint 19 complete and merged. Awaiting next sprint brief from Naa.
+
+---
+
+## Sprint History
+
+### ✅ Sprint 19 — Security Hardening
+**Completed:** June 2026
+**Branch:** `sprint-19-security`
+**Approved by Naa:** [x]
+**Merged to main:** [x]
+**Merged date:** June 2026
+
+- [x] FIX-CSRF — `lib/csrf.ts`: fail-closed when both Origin and Referer headers are absent (previously silently passed, allowing headerless curl requests to bypass CSRF on all 11 protected mutation routes)
+- [x] FIX-ERRleak — `app/api/admin/invoices/generate/route.ts`: sanitised both catch blocks — raw internal error messages no longer returned to admin client; full error now logged server-side only
+- [x] FIX-RATELIMIT — `lib/ratelimit.ts`: 5 new Upstash limiters added (agreement, passwordFlag, adminPayment, adminInvoice, adminReactivate); applied to 7 previously unprotected financial/state-changing routes
+- [x] FIX-LOGIN — `app/api/auth/login/route.ts`: new server-side login route with Upstash brute-force lockout (5 attempts / 15 min per email); replaces direct browser-side `signInWithPassword`; handles both client and admin login via `mode` param; returns `redirectTo` path; session cookies set on response for SSR pickup
+- [x] FIX-LOGIN — `app/login/page.tsx`: removed client-side `attempts`/`lockedUntil` state counters; now fetches `/api/auth/login`; redirects via `window.location.href` on success
+- [x] FIX-LOGIN — `app/(admin-auth)/admin-login/page.tsx`: same treatment; removed separate `/api/admin/auth/check-role` post-login call (role check now inside login route with `mode: "admin"`)
+- [x] FIX-ADMINLINK — `app/api/portal/payments/upload/route.ts`: admin notification link and email CTA now point to `/admin/clients/${user.id}` — previously pointed to `/admin/payments` which does not exist (404)
+- [x] FIX-AUDIT — `npm audit fix`: resolved `ws` (high), `@babel/core` (low), `js-yaml` (moderate); 5 vulnerabilities → 2 (remaining 2 are unfixable postcss/next chain — skip)
+
+**Pre-merge checklist:**
+- [ ] `npm run lint` — FAIL (pre-existing ESLint 8 + Next.js 16 circular JSON crash; not introduced by Sprint 19; requires ESLint flat config migration in future sprint)
+- [x] `npx tsc --noEmit` — 0 errors
+- [x] `npm run build` — clean, 70 pages, 0 warnings
+- [x] `npm audit` — 2 vulnerabilities remaining (both postcss/next chain, unfixable without breaking Next.js downgrade)
 
 ---
 

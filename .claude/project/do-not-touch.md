@@ -409,6 +409,28 @@ Completed and approved in Sprint 18. Do not modify.
 
 ---
 
+## Locked — Sprint 19 Security Hardening
+
+Completed and approved in Sprint 19. Do not modify.
+
+| File | Why locked | Risk if changed |
+|---|---|---|
+| `lib/csrf.ts` | Updated Sprint 19 — fail-closed on missing Origin+Referer; used by all 11 state-mutating routes | Reverts to fail-open CSRF: headerless requests bypass protection on all mutation endpoints |
+| `lib/ratelimit.ts` | Updated Sprint 19 — 5 new limiters (agreement, passwordFlag, adminPayment, adminInvoice, adminReactivate); used by 7 financial routes | Removes brute-force and abuse protection from financial/state-changing API routes |
+| `app/api/auth/login/route.ts` | New Sprint 19 — server-side login with Upstash brute-force lockout; handles client + admin via `mode` param; sets SSR session cookies | Breaks login for both client and admin portals; removes server-side rate limiting on auth |
+| `app/login/page.tsx` | Updated Sprint 19 — removed client-side lockout state; now delegates to `/api/auth/login` | Breaks client login page |
+| `app/(admin-auth)/admin-login/page.tsx` | Updated Sprint 19 — removed client-side lockout state; now delegates to `/api/auth/login` with `mode: "admin"` | Breaks admin login page |
+| `app/api/portal/agreements/accept/route.ts` | Updated Sprint 19 — rate limited (3/hr per user) | Removes rate limiting on agreement acceptance |
+| `app/api/portal/auth/clear-password-flag/route.ts` | Updated Sprint 19 — rate limited (10/hr per user) | Removes rate limiting on password flag clear |
+| `app/api/admin/payments/confirm/route.ts` | Updated Sprint 19 — rate limited (30/hr per admin) | Removes rate limiting on payment confirmation |
+| `app/api/admin/payments/reject/route.ts` | Updated Sprint 19 — rate limited (30/hr per admin) | Removes rate limiting on payment rejection |
+| `app/api/admin/invoices/generate/route.ts` | Updated Sprint 19 — rate limited (10/hr per admin); error messages sanitised | Removes rate limiting; may re-expose internal errors to admin |
+| `app/api/admin/invoices/upgrade/route.ts` | Updated Sprint 19 — rate limited (10/hr per admin) | Removes rate limiting on invoice upgrade |
+| `app/api/admin/clients/reactivate/route.ts` | Updated Sprint 19 — rate limited (20/hr per admin) | Removes rate limiting on client reactivation |
+| `app/api/portal/payments/upload/route.ts` | Updated Sprint 19 — admin notification link fixed to `/admin/clients/${user.id}` | Admin notification and email button point to 404 again |
+
+---
+
 ## Supabase Tables — Do Not Alter Without Migration
 
 Once data exists in these tables, column changes require a migration file. Never alter column types or names directly in the Supabase dashboard on a live table with data.
