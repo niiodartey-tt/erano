@@ -29,6 +29,14 @@ export const contactRatelimit = new Ratelimit({
   prefix: "erano:contact",
 });
 
+// Login — 5 attempts per 15 minutes per email (server-side brute-force protection)
+export const loginRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(5, "15 m"),
+  analytics: false,
+  prefix: "erano:login",
+});
+
 // Agreement acceptance — 3 per hour per client
 export const agreementRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
