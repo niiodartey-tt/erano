@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
         user_id: adminUser.id,
         type:    "payment_proof_uploaded",
         message: `Payment proof uploaded by ${prof?.contact_name ?? "a client"} (${prof?.legal_name ?? ""})`,
-        link:    "/admin/payments",
+        link:    `/admin/clients/${user.id}`,
       });
     }
 
@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
       const clientName  = prof?.contact_name ?? "Client";
       const businessName = prof?.legal_name ?? "";
       const amountStr   = `${currency} ${amount_paid.toFixed(2)}`;
-      const adminUrl    = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://eranoconsulting.com"}/admin/payments`;
+      const adminUrl    = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://eranoconsulting.com"}/admin/clients/${user.id}`;
       const html = await render(PaymentProofReceivedEmail({ clientName, businessName, transactionReference: transaction_reference, amountPaid: amountStr, adminUrl }));
       await sendEmail({ to: adminEmail, subject: emailSubjectFn(businessName), html });
     }
