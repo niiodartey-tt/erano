@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createBrowserClient } from "@supabase/ssr";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
@@ -15,68 +13,34 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_MS   = 15 * 60 * 1000;
-
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading,     setLoading]     = useState(false);
-  const [attempts,    setAttempts]    = useState(0);
-  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
-  const isLocked = lockedUntil !== null && Date.now() < lockedUntil;
-
   async function onSubmit(data: FormData) {
-    if (isLocked) {
-      setServerError("Too many failed attempts. Please try again in 15 minutes.");
-      return;
-    }
-
     setLoading(true);
     setServerError(null);
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
-
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email:    data.email,
-        password: data.password,
+      const res = await fetch("/api/auth/login", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ email: data.email, password: data.password, mode: "admin" }),
       });
+      const json = await res.json() as { error?: string; redirectTo?: string };
 
-      if (authError) {
-        const next = attempts + 1;
-        setAttempts(next);
-        if (next >= MAX_ATTEMPTS) {
-          setLockedUntil(Date.now() + LOCKOUT_MS);
-          setServerError("Too many failed attempts. Please try again in 15 minutes.");
-        } else {
-          setServerError("Invalid credentials.");
-        }
+      if (!res.ok) {
+        setServerError(json.error ?? "Something went wrong. Please try again.");
         return;
       }
 
-      const res = await fetch("/api/admin/auth/check-role");
-
-      if (res.status === 403) {
-        await supabase.auth.signOut();
-        setServerError("Access denied. This portal is for administrators only.");
-        return;
-      }
-
-      if (res.status === 401) {
-        setServerError("Authentication failed. Please try again.");
-        return;
-      }
-
-      router.replace("/admin");
+      window.location.href = json.redirectTo ?? "/admin";
+    } catch {
+      setServerError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -180,12 +144,12 @@ export default function AdminLoginPage() {
 
             <button
               type="submit"
-              disabled={loading || isLocked}
+              disabled={loading}
               className={cn(
                 "w-full min-h-[44px] px-4 py-3 rounded-lg text-sm font-bold",
                 "bg-gold text-navy transition-opacity duration-150",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy",
-                loading || isLocked ? "opacity-50 cursor-not-allowed" : "hover:opacity-90",
+                loading ? "opacity-50 cursor-not-allowed" : "hover:opacity-90",
               )}
             >
               {loading ? "Signing in…" : "Sign in"}

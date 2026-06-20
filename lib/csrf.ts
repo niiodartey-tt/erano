@@ -12,6 +12,7 @@ export function verifyCsrfOrigin(request: Request): void {
     if (referer && !allowedPrefixes.some((prefix) => referer.startsWith(prefix))) {
       throw new Error("CSRF_ORIGIN_MISMATCH");
     }
+    if (!referer) throw new Error("CSRF_ORIGIN_MISMATCH");
     return;
   }
 
