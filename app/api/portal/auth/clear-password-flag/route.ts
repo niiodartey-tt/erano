@@ -5,6 +5,7 @@ import { createServerClient } from "@/lib/supabase-server";
 import { render } from "@react-email/render";
 import { PasswordChangedEmail, subject as passwordChangedSubject } from "@/emails/PasswordChangedEmail";
 import { sendEmail } from "@/lib/email";
+import { passwordFlagRatelimit } from "@/lib/ratelimit";
 
 export async function POST() {
   const cookieStore = await cookies();
@@ -25,6 +26,9 @@ export async function POST() {
   if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const { success: rateLimitOk } = await passwordFlagRatelimit.limit(`pwflag:${user.id}`);
+  if (!rateLimitOk) return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
 
   // Service role client for privileged DB writes
   const supabase = createServerClient();

@@ -6,6 +6,7 @@ import { sendEmail } from "@/lib/email";
 import { PaymentRejectedEmail, subject } from "@/emails/PaymentRejectedEmail";
 import { render } from "@react-email/render";
 import { verifyCsrfOrigin } from "@/lib/csrf";
+import { adminPaymentRatelimit } from "@/lib/ratelimit";
 
 async function getAuthUser() {
   const cookieStore = await cookies();
@@ -24,6 +25,9 @@ export async function POST(req: Request) {
   const service = createServerClient();
   const { data: adminRow } = await service.from("users").select("role").eq("id", user.id).single();
   if (!adminRow || adminRow.role !== "admin") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const { success: rateLimitOk } = await adminPaymentRatelimit.limit(`payreject:${user.id}`);
+  if (!rateLimitOk) return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
 
   try {
     verifyCsrfOrigin(req);

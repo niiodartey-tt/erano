@@ -29,6 +29,46 @@ export const contactRatelimit = new Ratelimit({
   prefix: "erano:contact",
 });
 
+// Agreement acceptance — 3 per hour per client
+export const agreementRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "1 h"),
+  analytics: false,
+  prefix: "erano:agreement",
+});
+
+// Password flag clear — 10 per hour per user
+export const passwordFlagRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, "1 h"),
+  analytics: false,
+  prefix: "erano:pwflag",
+});
+
+// Admin payment confirm/reject — 30 per hour per admin
+export const adminPaymentRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(30, "1 h"),
+  analytics: false,
+  prefix: "erano:adminpayment",
+});
+
+// Admin invoice generate/upgrade — 10 per hour per admin
+export const adminInvoiceRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, "1 h"),
+  analytics: false,
+  prefix: "erano:admininvoice",
+});
+
+// Admin client reactivate — 20 per hour per admin
+export const adminReactivateRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(20, "1 h"),
+  analytics: false,
+  prefix: "erano:adminreactivate",
+});
+
 export function getClientIp(request: Request): string {
   return (
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
